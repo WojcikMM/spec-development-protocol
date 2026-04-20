@@ -24,6 +24,7 @@ In this template repository, framework sources are stored under `src/`. During i
 |---|---|---|
 | `SDP_BRANCH` | `main` | Install from a specific branch or release tag |
 | `SDP_FORCE` | `false` | Set to `true` to overwrite existing SDP files during upgrade |
+| `SDP_TECH_MODE` | `init` | Control `.github/TECH.md`: `init` (create if missing), `overwrite`, or `skip` |
 | `SDP_TARGET` | current directory | Target repository root |
 
 ```bash
@@ -32,6 +33,12 @@ SDP_BRANCH=v1.0.0 curl -fsSL https://raw.githubusercontent.com/WojcikMM/spec-dev
 
 # Upgrade existing installation (overwrite SDP files)
 SDP_FORCE=true curl -fsSL https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.sh | bash
+
+# Upgrade SDP files but keep existing .github/TECH.md
+SDP_FORCE=true SDP_TECH_MODE=skip curl -fsSL https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.sh | bash
+
+# Re-initialize .github/TECH.md from template
+SDP_TECH_MODE=overwrite curl -fsSL https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.sh | bash
 ```
 
 ### Manual Installation
@@ -54,7 +61,7 @@ After installation, open `.github/TECH.md` — this is the single source of trut
 - Coding standards and conventions
 - Security and identity baseline
 
-> **Working on an existing project?** A `sdp.discover` agent (coming soon) can read your codebase and generate a `TECH.md` draft for you to review.
+> **Working on an existing project?** Use `discover-tech` to trigger the `sdp.discover` agent, which reads your codebase and drafts `TECH.md` for review.
 
 ### 2. Enable Agent Mode in VS Code
 
@@ -103,6 +110,7 @@ SDP works equally well on existing codebases:
 | Agent | File | Purpose |
 |---|---|---|
 | `sdp.prd` | `agents/sdp.prd.agent.md` | Writes `PRD.md` from business intent |
+| `sdp.discover` | `agents/sdp.discover.agent.md` | Discovers legacy stack signals and drafts `TECH.md` |
 | `sdp.analyst` | `agents/sdp.analyst.agent.md` | Refines PRD into epics, features, and user stories |
 | `sdp.architect` | `agents/sdp.architect.agent.md` | Produces right-sized technical designs |
 | `sdp.developer` | `agents/sdp.developer.agent.md` | Plans and implements one story at a time |
@@ -120,6 +128,7 @@ Prompts are the entry points that activate agents with the correct mode:
 
 | Prompt | Triggers | Gate |
 |---|---|---|
+| `discover-tech` | `sdp.discover` | Legacy onboarding |
 | `create-prd` | `sdp.prd` | Gate 1 |
 | `refine-backlog` | `sdp.analyst` | Gate 2 |
 | `design-system` | `sdp.architect` | Gate 3 |

@@ -8,6 +8,7 @@
 # Environment variables:
 #   SDP_BRANCH   — branch or tag to install from         (default: main)
 #   SDP_FORCE    — set to "true" to overwrite existing   (default: false)
+#   SDP_TECH_MODE— TECH.md handling: init|overwrite|skip  (default: init)
 #   SDP_TARGET   — target directory                      (default: current dir)
 # =============================================================================
 set -euo pipefail
@@ -15,6 +16,7 @@ set -euo pipefail
 REPO="WojcikMM/spec-development-protocol"
 BRANCH="${SDP_BRANCH:-main}"
 FORCE="${SDP_FORCE:-false}"
+TECH_MODE="${SDP_TECH_MODE:-init}"
 TARGET_DIR="${SDP_TARGET:-$(pwd)}"
 
 EXTRACTED_SUBDIR="spec-development-protocol-${BRANCH}"
@@ -46,6 +48,14 @@ if [[ ! -d "$TARGET_DIR" ]]; then
   print_error "Target directory does not exist: $TARGET_DIR"
   exit 1
 fi
+
+case "$TECH_MODE" in
+  init|overwrite|skip) ;;
+  *)
+    print_error "Invalid SDP_TECH_MODE: ${TECH_MODE} (allowed: init, overwrite, skip)"
+    exit 1
+    ;;
+esac
 
 # ---------------------------------------------------------------------------
 # Download and extract
@@ -89,6 +99,8 @@ copied=0
 skipped=0
 tech_initialized=0
 tech_preserved=0
+tech_overwritten=0
+tech_skipped=0
 
 copy_file() {
   local src="$1"
@@ -120,12 +132,27 @@ TEMPLATE_TECH="$DEST_DIR/templates/TECH.md"
 TARGET_TECH="$DEST_DIR/TECH.md"
 
 if [[ -f "$TEMPLATE_TECH" ]]; then
-  if [[ ! -f "$TARGET_TECH" || "$FORCE" == "true" ]]; then
-    cp "$TEMPLATE_TECH" "$TARGET_TECH"
-    tech_initialized=1
-  else
-    tech_preserved=1
-  fi
+  case "$TECH_MODE" in
+    skip)
+      tech_skipped=1
+      ;;
+    init)
+      if [[ ! -f "$TARGET_TECH" ]]; then
+        cp "$TEMPLATE_TECH" "$TARGET_TECH"
+        tech_initialized=1
+      else
+        tech_preserved=1
+      fi
+      ;;
+    overwrite)
+      if [[ -f "$TARGET_TECH" ]]; then
+        tech_overwritten=1
+      else
+        tech_initialized=1
+      fi
+      cp "$TEMPLATE_TECH" "$TARGET_TECH"
+      ;;
+  esac
 fi
 
 # ---------------------------------------------------------------------------
@@ -142,8 +169,12 @@ fi
 
 if [[ $tech_initialized -eq 1 ]]; then
   print_info "  TECH.md initialized from template"
+elif [[ $tech_overwritten -eq 1 ]]; then
+  print_warn "  TECH.md overwritten from template (SDP_TECH_MODE=overwrite)"
 elif [[ $tech_preserved -eq 1 ]]; then
   print_info "  Existing TECH.md preserved"
+elif [[ $tech_skipped -eq 1 ]]; then
+  print_info "  TECH.md update skipped (SDP_TECH_MODE=skip)"
 fi
 
 echo ""
