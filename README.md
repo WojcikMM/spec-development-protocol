@@ -16,6 +16,8 @@ curl -fsSL https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/
 
 This copies the `.github/` framework files into your repository **without overwriting** any existing files. Your custom agents, instructions, and scripts stay untouched.
 
+In this template repository, framework sources are stored under `src/`. During install, they are copied into your project's `.github/` folder.
+
 **Options (via environment variables):**
 
 | Variable | Default | Description |
@@ -35,8 +37,9 @@ SDP_FORCE=true curl -fsSL https://raw.githubusercontent.com/WojcikMM/spec-develo
 ### Manual Installation
 
 1. Clone or download this repository.
-2. Copy the `.github/` folder into your project root.
-3. Existing files in your `.github/` folder will not be overwritten.
+2. Create `.github/` in your project root if missing.
+3. Copy the **contents of `src/`** into your project's `.github/` folder.
+4. Existing files in your `.github/` folder should not be overwritten unless you explicitly choose to.
 
 ---
 
@@ -140,7 +143,7 @@ SDP is designed to coexist with your own tooling:
 
 ## Templates
 
-The `.github/templates/` folder contains:
+After installation, the `.github/templates/` folder in your project contains:
 
 - `TECH.md` — blank TECH.md template to copy when starting a new project.
 - `template.agent.md` — starter template for writing your own agents.
@@ -151,31 +154,22 @@ The `.github/templates/` folder contains:
 ## Project Structure
 
 ```
+Repository source layout:
+src/
+├── copilot-instructions.md
+├── agents/
+├── instructions/
+├── prompts/
+└── templates/
+
+Installed layout in client repository:
 .github/
 ├── TECH.md                          ← Fill this in for your project
 ├── copilot-instructions.md          ← Global AI coding standards (auto-loaded)
 ├── agents/
-│   ├── sdp.prd.agent.md
-│   ├── sdp.analyst.agent.md
-│   ├── sdp.architect.agent.md
-│   ├── sdp.developer.agent.md
-│   ├── sdp.reviewer.agent.md
-│   ├── sdp.security.agent.md
-│   └── sdp.qa.agent.md
 ├── instructions/
-│   └── sdlc-process.instructions.md
 ├── prompts/
-│   ├── create-prd.prompt.md
-│   ├── refine-backlog.prompt.md
-│   ├── design-system.prompt.md
-│   ├── plan-task.prompt.md
-│   ├── implement.prompt.md
-│   ├── run-review.prompt.md
-│   └── audit-security.prompt.md
 └── templates/
-    ├── TECH.md
-    ├── template.agent.md
-    └── template.prompt.md
 ```
 
 ---

@@ -17,7 +17,6 @@ BRANCH="${SDP_BRANCH:-main}"
 FORCE="${SDP_FORCE:-false}"
 TARGET_DIR="${SDP_TARGET:-$(pwd)}"
 
-ARCHIVE_URL="https://github.com/${REPO}/archive/refs/heads/${BRANCH}.tar.gz"
 EXTRACTED_SUBDIR="spec-development-protocol-${BRANCH}"
 
 # ---------------------------------------------------------------------------
@@ -58,18 +57,24 @@ trap 'rm -rf "$WORK_DIR"' EXIT
 print_info "Installing SDP from branch '${BRANCH}' into: ${TARGET_DIR}"
 print_info "Downloading archive..."
 
-if ! curl -fsSL "$ARCHIVE_URL" -o "$WORK_DIR/sdp.tar.gz"; then
-  print_error "Failed to download archive from: $ARCHIVE_URL"
-  print_error "Check that the branch '${BRANCH}' exists."
-  exit 1
+ARCHIVE_HEADS_URL="https://github.com/${REPO}/archive/refs/heads/${BRANCH}.tar.gz"
+ARCHIVE_TAGS_URL="https://github.com/${REPO}/archive/refs/tags/${BRANCH}.tar.gz"
+
+if ! curl -fsSL "$ARCHIVE_HEADS_URL" -o "$WORK_DIR/sdp.tar.gz"; then
+  if ! curl -fsSL "$ARCHIVE_TAGS_URL" -o "$WORK_DIR/sdp.tar.gz"; then
+    print_error "Failed to download archive for '${BRANCH}'"
+    print_error "Tried branch URL: $ARCHIVE_HEADS_URL"
+    print_error "Tried tag URL:    $ARCHIVE_TAGS_URL"
+    exit 1
+  fi
 fi
 
 tar -xzf "$WORK_DIR/sdp.tar.gz" -C "$WORK_DIR"
 
-SRC_DIR="$WORK_DIR/${EXTRACTED_SUBDIR}/.github"
+SRC_DIR="$WORK_DIR/${EXTRACTED_SUBDIR}/src"
 
 if [[ ! -d "$SRC_DIR" ]]; then
-  print_error "Expected .github directory not found in archive."
+  print_error "Expected src directory not found in archive."
   exit 1
 fi
 
