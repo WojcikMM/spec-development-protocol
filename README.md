@@ -20,12 +20,12 @@ In this template repository, framework sources are stored under `src/`. During i
 
 **Options (via environment variables):**
 
-| Variable | Default | Description |
-|---|---|---|
-| `SDP_BRANCH` | `main` | Install from a specific branch or release tag |
-| `SDP_FORCE` | `false` | Set to `true` to overwrite existing SDP files during upgrade |
-| `SDP_TECH_MODE` | `init` | Control `.github/TECH.md`: `init` (create if missing), `overwrite`, or `skip` |
-| `SDP_TARGET` | current directory | Target repository root |
+| Variable        | Default           | Description                                                                   |
+| --------------- | ----------------- | ----------------------------------------------------------------------------- |
+| `SDP_BRANCH`    | `main`            | Install from a specific branch or release tag                                 |
+| `SDP_FORCE`     | `false`           | Set to `true` to overwrite existing SDP files during upgrade                  |
+| `SDP_TECH_MODE` | `init`            | Control `.github/TECH.md`: `init` (create if missing), `overwrite`, or `skip` |
+| `SDP_TARGET`    | current directory | Target repository root                                                        |
 
 ```bash
 # Install a specific version
@@ -86,14 +86,14 @@ Gate 6: Hardening      → Review + Security audit + QA validation
 
 Use the prompts in `.github/prompts/` to trigger the right agent at each gate:
 
-| Step | Prompt file | What happens |
-|---|---|---|
-| 1 | `create-prd` | Describe your idea — the PRD agent drafts `PRD.md` |
-| 2 | `refine-backlog` | Analyst breaks PRD into epics and user stories |
-| 3 | `design-system` | Architect produces a technical design |
-| 4 | `plan-task` | Developer plans one story (no code yet) |
-| 5 | `implement` | Developer implements the approved plan |
-| 6 | `run-review` + `audit-security` | Reviewer and Security agent validate the changes |
+| Step | Prompt file                     | What happens                                       |
+| ---- | ------------------------------- | -------------------------------------------------- |
+| 1    | `create-prd`                    | Describe your idea — the PRD agent drafts `PRD.md` |
+| 2    | `refine-backlog`                | Analyst breaks PRD into epics and user stories     |
+| 3    | `design-system`                 | Architect produces a technical design              |
+| 4    | `plan-task`                     | Developer plans one story (no code yet)            |
+| 5    | `implement`                     | Developer implements the approved plan             |
+| 6    | `run-review` + `audit-security` | Reviewer and Security agent validate the changes   |
 
 ### Working on a Legacy Project
 
@@ -107,16 +107,16 @@ SDP works equally well on existing codebases:
 
 ## Agents
 
-| Agent | File | Purpose |
-|---|---|---|
-| `sdp.prd` | `agents/sdp.prd.agent.md` | Writes `PRD.md` from business intent |
-| `sdp.discover` | `agents/sdp.discover.agent.md` | Discovers legacy stack signals and drafts `TECH.md` |
-| `sdp.analyst` | `agents/sdp.analyst.agent.md` | Refines PRD into epics, features, and user stories |
-| `sdp.architect` | `agents/sdp.architect.agent.md` | Produces right-sized technical designs |
-| `sdp.developer` | `agents/sdp.developer.agent.md` | Plans and implements one story at a time |
-| `sdp.reviewer` | `agents/sdp.reviewer.agent.md` | Code and design review |
-| `sdp.security` | `agents/sdp.security.agent.md` | Security audit (OWASP + cloud baselines) |
-| `sdp.qa` | `agents/sdp.qa.agent.md` | Validates acceptance criteria |
+| Agent           | File                            | Purpose                                             |
+| --------------- | ------------------------------- | --------------------------------------------------- |
+| `sdp.prd`       | `agents/sdp.prd.agent.md`       | Writes `PRD.md` from business intent                |
+| `sdp.discover`  | `agents/sdp.discover.agent.md`  | Discovers legacy stack signals and drafts `TECH.md` |
+| `sdp.analyst`   | `agents/sdp.analyst.agent.md`   | Refines PRD into epics, features, and user stories  |
+| `sdp.architect` | `agents/sdp.architect.agent.md` | Produces right-sized technical designs              |
+| `sdp.developer` | `agents/sdp.developer.agent.md` | Plans and implements one story at a time            |
+| `sdp.reviewer`  | `agents/sdp.reviewer.agent.md`  | Code and design review                              |
+| `sdp.security`  | `agents/sdp.security.agent.md`  | Security audit (OWASP + cloud baselines)            |
+| `sdp.qa`        | `agents/sdp.qa.agent.md`        | Validates acceptance criteria                       |
 
 Agents hand off to each other automatically — after implementation the developer agent offers to trigger reviewer, security, and QA in one click.
 
@@ -126,16 +126,16 @@ Agents hand off to each other automatically — after implementation the develop
 
 Prompts are the entry points that activate agents with the correct mode:
 
-| Prompt | Triggers | Gate |
-|---|---|---|
-| `discover-tech` | `sdp.discover` | Legacy onboarding |
-| `create-prd` | `sdp.prd` | Gate 1 |
-| `refine-backlog` | `sdp.analyst` | Gate 2 |
-| `design-system` | `sdp.architect` | Gate 3 |
-| `plan-task` | `sdp.developer` (plan mode) | Gate 4 |
-| `implement` | `sdp.developer` (implement mode) | Gate 5 |
-| `run-review` | `sdp.reviewer` | Gate 6 |
-| `audit-security` | `sdp.security` | Gate 6 |
+| Prompt           | Triggers                         | Gate              |
+| ---------------- | -------------------------------- | ----------------- |
+| `discover-tech`  | `sdp.discover`                   | Legacy onboarding |
+| `create-prd`     | `sdp.prd`                        | Gate 1            |
+| `refine-backlog` | `sdp.analyst`                    | Gate 2            |
+| `design-system`  | `sdp.architect`                  | Gate 3            |
+| `plan-task`      | `sdp.developer` (plan mode)      | Gate 4            |
+| `implement`      | `sdp.developer` (implement mode) | Gate 5            |
+| `run-review`     | `sdp.reviewer`                   | Gate 6            |
+| `audit-security` | `sdp.security`                   | Gate 6            |
 
 ---
 
