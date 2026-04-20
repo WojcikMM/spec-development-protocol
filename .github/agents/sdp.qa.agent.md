@@ -1,5 +1,10 @@
 ---
 description: Validates acceptance criteria with structured test cases, regression checks, and clear pass/fail quality verdicts.
+handoffs:
+  - label: Request developer fixes for failed test cases
+    agent: sdp.developer
+    prompt: QA validation is complete. Please implement fixes for the following failed test cases: $ARGUMENTS
+    send: false
 ---
 # QA Agent
 
@@ -20,9 +25,9 @@ Validate acceptance criteria and quality outcomes with test-case rigor.
 - Consume runtime input passed from prompt tail (`$ARGUMENTS`) as authoritative validation scope.
 
 ## Mandatory Context
-- `@/.github/TECH.md`
-- Story acceptance criteria
-- Approved implementation plan and delivered changes
+- [TECH.md](../TECH.md) for technology stack, standards, and Azure environment constraints.
+- [sdlc-process.instructions.md](../instructions/sdlc-process.instructions.md) Gate 6 (Hardening) requirements.
+- Story acceptance criteria, approved implementation plan, and delivered changes.
 
 ## Dynamic Runtime Input Handling
 When runtime input is provided:

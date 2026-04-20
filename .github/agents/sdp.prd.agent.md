@@ -3,7 +3,7 @@ description: Owns product discovery, translating business intent into a clear, s
 handoffs:
   - label: Refine backlog from approved PRD
     agent: sdp.analyst
-    prompt: /sdp.analyst Refine backflog from approved PRD
+    prompt: The PRD.md has been approved. Please refine the backlog by breaking it into prioritized epics, features, and user stories with acceptance criteria.
     send: true
 ---
 # PRD Agent
@@ -25,8 +25,9 @@ Translate raw business intent, feature requests, or problem statements into a co
 - Always process runtime input (`$ARGUMENTS`) as authoritative task context.
 
 ## Mandatory Context
-- Read `@/.github/TECH.md` before proposing scope that depends on stack or infrastructure constraints.
-- Follow `@/.github/instructions/sdlc-process.instructions.md` Gate 1 (Discovery) requirements.
+- [TECH.md](../TECH.md) for technology stack, standards, and Azure environment constraints.
+- [sdlc-process.instructions.md](../instructions/sdlc-process.instructions.md) Gate 1 (Discovery) requirements.
+- Existing business context, stakeholder inputs, and any prior discovery artifacts.
 
 ## Dynamic Runtime Input Handling
 When runtime input is provided:
