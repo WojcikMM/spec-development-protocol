@@ -1,0 +1,146 @@
+#!/usr/bin/env bash
+# =============================================================================
+# Spec Development Protocol (SDP) — Installer
+# =============================================================================
+# Usage:
+#   curl -fsSL https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.sh | bash
+#
+# Environment variables:
+#   SDP_BRANCH   — branch or tag to install from         (default: main)
+#   SDP_FORCE    — set to "true" to overwrite existing   (default: false)
+#   SDP_TARGET   — target directory                      (default: current dir)
+# =============================================================================
+set -euo pipefail
+
+REPO="WojcikMM/spec-development-protocol"
+BRANCH="${SDP_BRANCH:-main}"
+FORCE="${SDP_FORCE:-false}"
+TARGET_DIR="${SDP_TARGET:-$(pwd)}"
+
+ARCHIVE_URL="https://github.com/${REPO}/archive/refs/heads/${BRANCH}.tar.gz"
+EXTRACTED_SUBDIR="spec-development-protocol-${BRANCH}"
+
+# ---------------------------------------------------------------------------
+# Helpers
+# ---------------------------------------------------------------------------
+
+print_info()    { printf '\033[0;34m[SDP]\033[0m %s\n' "$*"; }
+print_success() { printf '\033[0;32m[SDP]\033[0m %s\n' "$*"; }
+print_warn()    { printf '\033[0;33m[SDP]\033[0m %s\n' "$*"; }
+print_error()   { printf '\033[0;31m[SDP]\033[0m %s\n' "$*" >&2; }
+
+require_cmd() {
+  if ! command -v "$1" &>/dev/null; then
+    print_error "Required command not found: $1"
+    exit 1
+  fi
+}
+
+# ---------------------------------------------------------------------------
+# Preflight checks
+# ---------------------------------------------------------------------------
+
+require_cmd curl
+require_cmd tar
+
+if [[ ! -d "$TARGET_DIR" ]]; then
+  print_error "Target directory does not exist: $TARGET_DIR"
+  exit 1
+fi
+
+# ---------------------------------------------------------------------------
+# Download and extract
+# ---------------------------------------------------------------------------
+
+WORK_DIR=$(mktemp -d)
+trap 'rm -rf "$WORK_DIR"' EXIT
+
+print_info "Installing SDP from branch '${BRANCH}' into: ${TARGET_DIR}"
+print_info "Downloading archive..."
+
+if ! curl -fsSL "$ARCHIVE_URL" -o "$WORK_DIR/sdp.tar.gz"; then
+  print_error "Failed to download archive from: $ARCHIVE_URL"
+  print_error "Check that the branch '${BRANCH}' exists."
+  exit 1
+fi
+
+tar -xzf "$WORK_DIR/sdp.tar.gz" -C "$WORK_DIR"
+
+SRC_DIR="$WORK_DIR/${EXTRACTED_SUBDIR}/.github"
+
+if [[ ! -d "$SRC_DIR" ]]; then
+  print_error "Expected .github directory not found in archive."
+  exit 1
+fi
+
+# ---------------------------------------------------------------------------
+# Copy files
+# ---------------------------------------------------------------------------
+
+DEST_DIR="$TARGET_DIR/.github"
+mkdir -p "$DEST_DIR"
+
+copied=0
+skipped=0
+tech_initialized=0
+tech_preserved=0
+
+copy_file() {
+  local src="$1"
+  local dest="$2"
+
+  local dest_dir
+  dest_dir="$(dirname "$dest")"
+  mkdir -p "$dest_dir"
+
+  if [[ -f "$dest" && "$FORCE" != "true" ]]; then
+    skipped=$((skipped + 1))
+    return
+  fi
+
+  cp "$src" "$dest"
+  copied=$((copied + 1))
+}
+
+# Walk source tree and copy each file
+while IFS= read -r -d '' src_file; do
+  # Compute relative path from SRC_DIR
+  rel_path="${src_file#"$SRC_DIR"/}"
+  dest_file="$DEST_DIR/$rel_path"
+  copy_file "$src_file" "$dest_file"
+done < <(find "$SRC_DIR" -type f -print0)
+
+# Ensure client TECH.md is initialized from template
+TEMPLATE_TECH="$DEST_DIR/templates/TECH.md"
+TARGET_TECH="$DEST_DIR/TECH.md"
+
+if [[ -f "$TEMPLATE_TECH" ]]; then
+  if [[ ! -f "$TARGET_TECH" || "$FORCE" == "true" ]]; then
+    cp "$TEMPLATE_TECH" "$TARGET_TECH"
+    tech_initialized=1
+  else
+    tech_preserved=1
+  fi
+fi
+
+# ---------------------------------------------------------------------------
+# Summary
+# ---------------------------------------------------------------------------
+
+print_success "Done."
+print_info   "  Files copied : ${copied}"
+
+if [[ $skipped -gt 0 ]]; then
+  print_warn "  Files skipped (already exist): ${skipped}"
+  print_warn "  Run with SDP_FORCE=true to overwrite existing files."
+fi
+
+if [[ $tech_initialized -eq 1 ]]; then
+  print_info "  TECH.md initialized from template"
+elif [[ $tech_preserved -eq 1 ]]; then
+  print_info "  Existing TECH.md preserved"
+fi
+
+echo ""
+print_info "Next step: fill in .github/TECH.md with your project stack and standards."
+print_info "See README: https://github.com/${REPO}#readme"
