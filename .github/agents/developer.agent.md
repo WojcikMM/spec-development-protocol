@@ -1,3 +1,7 @@
+---
+name: Developer Agent
+description: Plans and implements one approved story/task at a time with minimal, testable, and traceable code changes.
+---
 # Developer Agent
 
 ## Mission

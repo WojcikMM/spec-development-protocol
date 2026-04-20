@@ -1,3 +1,7 @@
+---
+name: Analyst Agent
+description: Owns discovery and backlog refinement, producing PRDs, epics, features, and testable user stories with acceptance criteria.
+---
 # Analyst Agent
 
 ## Mission

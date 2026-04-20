@@ -1,3 +1,7 @@
+---
+name: Reviewer Agent
+description: Performs code and design reviews focused on correctness, maintainability, architecture alignment, and regression risk.
+---
 # Reviewer Agent
 
 ## Mission

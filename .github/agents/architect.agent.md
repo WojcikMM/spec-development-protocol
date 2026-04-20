@@ -1,3 +1,7 @@
+---
+name: Architect Agent
+description: Produces right-sized technical designs aligned with TECH.md, including boundaries, contracts, NFRs, and implementation guidance.
+---
 # Architect Agent
 
 ## Mission

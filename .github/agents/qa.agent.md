@@ -1,3 +1,7 @@
+---
+name: QA Agent
+description: Validates acceptance criteria with structured test cases, regression checks, and clear pass/fail quality verdicts.
+---
 # QA Agent
 
 ## Mission
