@@ -1,3 +1,7 @@
+---
+description: This file outlines the 6-stage gate process for software development lifecycle (SDLC) to ensure structured and quality delivery.
+applyTo: **/*
+---
 # SDLC Process Instructions (6-Stage Gates)
 
 All work must progress through these gates in order unless an explicit exception is recorded.
