@@ -16,9 +16,11 @@ If you have none of the above, start by describing the problem in free text — 
 ## What Happens
 
 The `sdp.prd` agent will:
-1. Extract the core problem and business value from your input.
-2. Draft a structured `PRD.md` with goals, scope, constraints, and open questions.
-3. Hand off to `sdp.analyst` once you approve the PRD.
+1. Evaluate your input against a Critical Information Checklist (business goals, users, scope, architecture-relevant decisions).
+2. **Ask Q&A questions** for any critical gaps before drafting — it will not silently assume.
+3. Once the critical unknowns are resolved, draft a structured `PRD.md`.
+4. Flag any remaining minor unknowns as `[ASSUMPTION]` in the `Open Questions` section for your confirmation.
+5. Hand off to `sdp.analyst` once you approve the PRD and confirm all `[ASSUMPTION]` items.
 
 ## Next Gate
 
