@@ -74,13 +74,32 @@ SDP agents run in **GitHub Copilot Agent Mode**. Make sure you have the [GitHub 
 SDP enforces a **6-gate SDLC process**. Work progresses gate by gate — no coding until the design is approved, no design without a backlog, no backlog without a PRD.
 
 ```
-Gate 1: Discovery      → PRD.md
-Gate 2: Refinement     → BACKLOG.md + EPIC-*.md
-Gate 3: Architecture   → Technical design docs
-Gate 4: Planning       → Implementation plan (one story at a time)
-Gate 5: Implementation → Code + tests
-Gate 6: Hardening      → Review + Security audit + QA validation
+Gate 1: Discovery      -> PRD.md
+Gate 2: Refinement     -> BACKLOG.md + docs/backlog/EPIC-*.md (+ optional docs/qa/ACL.md)
+Gate 3: Architecture   -> docs/architecture/ADL.md + docs/architecture/ADR-*.md
+Gate 4: Planning       -> docs/plans/IMPLEMENTATION-PLAN-<TASK-ID>.md
+Gate 5: Implementation -> Code + tests + CHANGELOG.md (when behavior changes)
+Gate 6: Hardening      -> docs/review/REVIEW-*.md + docs/security/SECURITY-AUDIT-*.md + docs/qa/QA-REPORT-*.md
 ```
+
+### Artifact Locations (Canonical)
+
+All SDP agents read and write process artifacts from the same canonical locations at repository root:
+
+| Artifact | Canonical path | Primary owner |
+| --- | --- | --- |
+| Tech baseline | `.github/TECH.md` | `sdp.discover` (draft), human owner (final) |
+| Product requirements | `PRD.md` | `sdp.prd` |
+| Backlog index | `BACKLOG.md` | `sdp.analyst` |
+| Epic details | `docs/backlog/EPIC-<N>-<slug>.md` | `sdp.analyst` |
+| Acceptance criteria log | `docs/qa/ACL.md` | `sdp.analyst`, `sdp.qa` |
+| Architecture design log | `docs/architecture/ADL.md` | `sdp.architect` |
+| Architecture decision records | `docs/architecture/ADR-<N>-<slug>.md` | `sdp.architect` |
+| Implementation plans | `docs/plans/IMPLEMENTATION-PLAN-<TASK-ID>.md` | `sdp.developer` |
+| Code review reports | `docs/review/REVIEW-<TASK-ID>.md` | `sdp.reviewer` |
+| Security audit reports | `docs/security/SECURITY-AUDIT-<TASK-ID>.md` | `sdp.security` |
+| QA validation reports | `docs/qa/QA-REPORT-<TASK-ID>.md` | `sdp.qa` |
+| Release history | `CHANGELOG.md` | `sdp.developer` (implementation updates), shared reference |
 
 ### Starting a New Feature (Greenfield or Greenfield Feature)
 
@@ -179,6 +198,19 @@ Installed layout in client repository:
 ├── instructions/
 ├── prompts/
 └── templates/
+
+Runtime artifacts created by agents in client repository:
+.
+├── PRD.md
+├── BACKLOG.md
+├── CHANGELOG.md
+└── docs/
+	├── backlog/
+	├── architecture/
+	├── plans/
+	├── review/
+	├── security/
+	└── qa/
 ```
 
 ---

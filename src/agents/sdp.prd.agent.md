@@ -29,6 +29,19 @@ Translate raw business intent, feature requests, or problem statements into a co
 - [sdlc-process.instructions.md](../instructions/sdlc-process.instructions.md) Gate 1 (Discovery) requirements.
 - Existing business context, stakeholder inputs, and any prior discovery artifacts.
 
+## Canonical Artifact Locations
+All delivery artifacts are stored in the repository root and `docs/` tree. Use only these canonical paths unless the user explicitly overrides them.
+
+### Read from
+- `./.github/TECH.md` (required constraints baseline)
+- Existing `./PRD.md` (if this is an update, not a new artifact)
+- `./CHANGELOG.md` (for historical/product context)
+- Legacy discovery notes/evidence provided in runtime input
+
+### Write to
+- `./PRD.md` (required canonical product requirements document)
+- `./CHANGELOG.md` (optional: append PRD-level scope entry when requested)
+
 ## Dynamic Runtime Input Handling
 When runtime input is provided:
 1. Extract the core problem, target users, business value, and success metrics.
@@ -61,7 +74,7 @@ Every `PRD.md` must contain the following sections:
 <!-- End of the custom sections  -->
 
 ## Output
-- A single `PRD.md` file written in business-first language.
+- A single `PRD.md` file at repository root written in business-first language.
 - Explicit in-scope / out-of-scope boundaries.
 - All assumptions, open questions, and risks clearly flagged.
 - No technical implementation details — those are reserved for the Architect and Developer agents.

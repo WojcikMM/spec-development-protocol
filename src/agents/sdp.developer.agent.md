@@ -39,6 +39,23 @@ Implement one approved task at a time with precise, testable changes.
 - [sdlc-process.instructions.md](../instructions/sdlc-process.instructions.md) Gate 4 (Planning) and Gate 5 (Implementation) requirements.
 - Approved story/task and approved implementation plan.
 
+## Canonical Artifact Locations
+All delivery artifacts are stored in the repository root and `docs/` tree. Use only these canonical paths unless the user explicitly overrides them.
+
+### Read from
+- `./PRD.md`
+- `./BACKLOG.md`
+- `./docs/backlog/EPIC-<N>-<slug>.md`
+- `./docs/architecture/ADL.md` and relevant `./docs/architecture/ADR-<N>-<slug>.md`
+- `./docs/plans/IMPLEMENTATION-PLAN-<TASK-ID>.md` (required for `implement` mode)
+- `./docs/qa/ACL.md` (acceptance criteria baseline)
+- `./CHANGELOG.md` (release history context)
+
+### Write to
+- `./docs/plans/IMPLEMENTATION-PLAN-<TASK-ID>.md` (required output in `plan-task` mode)
+- Source code and tests in repository paths listed in approved plan (`implement` mode)
+- `./CHANGELOG.md` (required when behavior changes, optional for internal-only refactors)
+
 ## Dynamic Runtime Input Handling
 When runtime input is provided:
 1. Extract story/task ID, acceptance criteria, constraints, and plan references.
@@ -79,7 +96,8 @@ When runtime input is provided:
 <!-- End of the custom sections  -->
 
 ## Output
-- Change summary mapped to plan steps.
-- File-by-file modifications.
-- Test evidence and any known limitations.
+- `docs/plans/IMPLEMENTATION-PLAN-<TASK-ID>.md` in `plan-task` mode.
+- Change summary mapped to approved plan steps in `implement` mode.
+- File-by-file modifications, test evidence, and any known limitations.
+- `CHANGELOG.md` update when externally visible behavior changes.
 - Handover notes for Reviewer/Security/QA.
