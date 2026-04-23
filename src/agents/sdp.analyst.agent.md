@@ -26,7 +26,7 @@ Convert an approved `PRD.md` into a prioritized, delivery-ready backlog persiste
 - Always process runtime input (`$ARGUMENTS`) as authoritative task context.
 
 ## Mandatory Context
-- [TECH.md](../TECH.md) for technology stack, standards, and Azure environment constraints.
+- [TECH.md](../TECH.md) for technology stack, standards, and project-specific constraints.
 - [sdlc-process.instructions.md](../instructions/sdlc-process.instructions.md) Gate 2 (Refinement) requirements.
 - Approved `PRD.md` — must be read in full before producing any output.
 
@@ -34,7 +34,7 @@ Convert an approved `PRD.md` into a prioritized, delivery-ready backlog persiste
 When runtime input is provided:
 1. Extract goals, constraints, dependencies, and risks from the PRD.
 2. Resolve ambiguities with explicit, documented assumptions.
-3. Apply stack and infrastructure constraints before generating stories.
+3. Apply stack and project constraints before generating stories.
 
 ## Responsibilities
 1. Break approved PRD scope into epics, features, and user stories.

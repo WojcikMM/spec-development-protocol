@@ -1,49 +1,62 @@
 # Global Technology Context (TECH)
 
-This document is the source of truth for technology choices, standards, and Azure environment constraints used by the Spec Development Protocol (SDP).
+This document is the source of truth for technology choices, standards, and delivery constraints used by the Spec Development Protocol (SDP). Fill in every `<define>` placeholder before running SDP agents.
 
-## 1) Frontend Stack
-- **Primary framework:** `<define>`
-- **Language:** `<TypeScript/JavaScript>`
-- **UI system/design:** `<define>`
-- **State management:** `<define>`
-- **Testing:** `<unit/e2e tools>`
-- **Build toolchain:** `<define>`
+## 1) Platform Type
 
-## 2) Backend Stack
-- **Primary runtime/framework:** `<define>`
-- **Language:** `<define>`
-- **API style:** `<REST/GraphQL/gRPC>`
-- **Data access pattern:** `<ORM/query builder/raw SQL>`
+- **Application type:** `<Web Application / API Service / Full-Stack / Frontend-only / Backend-only>`
+- **Target environments:** `<Browser / Node.js server / Edge / define>`
+
+## 2) Frontend Stack
+
+> Remove this section if the project is backend-only or API-only.
+
+- **Primary framework:** `<React / Vue / Angular / Svelte / Next.js / Nuxt / define>`
+- **Language:** `<TypeScript / JavaScript>`
+- **UI system/design:** `<Tailwind CSS / MUI / shadcn/ui / define>`
+- **State management:** `<Redux / Zustand / Pinia / Context API / define>`
+- **Testing:** `<Vitest / Jest + Testing Library / Playwright / Cypress / define>`
+- **Build toolchain:** `<Vite / Webpack / Turbopack / define>`
+
+## 3) Backend Stack
+
+> Remove this section if the project is frontend-only.
+
+- **Primary runtime/framework:** `<Node.js + Express / NestJS / FastAPI / Django / Spring Boot / define>`
+- **Language:** `<TypeScript / Python / Java / Go / define>`
+- **API style:** `<REST / GraphQL / gRPC / tRPC>`
+- **Data access pattern:** `<ORM / query builder / raw SQL>`
 - **Messaging/events:** `<define if applicable>`
-- **Testing:** `<unit/integration/contract tools>`
+- **Testing:** `<Jest / Pytest / JUnit / Supertest / define>`
 
-## 3) Azure DevOps Project Details
-- **Organization:** `<define>`
-- **Project:** `<define>`
-- **Repositories:** `<define>`
-- **Boards setup:** `<Epics/Features/User Stories/Bugs>`
-- **Pipelines:** `<build/release strategy>`
-- **Environments:** `<dev/test/stage/prod>`
-- **Branching policy:** `<trunk/GitFlow + protections>`
+## 4) CI/CD & DevOps
 
-## 4) Infrastructure (Bicep/Terraform)
-- **IaC tool:** `<Bicep/Terraform>`
-- **Subscription(s):** `<define>`
-- **Resource groups:** `<define naming convention>`
-- **Networking:** `<VNet/Subnet/Private Endpoint policy>`
-- **Compute/data resources:** `<App Service/Container Apps/AKS/SQL/Cosmos/etc.>`
-- **Secrets/configuration:** `Azure Key Vault + managed identity`
-- **Observability:** `<App Insights/Log Analytics/Azure Monitor>`
-- **Policy/compliance controls:** `<Azure Policy/Defender/Tagging>`
+- **Version control platform:** `<GitHub / GitLab / Bitbucket>`
+- **CI/CD system:** `<GitHub Actions / GitLab CI / Azure DevOps / Jenkins / define>`
+- **Environments:** `<dev / staging / production>`
+- **Branching strategy:** `<trunk-based / GitFlow / define>`
+- **Pipeline stages:** `<lint / test / build / deploy>`
 
-## 5) Security & Identity Baseline
-- Prefer **managed identities** over secrets wherever possible.
-- Store secrets only in **Azure Key Vault**.
-- Enforce least privilege with Azure RBAC and scoped service connections.
-- Require HTTPS/TLS, secure transport, and environment segregation.
+## 5) Infrastructure & Deployment
 
-## 6) Coding Standards
+- **Hosting/compute:** `<Vercel / AWS / Azure / GCP / Railway / Render / self-hosted / define>`
+- **IaC tool:** `<Terraform / Pulumi / Bicep / CDK / none>`
+- **Database(s):** `<PostgreSQL / MySQL / MongoDB / SQLite / define>`
+- **Cache:** `<Redis / Memcached / define if applicable>`
+- **Secrets/configuration:** `<environment variables / secrets manager name / define>`
+- **Observability:** `<Datadog / Sentry / OpenTelemetry / Grafana / define>`
+
+## 6) Security & Identity Baseline
+
+- Store secrets only in a dedicated secrets manager or environment variables — **never in source code**.
+- Enforce least privilege access controls for all services and users.
+- Require HTTPS/TLS for all traffic; enforce secure HTTP headers (CSP, HSTS, X-Frame-Options).
+- Apply input validation and output encoding at all API and UI boundaries (OWASP Top 10 baseline).
+- **Authentication method:** `<JWT / OAuth2 / session-based / define>`
+- **Authorization model:** `<RBAC / ABAC / define>`
+
+## 7) Coding Standards
+
 - Follow **Clean Code** principles:
   - Small focused functions/modules
   - Clear naming and intent-revealing code
@@ -54,13 +67,15 @@ This document is the source of truth for technology choices, standards, and Azur
 - Use consistent formatting/linting from repo toolchain.
 - Keep changes small, testable, and traceable to backlog items.
 
-## 7) Definition of Done Anchors
-- Spec artifacts updated and traceable (PRD -> backlog -> design -> tasks).
+## 8) Definition of Done Anchors
+
+- Spec artifacts updated and traceable (PRD → backlog → design → tasks).
 - Implementation aligns with approved technical design.
 - Tests and quality gates pass per project standards.
 - Security and QA sign-off criteria satisfied for the change scope.
 
-## 8) Project-Specific Decisions Log
+## 9) Project-Specific Decisions Log
+
 Use this section to append architecture decision records (ADRs) or key technical decisions.
 
 - `YYYY-MM-DD`: `<decision summary>`

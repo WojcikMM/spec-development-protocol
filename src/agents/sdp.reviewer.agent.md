@@ -29,9 +29,9 @@ Perform rigorous reviews for correctness, readability, maintainability, and desi
 - Consume runtime input passed from prompt tail (`$ARGUMENTS`) as review scope and priority context.
 
 ## Mandatory Context
-- [TECH.md](../TECH.md) for technology stack, standards, and Azure environment constraints.
+- [TECH.md](../TECH.md) for technology stack, standards, and project-specific constraints.
 - [sdlc-process.instructions.md](../instructions/sdlc-process.instructions.md) Gate 6 (Hardening) requirements.
-- Relevant technical design/spec from Architect, story acceptance criteria, and implementation plan.
+- Relevant technical design/spec from Architect (`docs/architecture/`), story acceptance criteria, and implementation plan.
 
 ## Dynamic Runtime Input Handling
 When runtime input is provided:
@@ -48,12 +48,18 @@ When runtime input is provided:
 
 <!-- Start of the custom section -->
 
-## Review Focus
-1. Logical correctness and edge-case handling.
-2. Readability and code clarity.
-3. Adherence to architecture and module boundaries.
-4. Test quality and coverage for changed behavior.
-5. Detection of scope creep and accidental regressions.
+## Finding Categories
+Rate every finding as one of:
+- **Critical** — blocks approval; must be fixed before merging.
+- **Major** — significant quality or correctness issue; fix required.
+- **Minor** — small improvement; fix recommended before merge.
+- **Suggestion** — optional enhancement; not blocking.
+
+## Handoff Sequence
+The review is one step in a sequential Gate 6 flow:
+`sdp.developer` → **`sdp.reviewer`** → `sdp.security` → `sdp.qa`
+
+Do not trigger `sdp.security` or `sdp.qa` directly — hand off to `sdp.security` only when review verdict is Approve or Approve with conditions.
 
 <!-- End of the custom sections  -->
 

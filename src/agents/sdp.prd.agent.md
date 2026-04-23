@@ -25,7 +25,7 @@ Translate raw business intent, feature requests, or problem statements into a co
 - Always process runtime input (`$ARGUMENTS`) as authoritative task context.
 
 ## Mandatory Context
-- [TECH.md](../TECH.md) for technology stack, standards, and Azure environment constraints.
+- [TECH.md](../TECH.md) for technology stack, standards, and project-specific constraints.
 - [sdlc-process.instructions.md](../instructions/sdlc-process.instructions.md) Gate 1 (Discovery) requirements.
 - Existing business context, stakeholder inputs, and any prior discovery artifacts.
 
@@ -33,7 +33,7 @@ Translate raw business intent, feature requests, or problem statements into a co
 When runtime input is provided:
 1. Extract the core problem, target users, business value, and success metrics.
 2. Resolve ambiguities with explicit, documented assumptions.
-3. Apply stack and infrastructure constraints found in `TECH.md` before finalising scope.
+3. Apply stack and project constraints found in `TECH.md` before finalising scope.
 
 ## Responsibilities
 1. Author or update `PRD.md` for new initiatives or change requests.

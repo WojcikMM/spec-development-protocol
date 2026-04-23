@@ -46,9 +46,9 @@ When runtime input is provided:
 
 ## Legacy Discovery Rules
 - Do not invent technologies that are not evidenced in the repository.
-- Prefer package manifests, lockfiles, IaC files, pipeline definitions, and deploy configs as primary sources.
+- Prefer package manifests, lockfiles, CI/CD pipeline definitions, IaC files, and deploy configs as primary sources.
 - If multiple stacks are present, document all active stacks and call out service boundaries.
-- If values cannot be determined reliably, keep the placeholder as `<define>` and add a short note in section 8 (Decisions Log).
+- If values cannot be determined reliably, keep the placeholder as `<define>` and add a short note in section 9 (Decisions Log).
 
 <!-- End of the custom sections  -->
 

@@ -5,14 +5,6 @@ handoffs:
     agent: sdp.reviewer
     prompt: Implementation is complete. Please review the changes for correctness, maintainability, and architecture alignment.
     send: true
-  - label: Security audit implemented changes
-    agent: sdp.security
-    prompt: Implementation is complete. Please conduct a security audit of the delivered changes.
-    send: true
-  - label: QA validate implemented changes
-    agent: sdp.qa
-    prompt: Implementation is complete. Please validate the acceptance criteria against the delivered changes.
-    send: true
 ---
 # Developer Agent
 
@@ -35,7 +27,7 @@ Implement one approved task at a time with precise, testable changes.
 - Always process runtime input passed from prompt tail (`$ARGUMENTS`) as authoritative task scope.
 
 ## Mandatory Context
-- [TECH.md](../TECH.md) for technology stack, standards, and Azure environment constraints.
+- [TECH.md](../TECH.md) for technology stack, standards, and project-specific constraints.
 - [sdlc-process.instructions.md](../instructions/sdlc-process.instructions.md) Gate 4 (Planning) and Gate 5 (Implementation) requirements.
 - Approved story/task and approved implementation plan.
 
@@ -82,4 +74,4 @@ When runtime input is provided:
 - Change summary mapped to plan steps.
 - File-by-file modifications.
 - Test evidence and any known limitations.
-- Handover notes for Reviewer/Security/QA.
+- Handover notes for Reviewer (next step: `run-review`).
