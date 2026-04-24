@@ -1,6 +1,6 @@
 # Spec Development Protocol (SDP)
 
-An AI-agentic framework for spec-driven engineering — structured, traceable, and ready for both greenfield and legacy projects.
+An AI-agentic framework for spec-driven engineering — structured, traceable, and ready for both greenfield and legacy web projects.
 
 SDP turns GitHub Copilot Agent Mode into a disciplined delivery team: a PRD author, analyst, architect, developer, reviewer, security auditor, and QA validator — all following a 6-gate SDLC process so nothing gets built without being properly specified first.
 
@@ -16,7 +16,7 @@ curl -fsSL https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/
 
 This copies the `.github/` framework files into your repository **without overwriting** any existing files. Your custom agents, instructions, and scripts stay untouched.
 
-In this template repository, framework sources are stored under `src/`. During install, they are copied into your project's `.github/` folder.
+In this template repository, framework sources are stored under `src/`. During install, they are copied into your project's `.github/` folder. A `.github/sdp-version` file is written so you always know which version is installed.
 
 **Options (via environment variables):**
 
@@ -57,7 +57,7 @@ SDP_TECH_MODE=overwrite curl -fsSL https://raw.githubusercontent.com/WojcikMM/sp
 After installation, open `.github/TECH.md` — this is the single source of truth SDP agents read before doing anything. Fill it in with your project's:
 
 - Frontend and backend stack
-- Infrastructure and cloud environment
+- CI/CD system and deployment environment
 - Coding standards and conventions
 - Security and identity baseline
 
@@ -69,50 +69,90 @@ SDP agents run in **GitHub Copilot Agent Mode**. Make sure you have the [GitHub 
 
 ---
 
+## Quick Start: End-to-End Example
+
+> New to SDP? Here is the full flow for adding a feature to a web app, step by step.
+
+**Goal:** Add a "User Registration" feature to an existing web application.
+
+| Step | What you do | Prompt to run | Output |
+|---|---|---|---|
+| 1 | Describe the feature idea in plain language | `create-prd` | `spec/user-registration/PRD.md` + `spec/ACTIVE.md` |
+| 2 | Review and approve `PRD.md`, then break it into stories | `refine-backlog` | `spec/user-registration/BACKLOG.md` + `spec/user-registration/EPIC-1-core-flow.md` |
+| 3 | Design the technical solution | `design-system` | `spec/user-registration/DESIGN.md` |
+| 4 | Pick story `US-1`, create an implementation plan (no code yet) | `plan-task` with "US-1" | `spec/user-registration/PLAN.md` |
+| 5 | Review and approve the plan, then implement | `implement` with "US-1" | Code + tests + `spec/user-registration/HISTORY.md` updated |
+| 6a | Review the code | `run-review` | Review findings |
+| 6b | Security audit | `audit-security` | Security sign-off |
+| 6c | QA validation | `qa-validate` with "US-1" | Pass / Fail verdict |
+| 7 | Repeat from step 4 for the next story | `plan-task` with "US-2" | — |
+
+Each story goes through Gates 4–6 independently. You stay in control at every approval checkpoint.
+
+---
+
 ## How It Works
 
 SDP enforces a **6-gate SDLC process**. Work progresses gate by gate — no coding until the design is approved, no design without a backlog, no backlog without a PRD.
 
 ```
-Gate 1: Discovery      -> PRD.md
-Gate 2: Refinement     -> BACKLOG.md + docs/backlog/EPIC-*.md (+ optional docs/qa/ACL.md)
-Gate 3: Architecture   -> docs/architecture/ADL.md + docs/architecture/ADR-*.md
-Gate 4: Planning       -> docs/plans/IMPLEMENTATION-PLAN-<TASK-ID>.md
-Gate 5: Implementation -> Code + tests + CHANGELOG.md (when behavior changes)
-Gate 6: Hardening      -> docs/review/REVIEW-*.md + docs/security/SECURITY-AUDIT-*.md + docs/qa/QA-REPORT-*.md
+Gate 1: Discovery      → spec/<slug>/PRD.md  +  spec/ACTIVE.md
+Gate 2: Refinement     → spec/<slug>/BACKLOG.md + EPIC-*.md
+Gate 3: Architecture   → spec/<slug>/DESIGN.md
+Gate 4: Planning       → spec/<slug>/PLAN.md (one story at a time)
+Gate 5: Implementation → Code + tests  →  spec/<slug>/HISTORY.md updated
+Gate 6: Hardening      → Review → Security audit → QA validation
 ```
 
-### Artifact Locations (Canonical)
+**Feedback loops** — when a gate fails, work returns to the appropriate earlier gate, not the beginning:
 
-All SDP agents read and write process artifacts from the same canonical locations at repository root:
+- Review failure → back to Gate 5 (fix + re-run Gate 6 from the start)
+- Security finding (Critical/High) → back to Gate 5
+- QA failure → back to Gate 5
+- Architecture-level security issue → back to Gate 3
 
-| Artifact | Canonical path | Primary owner |
-| --- | --- | --- |
-| Tech baseline | `.github/TECH.md` | `sdp.discover` (draft), human owner (final) |
-| Product requirements | `PRD.md` | `sdp.prd` |
-| Backlog index | `BACKLOG.md` | `sdp.analyst` |
-| Epic details | `docs/backlog/EPIC-<N>-<slug>.md` | `sdp.analyst` |
-| Acceptance criteria log | `docs/qa/ACL.md` | `sdp.analyst`, `sdp.qa` |
-| Architecture design log | `docs/architecture/ADL.md` | `sdp.architect` |
-| Architecture decision records | `docs/architecture/ADR-<N>-<slug>.md` | `sdp.architect` |
-| Implementation plans | `docs/plans/IMPLEMENTATION-PLAN-<TASK-ID>.md` | `sdp.developer` |
-| Code review reports | `docs/review/REVIEW-<TASK-ID>.md` | `sdp.reviewer` |
-| Security audit reports | `docs/security/SECURITY-AUDIT-<TASK-ID>.md` | `sdp.security` |
-| QA validation reports | `docs/qa/QA-REPORT-<TASK-ID>.md` | `sdp.qa` |
-| Release history | `CHANGELOG.md` | `sdp.developer` (implementation updates), shared reference |
-
-### Starting a New Feature (Greenfield or Greenfield Feature)
+### Starting a New Feature
 
 Use the prompts in `.github/prompts/` to trigger the right agent at each gate:
 
-| Step | Prompt file                     | What happens                                       |
-| ---- | ------------------------------- | -------------------------------------------------- |
-| 1    | `create-prd`                    | Describe your idea — the PRD agent drafts `PRD.md` |
-| 2    | `refine-backlog`                | Analyst breaks PRD into epics and user stories     |
-| 3    | `design-system`                 | Architect produces a technical design              |
-| 4    | `plan-task`                     | Developer plans one story (no code yet)            |
-| 5    | `implement`                     | Developer implements the approved plan             |
-| 6    | `run-review` + `audit-security` | Reviewer and Security agent validate the changes   |
+| Step | Prompt file | What happens |
+|---|---|---|
+| 1 | `create-prd` | Describe your idea — the PRD agent drafts `PRD.md` |
+| 2 | `refine-backlog` | Analyst breaks PRD into epics and user stories |
+| 3 | `design-system` | Architect produces a technical design |
+| 4 | `plan-task` | Developer plans one story (no code yet) |
+| 5 | `implement` | Developer implements the approved plan |
+| 6 | `run-review` → `audit-security` → `qa-validate` | Reviewer, Security, and QA validate in sequence |
+
+### Feature Folder Structure
+
+All spec artifacts for a feature live together in `spec/<feature-slug>/` at the project root. You do not need to remember where files go — agents create and update them automatically.
+
+```
+spec/
+  ACTIVE.md                        ← which feature is currently active
+  user-registration/
+    PRD.md                         ← Gate 1: product requirements
+    BACKLOG.md                     ← Gate 2: epic index
+    EPIC-1-core-registration.md    ← Gate 2: stories + acceptance criteria
+    DESIGN.md                      ← Gate 3: technical design
+    PLAN.md                        ← Gate 4: current implementation plan
+    HISTORY.md                     ← Gate 5: running log of completed tasks
+  checkout-flow/
+    PRD.md
+    ...
+```
+
+**`spec/ACTIVE.md`** is the key file — it tells all agents which feature is currently in flight:
+
+```
+slug: user-registration
+title: User Registration
+```
+
+When you start a new PRD, the `sdp.prd` agent derives the slug from the feature title, creates the folder, and updates `ACTIVE.md` for you. All subsequent agents read it automatically — you don't need to mention which feature you're working on in every chat.
+
+To switch to a different feature, update `slug` and `title` in `spec/ACTIVE.md`, or run `create-prd` for the new feature.
 
 ### Working on a Legacy Project
 
@@ -134,16 +174,16 @@ SDP works equally well on existing codebases:
 | `sdp.architect` | `agents/sdp.architect.agent.md` | Produces right-sized technical designs              |
 | `sdp.developer` | `agents/sdp.developer.agent.md` | Plans and implements one story at a time            |
 | `sdp.reviewer`  | `agents/sdp.reviewer.agent.md`  | Code and design review                              |
-| `sdp.security`  | `agents/sdp.security.agent.md`  | Security audit (OWASP + cloud baselines)            |
+| `sdp.security`  | `agents/sdp.security.agent.md`  | Security audit (OWASP web baselines)                |
 | `sdp.qa`        | `agents/sdp.qa.agent.md`        | Validates acceptance criteria                       |
 
-Agents hand off to each other automatically — after implementation the developer agent offers to trigger reviewer, security, and QA in one click.
+Agents suggest handoffs to the next step — after review, the reviewer agent offers to trigger the security agent; after security sign-off, the security agent offers to trigger QA. Each handoff requires your confirmation.
 
 ---
 
 ## Prompts
 
-Prompts are the entry points that activate agents with the correct mode:
+Prompts are the entry points that activate agents with the correct mode. Each prompt file includes a checklist of prerequisites and describes what will happen before you commit to running it.
 
 | Prompt           | Triggers                         | Gate              |
 | ---------------- | -------------------------------- | ----------------- |
@@ -155,6 +195,23 @@ Prompts are the entry points that activate agents with the correct mode:
 | `implement`      | `sdp.developer` (implement mode) | Gate 5            |
 | `run-review`     | `sdp.reviewer`                   | Gate 6            |
 | `audit-security` | `sdp.security`                   | Gate 6            |
+| `qa-validate`    | `sdp.qa`                         | Gate 6            |
+
+---
+
+## Skills
+
+Skills are focused, reusable technical guidance files that agents and developers can reference for specific programming tasks. They live in `.github/skills/` and encode the "how to do it right" knowledge for common web development patterns.
+
+| Skill | File | Purpose |
+|---|---|---|
+| Write Tests | `skills/sdp.skill.write-tests.md` | Unit and integration tests with AAA pattern, TDD guidance |
+| Create REST API Endpoint | `skills/sdp.skill.create-api-endpoint.md` | Route design, input validation, auth, error responses, documentation |
+| Create UI Component | `skills/sdp.skill.create-ui-component.md` | Component structure, accessibility, state, testing |
+| Database Migration | `skills/sdp.skill.database-migration.md` | Safe schema changes, rollback, zero-downtime patterns |
+| Error Handling | `skills/sdp.skill.error-handling.md` | Error classification, logging, safe responses, retries |
+
+Skills can be referenced directly in Copilot chat or invoked by agents when a specific technical pattern is needed. To create your own skill, use `.github/templates/template.skill.md` as a starting point.
 
 ---
 
@@ -165,6 +222,7 @@ SDP is designed to coexist with your own tooling:
 - **Custom agents:** add your own `.agent.md` files alongside the SDP ones — they won't be touched by updates.
 - **Custom instructions:** extend `.github/copilot-instructions.md` with project-specific rules.
 - **Custom prompts:** add prompts to `.github/prompts/` for team-specific workflows.
+- **Custom skills:** add your own `.skill.md` files to `.github/skills/` using the template.
 - **TECH.md is yours:** it's the one file you're expected to own and keep current.
 
 ---
@@ -176,6 +234,7 @@ After installation, the `.github/templates/` folder in your project contains:
 - `TECH.md` — blank TECH.md template to copy when starting a new project.
 - `template.agent.md` — starter template for writing your own agents.
 - `template.prompt.md` — starter template for writing your own prompts.
+- `template.skill.md` — starter template for writing your own skills.
 
 ---
 
@@ -188,15 +247,18 @@ src/
 ├── agents/
 ├── instructions/
 ├── prompts/
+├── skills/
 └── templates/
 
 Installed layout in client repository:
 .github/
-├── TECH.md                          ← Fill this in for your project
-├── copilot-instructions.md          ← Global AI coding standards (auto-loaded)
+├── TECH.md                          <- Fill this in for your project
+├── sdp-version                      <- Installed SDP version marker
+├── copilot-instructions.md          <- Global AI coding standards (auto-loaded)
 ├── agents/
 ├── instructions/
 ├── prompts/
+├── skills/
 └── templates/
 
 Runtime artifacts created by agents in client repository:

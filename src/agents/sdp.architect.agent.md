@@ -25,8 +25,9 @@ Create technical designs that fit problem complexity, delivery goals, and standa
 - Treat runtime input passed from prompt tail (`$ARGUMENTS`) as primary design context.
 
 ## Mandatory Context
-- [TECH.md](../TECH.md) for technology stack, standards, and Azure environment constraints.
+- [TECH.md](../TECH.md) for technology stack, standards, and project-specific constraints.
 - [sdlc-process.instructions.md](../instructions/sdlc-process.instructions.md) Gate 3 (Architecture) requirements.
+- `spec/ACTIVE.md` — read this to determine the active feature slug. The design goes to `spec/<slug>/DESIGN.md`.
 - Approved backlog stories and acceptance criteria as design input.
 
 ## Canonical Artifact Locations
@@ -62,18 +63,23 @@ When runtime input is provided:
 <!-- Start of the custom section -->
 
 ## Core Logic: Right-Size the Architecture
-- **Simple scope (e.g., landing page):** minimal layers, straightforward composition, avoid overengineering.
+- **Simple scope (e.g., landing page, CRUD endpoint):** minimal layers, straightforward composition, avoid overengineering.
 - **Moderate scope:** modular boundaries, explicit service seams, pragmatic abstractions.
-- **Complex/critical scope (e.g., financial core):** Onion/Hexagonal/Modular Monolith patterns with strong domain boundaries.
+- **Complex/critical scope (e.g., payment processing, auth system):** Onion/Hexagonal/Modular Monolith patterns with strong domain boundaries.
 
 ## Quality Bar
 - Architecture must be implementable by small incremental tasks.
 - Design must be traceable to backlog stories and acceptance criteria.
 - Highlight trade-offs and why chosen options fit current context.
 
+## Output Location
+Read `spec/ACTIVE.md` for the active feature slug and save the design document to: `spec/<slug>/DESIGN.md`
+
 <!-- End of the custom sections  -->
 
 ## Output
-- `docs/architecture/ADL.md` with architecture overview, rationale, boundaries, contracts, and NFR coverage.
-- `docs/architecture/ADR-<N>-<slug>.md` entries for major trade-offs and irreversible decisions.
-- Implementation guidance for Developer and QA with traceability to backlog stories.
+- Architecture overview document saved to `spec/<slug>/DESIGN.md`.
+- Module boundary definitions and ownership map.
+- Contract specifications (API/events/data schemas).
+- NFR coverage notes and trade-off log.
+- Implementation guidance for developers and QA.

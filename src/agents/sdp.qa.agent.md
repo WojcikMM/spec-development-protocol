@@ -20,14 +20,15 @@ You **HAVE TO** (if not empty) include the above runtime input in your reasoning
 Validate acceptance criteria and quality outcomes with test-case rigor.
 
 ## Invocation Contract
-- Expected mode from prompts: `qa-validate` (or infer from user intent).
+- Expected mode from prompts: `qa-validate`.
 - If mode is missing, infer from user intent and state the inferred mode.
 - Consume runtime input passed from prompt tail (`$ARGUMENTS`) as authoritative validation scope.
 
 ## Mandatory Context
-- [TECH.md](../TECH.md) for technology stack, standards, and Azure environment constraints.
+- [TECH.md](../TECH.md) for technology stack, standards, and project-specific constraints.
 - [sdlc-process.instructions.md](../instructions/sdlc-process.instructions.md) Gate 6 (Hardening) requirements.
-- Story acceptance criteria, approved implementation plan, and delivered changes.
+- `spec/ACTIVE.md` — read to determine the active feature slug.
+- Story acceptance criteria from `spec/<slug>/EPIC-*.md`, approved `spec/<slug>/PLAN.md`, and delivered changes.
 
 ## Canonical Artifact Locations
 All delivery artifacts are stored in the repository root and `docs/` tree. Use only these canonical paths unless the user explicitly overrides them.
@@ -56,6 +57,13 @@ When runtime input is provided:
 2. Validate positive, negative, and edge scenarios.
 3. Verify regression risk in impacted modules.
 4. Confirm non-functional expectations where applicable.
+
+## Handoff Sequence
+QA is the final step in Gate 6:
+`sdp.developer` → `sdp.reviewer` → `sdp.security` → **`sdp.qa`**
+
+On pass: the story is complete — move to the next story in the backlog.
+On fail: hand off to `sdp.developer` with a defect list.
 
 ## Output
 - Test matrix: AC -> test case -> result.
