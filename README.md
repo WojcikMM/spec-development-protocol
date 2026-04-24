@@ -203,15 +203,15 @@ Prompts are the entry points that activate agents with the correct mode. Each pr
 
 Skills are focused, reusable technical guidance files that agents and developers can reference for specific programming tasks. They live in `.github/skills/` and encode the "how to do it right" knowledge for common web development patterns.
 
-| Skill | File | Purpose |
+| Skill | Folder | Purpose |
 |---|---|---|
-| Write Tests | `skills/sdp.skill.write-tests.md` | Unit and integration tests with AAA pattern, TDD guidance |
-| Create REST API Endpoint | `skills/sdp.skill.create-api-endpoint.md` | Route design, input validation, auth, error responses, documentation |
-| Create UI Component | `skills/sdp.skill.create-ui-component.md` | Component structure, accessibility, state, testing |
-| Database Migration | `skills/sdp.skill.database-migration.md` | Safe schema changes, rollback, zero-downtime patterns |
-| Error Handling | `skills/sdp.skill.error-handling.md` | Error classification, logging, safe responses, retries |
+| Write Tests | `skills/write-tests/` | Unit and integration tests with AAA pattern, TDD guidance |
+| Create REST API Endpoint | `skills/create-api-endpoint/` | Route design, input validation, auth, error responses, documentation |
+| Create UI Component | `skills/create-ui-component/` | Component structure, accessibility, state, testing |
+| Database Migration | `skills/database-migration/` | Safe schema changes, rollback, zero-downtime patterns |
+| Error Handling | `skills/error-handling/` | Error classification, logging, safe responses, retries |
 
-Skills can be referenced directly in Copilot chat or invoked by agents when a specific technical pattern is needed. To create your own skill, use `.github/templates/template.skill.md` as a starting point.
+Each skill is a folder containing a `SKILL.md` file with metadata (`name`, `description`) and instructions, following the [Agent Skills open standard](https://agentskills.io). Skills can be referenced directly in Copilot chat or invoked by agents when a specific technical pattern is needed. To create your own skill, create a new folder under `.github/skills/` and add a `SKILL.md` file using `.github/templates/template.skill.md` as a starting point.
 
 ---
 
@@ -222,7 +222,7 @@ SDP is designed to coexist with your own tooling:
 - **Custom agents:** add your own `.agent.md` files alongside the SDP ones — they won't be touched by updates.
 - **Custom instructions:** extend `.github/copilot-instructions.md` with project-specific rules.
 - **Custom prompts:** add prompts to `.github/prompts/` for team-specific workflows.
-- **Custom skills:** add your own `.skill.md` files to `.github/skills/` using the template.
+- **Custom skills:** add your own skill folders to `.github/skills/` — each as `<skill-name>/SKILL.md` using the template.
 - **TECH.md is yours:** it's the one file you're expected to own and keep current.
 
 ---
@@ -248,6 +248,16 @@ src/
 ├── instructions/
 ├── prompts/
 ├── skills/
+│   ├── create-api-endpoint/
+│   │   └── SKILL.md
+│   ├── create-ui-component/
+│   │   └── SKILL.md
+│   ├── database-migration/
+│   │   └── SKILL.md
+│   ├── error-handling/
+│   │   └── SKILL.md
+│   └── write-tests/
+│       └── SKILL.md
 └── templates/
 
 Installed layout in client repository:
@@ -259,6 +269,9 @@ Installed layout in client repository:
 ├── instructions/
 ├── prompts/
 ├── skills/
+│   ├── <skill-name>/
+│   │   └── SKILL.md                 <- Agent Skills standard format
+│   └── ...
 └── templates/
 
 Runtime artifacts created by agents in client repository:

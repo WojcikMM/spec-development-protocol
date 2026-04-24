@@ -8,13 +8,23 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Changed
+- `src/skills/` restructured to comply with the [Agent Skills open standard](https://agentskills.io): each skill is now a subfolder (`<skill-name>/`) containing a `SKILL.md` file instead of a flat `sdp.skill.<name>.md` file
+  - `sdp.skill.write-tests.md` → `write-tests/SKILL.md`
+  - `sdp.skill.create-api-endpoint.md` → `create-api-endpoint/SKILL.md`
+  - `sdp.skill.create-ui-component.md` → `create-ui-component/SKILL.md`
+  - `sdp.skill.database-migration.md` → `database-migration/SKILL.md`
+  - `sdp.skill.error-handling.md` → `error-handling/SKILL.md`
+- All skill frontmatter updated to include both `name` and `description` fields (required by the Agent Skills standard)
+- `README.md` — Skills section updated: table now lists skill folders instead of flat files; Customization and Project Structure sections updated to reflect the new layout
+
 ### Added
 - `src/skills/` directory with 5 web-focused skill files:
-  - `sdp.skill.write-tests.md` — unit and integration test guidance (AAA, TDD, behavior-based testing)
-  - `sdp.skill.create-api-endpoint.md` — REST API endpoint design, validation, auth, error handling
-  - `sdp.skill.create-ui-component.md` — frontend component structure, accessibility, state, testing
-  - `sdp.skill.database-migration.md` — safe schema migrations, rollback patterns, zero-downtime techniques
-  - `sdp.skill.error-handling.md` — error classification, structured logging, safe API responses, retries
+  - `write-tests/SKILL.md` — unit and integration test guidance (AAA, TDD, behavior-based testing)
+  - `create-api-endpoint/SKILL.md` — REST API endpoint design, validation, auth, error handling
+  - `create-ui-component/SKILL.md` — frontend component structure, accessibility, state, testing
+  - `database-migration/SKILL.md` — safe schema migrations, rollback patterns, zero-downtime techniques
+  - `error-handling/SKILL.md` — error classification, structured logging, safe API responses, retries
 - `src/templates/template.skill.md` — starter template for writing custom skills
 - `src/prompts/qa-validate.prompt.md` — missing prompt for triggering the QA agent (Gate 6)
 - `.github/sdp-version` file written by installer to track installed SDP version
