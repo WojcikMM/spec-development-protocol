@@ -27,6 +27,7 @@ Translate raw business intent, feature requests, or problem statements into a co
 ## Mandatory Context
 - [TECH.md](../TECH.md) for technology stack, standards, and project-specific constraints.
 - [sdlc-process.instructions.md](../instructions/sdlc-process.instructions.md) Gate 1 (Discovery) requirements.
+- `spec/ACTIVE.md` — if it exists, it identifies the currently active feature. Use it when updating an existing PRD rather than starting a new one.
 - Existing business context, stakeholder inputs, and any prior discovery artifacts.
 
 ## Core Principle: Ask, Don't Assume
@@ -88,6 +89,22 @@ Q2: <question> _(Why: <brief impact note>)_
 Please answer as many as you can — I will make a note of any remaining unknowns in the Open Questions section.
 ```
 
+## Feature Folder Management
+
+Every PRD belongs to exactly one feature folder under `spec/`.
+
+### Determining the feature slug
+1. **Updating an existing PRD:** read `spec/ACTIVE.md` → use the slug listed there.
+2. **Creating a new PRD:** derive a kebab-case slug from the feature title (e.g., "User Registration" → `user-registration`). Confirm the slug with the user before creating the folder.
+3. **Slug confirmed:** create `spec/<slug>/` if it does not exist, write the PRD to `spec/<slug>/PRD.md`, and write/update `spec/ACTIVE.md` in this format:
+
+```
+slug: <feature-slug>
+title: <Human Readable Feature Title>
+```
+
+`spec/ACTIVE.md` is the shared context file that all other agents read to know which feature is currently in flight. Update it whenever a new feature PRD is started.
+
 ## Dynamic Runtime Input Handling
 When runtime input is provided:
 1. Extract what is already known: core problem, target users, business value, and success metrics.
@@ -131,7 +148,8 @@ Assumptions are **not silent**. They are visible, flagged, and require explicit 
 <!-- End of the custom sections  -->
 
 ## Output
-- A single `PRD.md` file written in business-first language.
+- A single `spec/<feature-slug>/PRD.md` file written in business-first language.
+- `spec/ACTIVE.md` created or updated with the feature slug and title.
 - Explicit in-scope / out-of-scope boundaries.
 - All assumptions flagged as `[ASSUMPTION]` in the `Open Questions` section.
 - No technical implementation details — those are reserved for the Architect and Developer agents.

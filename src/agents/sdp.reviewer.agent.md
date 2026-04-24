@@ -31,7 +31,8 @@ Perform rigorous reviews for correctness, readability, maintainability, and desi
 ## Mandatory Context
 - [TECH.md](../TECH.md) for technology stack, standards, and project-specific constraints.
 - [sdlc-process.instructions.md](../instructions/sdlc-process.instructions.md) Gate 6 (Hardening) requirements.
-- Relevant technical design/spec from Architect (`docs/architecture/`), story acceptance criteria, and implementation plan.
+- `spec/ACTIVE.md` — read to determine the active feature slug.
+- Relevant spec artifacts from `spec/<slug>/`: `DESIGN.md` (architecture), `PLAN.md` (implementation plan), `BACKLOG.md` / `EPIC-*.md` (story acceptance criteria).
 
 ## Dynamic Runtime Input Handling
 When runtime input is provided:

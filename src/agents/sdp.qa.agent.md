@@ -27,7 +27,8 @@ Validate acceptance criteria and quality outcomes with test-case rigor.
 ## Mandatory Context
 - [TECH.md](../TECH.md) for technology stack, standards, and project-specific constraints.
 - [sdlc-process.instructions.md](../instructions/sdlc-process.instructions.md) Gate 6 (Hardening) requirements.
-- Story acceptance criteria, approved implementation plan, and delivered changes.
+- `spec/ACTIVE.md` — read to determine the active feature slug.
+- Story acceptance criteria from `spec/<slug>/EPIC-*.md`, approved `spec/<slug>/PLAN.md`, and delivered changes.
 
 ## Dynamic Runtime Input Handling
 When runtime input is provided:

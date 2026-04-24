@@ -6,6 +6,7 @@ You are operating under the **Spec Development Protocol (SDP)** — a spec-first
 1. Read `@/.github/TECH.md` first — it defines the stack, cloud environment, and project-specific standards. All agents and decisions must be consistent with it.
 2. Follow the 6-gate SDLC in `@/.github/instructions/sdlc-process.instructions.md` — never skip or reorder gates without explicit approval.
 3. Route specialized work through the agents in `@/.github/agents/`.
+4. Check `@/spec/ACTIVE.md` — if it exists, it names the currently active feature (slug + title). Use it as the default working context for all gate operations when no explicit feature is specified in the user's input.
 
 ## Agent Routing
 | Task | Agent |

@@ -163,6 +163,19 @@ printf '%s\n' "$BRANCH" > "$DEST_DIR/sdp-version"
 print_info "  SDP version    : ${BRANCH}"
 
 # ---------------------------------------------------------------------------
+# Create spec/ directory for feature folders
+# ---------------------------------------------------------------------------
+
+SPEC_DIR="$TARGET_DIR/spec"
+spec_created=0
+
+if [[ ! -d "$SPEC_DIR" ]]; then
+  mkdir -p "$SPEC_DIR"
+  spec_created=1
+  print_info "  spec/ directory created"
+fi
+
+# ---------------------------------------------------------------------------
 # Summary
 # ---------------------------------------------------------------------------
 

@@ -28,7 +28,8 @@ Convert an approved `PRD.md` into a prioritized, delivery-ready backlog persiste
 ## Mandatory Context
 - [TECH.md](../TECH.md) for technology stack, standards, and project-specific constraints.
 - [sdlc-process.instructions.md](../instructions/sdlc-process.instructions.md) Gate 2 (Refinement) requirements.
-- Approved `PRD.md` — must be read in full before producing any output.
+- `spec/ACTIVE.md` — read this to determine the active feature slug. All output goes to `spec/<slug>/`.
+- Approved `spec/<active-slug>/PRD.md` — must be read in full before producing any output.
 
 ## Dynamic Runtime Input Handling
 When runtime input is provided:
@@ -48,10 +49,13 @@ When runtime input is provided:
 
 ## Backlog Document Structure
 
-### Primary output: `BACKLOG.md`
+### Active feature
+Read `spec/ACTIVE.md` to get the active feature slug. If missing, ask the user which feature they are refining. All backlog files are written inside `spec/<slug>/`.
+
+### Primary output: `spec/<slug>/BACKLOG.md`
 Top-level file listing all epics in priority order with links to their detail files.
 
-### Per-epic files: `docs/backlog/EPIC-<N>-<slug>.md`
+### Per-epic files: `spec/<slug>/EPIC-<N>-<slug>.md`
 Each epic file contains:
 - Epic title, goal, and PRD traceability reference.
 - List of features belonging to this epic.
@@ -69,13 +73,13 @@ Each epic file contains:
 - All assumptions, open questions, and sequencing risks documented in `BACKLOG.md`.
 
 ## Do / Don't
-- **Do:** create or update `BACKLOG.md` and `docs/backlog/EPIC-*.md` files.
-- **Don't:** author or modify `PRD.md` — that is the responsibility of `sdp.prd`.
+- **Do:** create or update `spec/<slug>/BACKLOG.md` and `spec/<slug>/EPIC-*.md` files.
+- **Don't:** author or modify `spec/<slug>/PRD.md` — that is the responsibility of `sdp.prd`.
 - **Don't:** design technical implementation details reserved for `sdp.architect` and `sdp.developer`.
 
 <!-- End of the custom sections  -->
 
 ## Output
-- `BACKLOG.md` listing all epics in priority order with links to detail files.
-- `docs/backlog/EPIC-<N>-<slug>.md` per epic, containing features, user stories, and acceptance criteria.
+- `spec/<slug>/BACKLOG.md` listing all epics in priority order with links to detail files.
+- `spec/<slug>/EPIC-<N>-<slug>.md` per epic, containing features, user stories, and acceptance criteria.
 - All assumptions, open questions, and sequencing risks documented.

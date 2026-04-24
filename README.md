@@ -77,11 +77,11 @@ SDP agents run in **GitHub Copilot Agent Mode**. Make sure you have the [GitHub 
 
 | Step | What you do | Prompt to run | Output |
 |---|---|---|---|
-| 1 | Describe the feature idea in plain language | `create-prd` | `PRD.md` |
-| 2 | Review and approve `PRD.md`, then break it into stories | `refine-backlog` | `BACKLOG.md` + `docs/backlog/EPIC-1-user-registration.md` |
-| 3 | Design the technical solution | `design-system` | `docs/architecture/DESIGN-user-registration.md` |
-| 4 | Pick story `US-1`, create an implementation plan (no code yet) | `plan-task` with "US-1" | Implementation plan |
-| 5 | Review and approve the plan, then implement | `implement` with "US-1" | Code + tests |
+| 1 | Describe the feature idea in plain language | `create-prd` | `spec/user-registration/PRD.md` + `spec/ACTIVE.md` |
+| 2 | Review and approve `PRD.md`, then break it into stories | `refine-backlog` | `spec/user-registration/BACKLOG.md` + `spec/user-registration/EPIC-1-core-flow.md` |
+| 3 | Design the technical solution | `design-system` | `spec/user-registration/DESIGN.md` |
+| 4 | Pick story `US-1`, create an implementation plan (no code yet) | `plan-task` with "US-1" | `spec/user-registration/PLAN.md` |
+| 5 | Review and approve the plan, then implement | `implement` with "US-1" | Code + tests + `spec/user-registration/HISTORY.md` updated |
 | 6a | Review the code | `run-review` | Review findings |
 | 6b | Security audit | `audit-security` | Security sign-off |
 | 6c | QA validation | `qa-validate` with "US-1" | Pass / Fail verdict |
@@ -96,11 +96,11 @@ Each story goes through Gates 4–6 independently. You stay in control at every 
 SDP enforces a **6-gate SDLC process**. Work progresses gate by gate — no coding until the design is approved, no design without a backlog, no backlog without a PRD.
 
 ```
-Gate 1: Discovery      → PRD.md
-Gate 2: Refinement     → BACKLOG.md + EPIC-*.md
-Gate 3: Architecture   → docs/architecture/DESIGN-<slug>.md
-Gate 4: Planning       → Implementation plan (one story at a time)
-Gate 5: Implementation → Code + tests
+Gate 1: Discovery      → spec/<slug>/PRD.md  +  spec/ACTIVE.md
+Gate 2: Refinement     → spec/<slug>/BACKLOG.md + EPIC-*.md
+Gate 3: Architecture   → spec/<slug>/DESIGN.md
+Gate 4: Planning       → spec/<slug>/PLAN.md (one story at a time)
+Gate 5: Implementation → Code + tests  →  spec/<slug>/HISTORY.md updated
 Gate 6: Hardening      → Review → Security audit → QA validation
 ```
 
@@ -123,6 +123,36 @@ Use the prompts in `.github/prompts/` to trigger the right agent at each gate:
 | 4 | `plan-task` | Developer plans one story (no code yet) |
 | 5 | `implement` | Developer implements the approved plan |
 | 6 | `run-review` → `audit-security` → `qa-validate` | Reviewer, Security, and QA validate in sequence |
+
+### Feature Folder Structure
+
+All spec artifacts for a feature live together in `spec/<feature-slug>/` at the project root. You do not need to remember where files go — agents create and update them automatically.
+
+```
+spec/
+  ACTIVE.md                        ← which feature is currently active
+  user-registration/
+    PRD.md                         ← Gate 1: product requirements
+    BACKLOG.md                     ← Gate 2: epic index
+    EPIC-1-core-registration.md    ← Gate 2: stories + acceptance criteria
+    DESIGN.md                      ← Gate 3: technical design
+    PLAN.md                        ← Gate 4: current implementation plan
+    HISTORY.md                     ← Gate 5: running log of completed tasks
+  checkout-flow/
+    PRD.md
+    ...
+```
+
+**`spec/ACTIVE.md`** is the key file — it tells all agents which feature is currently in flight:
+
+```
+slug: user-registration
+title: User Registration
+```
+
+When you start a new PRD, the `sdp.prd` agent derives the slug from the feature title, creates the folder, and updates `ACTIVE.md` for you. All subsequent agents read it automatically — you don't need to mention which feature you're working on in every chat.
+
+To switch to a different feature, update `slug` and `title` in `spec/ACTIVE.md`, or run `create-prd` for the new feature.
 
 ### Working on a Legacy Project
 

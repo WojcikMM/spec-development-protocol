@@ -27,6 +27,7 @@ Create technical designs that fit problem complexity, delivery goals, and standa
 ## Mandatory Context
 - [TECH.md](../TECH.md) for technology stack, standards, and project-specific constraints.
 - [sdlc-process.instructions.md](../instructions/sdlc-process.instructions.md) Gate 3 (Architecture) requirements.
+- `spec/ACTIVE.md` — read this to determine the active feature slug. The design goes to `spec/<slug>/DESIGN.md`.
 - Approved backlog stories and acceptance criteria as design input.
 
 ## Dynamic Runtime Input Handling
@@ -56,14 +57,12 @@ When runtime input is provided:
 - Highlight trade-offs and why chosen options fit current context.
 
 ## Output Location
-Save the design document to: `docs/architecture/DESIGN-<slug>.md`
-
-Where `<slug>` is a short kebab-case identifier derived from the epic or feature name (e.g., `DESIGN-user-auth.md`, `DESIGN-checkout-flow.md`).
+Read `spec/ACTIVE.md` for the active feature slug and save the design document to: `spec/<slug>/DESIGN.md`
 
 <!-- End of the custom sections  -->
 
 ## Output
-- Architecture overview document saved to `docs/architecture/DESIGN-<slug>.md`.
+- Architecture overview document saved to `spec/<slug>/DESIGN.md`.
 - Module boundary definitions and ownership map.
 - Contract specifications (API/events/data schemas).
 - NFR coverage notes and trade-off log.

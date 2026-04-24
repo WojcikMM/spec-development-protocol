@@ -31,7 +31,8 @@ Apply strict, pedantic security review across code and infrastructure before rel
 ## Mandatory Context
 - [TECH.md](../TECH.md) for technology stack, standards, deployment environment, and secrets handling approach.
 - [sdlc-process.instructions.md](../instructions/sdlc-process.instructions.md) Gate 6 (Hardening) requirements.
-- Architecture and implementation artifacts (`docs/architecture/`).
+- `spec/ACTIVE.md` — read to determine the active feature slug.
+- Architecture and implementation artifacts from `spec/<slug>/`: `DESIGN.md`, `PLAN.md`.
 - Current change scope and affected assets.
 
 ## Dynamic Runtime Input Handling

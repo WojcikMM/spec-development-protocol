@@ -6,33 +6,63 @@ applyTo: **/*
 
 All work must progress through these gates in order unless an explicit exception is recorded.
 
+---
+
+## Feature Folder Convention
+
+All spec artifacts for a feature live together under `spec/<feature-slug>/` in the project root.
+
+```
+spec/
+  ACTIVE.md                    ← slug + title of the currently active feature
+  <feature-slug>/
+    PRD.md                     ← Gate 1 output
+    BACKLOG.md                 ← Gate 2 output (epic index)
+    EPIC-<N>-<slug>.md         ← Gate 2 output (one per epic)
+    DESIGN.md                  ← Gate 3 output
+    PLAN.md                    ← Gate 4 output (current implementation plan)
+    HISTORY.md                 ← running log of implemented tasks and decisions
+```
+
+`ACTIVE.md` format:
+```
+slug: <feature-slug>
+title: <Human Readable Feature Title>
+```
+
+All agents read `spec/ACTIVE.md` to determine the working feature when no explicit feature is given in the user's input.
+
+---
+
 ## Gate 1: Discovery (PRD)
 **Objective:** Define the problem, users, business value, and success metrics.
-- Output: `PRD.md`
+- Output: `spec/<feature-slug>/PRD.md`
 - Owner: `sdp.prd`
 - Exit criteria: goals, scope, constraints, risks, and measurable outcomes are clear.
+- Side effect: creates `spec/<feature-slug>/` folder and sets `spec/ACTIVE.md`.
 
 ## Gate 2: Refinement (Epics/Stories)
 **Objective:** Convert PRD into delivery-ready backlog.
-- Output: `BACKLOG.md` + `docs/backlog/EPIC-*.md`
+- Output: `spec/<feature-slug>/BACKLOG.md` + `spec/<feature-slug>/EPIC-<N>-<slug>.md`
 - Owner: `sdp.analyst`
 - Exit criteria: stories are testable, scoped, and sequenced.
 
 ## Gate 3: Architecture (Tech Spec)
 **Objective:** Produce architecture/design that fits complexity and `TECH.md`.
-- Output: `docs/architecture/DESIGN-<slug>.md`
+- Output: `spec/<feature-slug>/DESIGN.md`
 - Owner: `sdp.architect`
 - Exit criteria: design is reviewable, implementable, and traceable to backlog.
 
 ## Gate 4: Planning (Task Breakdown)
 **Objective:** Create implementation plan for one selected story/task.
-- Output: implementation plan with files, steps, tests, and rollback notes.
+- Output: `spec/<feature-slug>/PLAN.md` (overwrite with current plan).
 - Owner: `sdp.developer` (plan-task mode)
 - Exit criteria: plan is explicit, approved, and bounded to one task.
 
 ## Gate 5: Implementation (Coding)
 **Objective:** Implement only the approved task plan.
 - Output: code + tests + docs updates within planned scope.
+- Side effect: append a summary entry to `spec/<feature-slug>/HISTORY.md`.
 - Owner: `sdp.developer` (implement mode)
 - Exit criteria: implementation complete, tests passing, no out-of-scope edits.
 
@@ -66,3 +96,4 @@ Gates are sequential but failures route back to the appropriate gate — not to 
 - Maintain bidirectional traceability: PRD -> backlog -> design -> plan -> code -> validation.
 - Block progression if current gate artifacts are incomplete or ambiguous.
 - One story/task at a time through Gates 4–6. Never bundle stories.
+- Always read `spec/ACTIVE.md` to determine the active feature when it is not explicitly provided.
