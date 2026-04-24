@@ -1,4 +1,5 @@
 ---
+name: Error Handling
 description: Guidance for implementing consistent, user-friendly, and observable error handling across API boundaries, service layers, and UI components.
 ---
 # Skill: Error Handling
