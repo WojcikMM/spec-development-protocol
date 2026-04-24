@@ -20,12 +20,12 @@ In this template repository, framework sources are stored under `src/`. During i
 
 **Options (via environment variables):**
 
-| Variable | Default | Description |
-|---|---|---|
-| `SDP_BRANCH` | `main` | Install from a specific branch or release tag |
-| `SDP_FORCE` | `false` | Set to `true` to overwrite existing SDP files during upgrade |
-| `SDP_TECH_MODE` | `init` | Control `.github/TECH.md`: `init` (create if missing), `overwrite`, or `skip` |
-| `SDP_TARGET` | current directory | Target repository root |
+| Variable        | Default           | Description                                                                   |
+| --------------- | ----------------- | ----------------------------------------------------------------------------- |
+| `SDP_BRANCH`    | `main`            | Install from a specific branch or release tag                                 |
+| `SDP_FORCE`     | `false`           | Set to `true` to overwrite existing SDP files during upgrade                  |
+| `SDP_TECH_MODE` | `init`            | Control `.github/TECH.md`: `init` (create if missing), `overwrite`, or `skip` |
+| `SDP_TARGET`    | current directory | Target repository root                                                        |
 
 ```bash
 # Install a specific version
@@ -166,16 +166,16 @@ SDP works equally well on existing codebases:
 
 ## Agents
 
-| Agent | File | Purpose |
-|---|---|---|
-| `sdp.prd` | `agents/sdp.prd.agent.md` | Writes `PRD.md` from business intent |
-| `sdp.discover` | `agents/sdp.discover.agent.md` | Discovers legacy stack signals and drafts `TECH.md` |
-| `sdp.analyst` | `agents/sdp.analyst.agent.md` | Refines PRD into epics, features, and user stories |
-| `sdp.architect` | `agents/sdp.architect.agent.md` | Produces right-sized technical designs |
-| `sdp.developer` | `agents/sdp.developer.agent.md` | Plans and implements one story at a time |
-| `sdp.reviewer` | `agents/sdp.reviewer.agent.md` | Code and design review |
-| `sdp.security` | `agents/sdp.security.agent.md` | Security audit (OWASP web baselines) |
-| `sdp.qa` | `agents/sdp.qa.agent.md` | Validates acceptance criteria |
+| Agent           | File                            | Purpose                                             |
+| --------------- | ------------------------------- | --------------------------------------------------- |
+| `sdp.prd`       | `agents/sdp.prd.agent.md`       | Writes `PRD.md` from business intent                |
+| `sdp.discover`  | `agents/sdp.discover.agent.md`  | Discovers legacy stack signals and drafts `TECH.md` |
+| `sdp.analyst`   | `agents/sdp.analyst.agent.md`   | Refines PRD into epics, features, and user stories  |
+| `sdp.architect` | `agents/sdp.architect.agent.md` | Produces right-sized technical designs              |
+| `sdp.developer` | `agents/sdp.developer.agent.md` | Plans and implements one story at a time            |
+| `sdp.reviewer`  | `agents/sdp.reviewer.agent.md`  | Code and design review                              |
+| `sdp.security`  | `agents/sdp.security.agent.md`  | Security audit (OWASP web baselines)                |
+| `sdp.qa`        | `agents/sdp.qa.agent.md`        | Validates acceptance criteria                       |
 
 Agents suggest handoffs to the next step — after review, the reviewer agent offers to trigger the security agent; after security sign-off, the security agent offers to trigger QA. Each handoff requires your confirmation.
 
@@ -185,17 +185,17 @@ Agents suggest handoffs to the next step — after review, the reviewer agent of
 
 Prompts are the entry points that activate agents with the correct mode. Each prompt file includes a checklist of prerequisites and describes what will happen before you commit to running it.
 
-| Prompt | Triggers | Gate |
-|---|---|---|
-| `discover-tech` | `sdp.discover` | Legacy onboarding |
-| `create-prd` | `sdp.prd` | Gate 1 |
-| `refine-backlog` | `sdp.analyst` | Gate 2 |
-| `design-system` | `sdp.architect` | Gate 3 |
-| `plan-task` | `sdp.developer` (plan mode) | Gate 4 |
-| `implement` | `sdp.developer` (implement mode) | Gate 5 |
-| `run-review` | `sdp.reviewer` | Gate 6 |
-| `audit-security` | `sdp.security` | Gate 6 |
-| `qa-validate` | `sdp.qa` | Gate 6 |
+| Prompt           | Triggers                         | Gate              |
+| ---------------- | -------------------------------- | ----------------- |
+| `discover-tech`  | `sdp.discover`                   | Legacy onboarding |
+| `create-prd`     | `sdp.prd`                        | Gate 1            |
+| `refine-backlog` | `sdp.analyst`                    | Gate 2            |
+| `design-system`  | `sdp.architect`                  | Gate 3            |
+| `plan-task`      | `sdp.developer` (plan mode)      | Gate 4            |
+| `implement`      | `sdp.developer` (implement mode) | Gate 5            |
+| `run-review`     | `sdp.reviewer`                   | Gate 6            |
+| `audit-security` | `sdp.security`                   | Gate 6            |
+| `qa-validate`    | `sdp.qa`                         | Gate 6            |
 
 ---
 
@@ -260,6 +260,19 @@ Installed layout in client repository:
 ├── prompts/
 ├── skills/
 └── templates/
+
+Runtime artifacts created by agents in client repository:
+.
+├── PRD.md
+├── BACKLOG.md
+├── CHANGELOG.md
+└── docs/
+	├── backlog/
+	├── architecture/
+	├── plans/
+	├── review/
+	├── security/
+	└── qa/
 ```
 
 ---

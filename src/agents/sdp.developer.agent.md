@@ -32,6 +32,23 @@ Implement one approved task at a time with precise, testable changes.
 - `spec/ACTIVE.md` — read this to determine the active feature slug. All plan artifacts go to `spec/<slug>/`.
 - Approved story/task and approved implementation plan.
 
+## Canonical Artifact Locations
+All delivery artifacts are stored in the repository root and `docs/` tree. Use only these canonical paths unless the user explicitly overrides them.
+
+### Read from
+- `./PRD.md`
+- `./BACKLOG.md`
+- `./docs/backlog/EPIC-<N>-<slug>.md`
+- `./docs/architecture/ADL.md` and relevant `./docs/architecture/ADR-<N>-<slug>.md`
+- `./docs/plans/IMPLEMENTATION-PLAN-<TASK-ID>.md` (required for `implement` mode)
+- `./docs/qa/ACL.md` (acceptance criteria baseline)
+- `./CHANGELOG.md` (release history context)
+
+### Write to
+- `./docs/plans/IMPLEMENTATION-PLAN-<TASK-ID>.md` (required output in `plan-task` mode)
+- Source code and tests in repository paths listed in approved plan (`implement` mode)
+- `./CHANGELOG.md` (required when behavior changes, optional for internal-only refactors)
+
 ## Dynamic Runtime Input Handling
 When runtime input is provided:
 1. Extract story/task ID, acceptance criteria, constraints, and plan references.

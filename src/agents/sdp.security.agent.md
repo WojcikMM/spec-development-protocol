@@ -35,6 +35,21 @@ Apply strict, pedantic security review across code and infrastructure before rel
 - Architecture and implementation artifacts from `spec/<slug>/`: `DESIGN.md`, `PLAN.md`.
 - Current change scope and affected assets.
 
+## Canonical Artifact Locations
+All delivery artifacts are stored in the repository root and `docs/` tree. Use only these canonical paths unless the user explicitly overrides them.
+
+### Read from
+- `./PRD.md`
+- `./BACKLOG.md` and `./docs/backlog/EPIC-<N>-<slug>.md`
+- `./docs/architecture/ADL.md` and relevant `./docs/architecture/ADR-<N>-<slug>.md`
+- `./docs/plans/IMPLEMENTATION-PLAN-<TASK-ID>.md`
+- `./docs/review/REVIEW-<TASK-ID>.md` (if available before security pass)
+- `./CHANGELOG.md`
+
+### Write to
+- `./docs/security/SECURITY-AUDIT-<TASK-ID>.md` (required audit report)
+- `./CHANGELOG.md` (optional: append security sign-off note when requested)
+
 ## Dynamic Runtime Input Handling
 When runtime input is provided:
 1. Extract target assets, threat context, and compliance obligations.
@@ -91,4 +106,4 @@ Hand off to `sdp.qa` only when all Critical and High findings are resolved.
 ## Output
 - Security findings (Critical/High/Medium/Low).
 - Mitigation checklist with validation steps.
-- Explicit sign-off decision for current scope.
+- `docs/security/SECURITY-AUDIT-<TASK-ID>.md` with explicit sign-off decision for current scope.

@@ -29,6 +29,18 @@ Accelerate legacy-project onboarding by producing a high-confidence draft of `TE
 - [sdlc-process.instructions.md](../instructions/sdlc-process.instructions.md) for process expectations.
 - Existing project files that indicate runtime stack, infrastructure, security controls, testing, and delivery workflows.
 
+## Canonical Artifact Locations
+All delivery artifacts are stored in the repository root and `docs/` tree. Use only these canonical paths unless the user explicitly overrides them.
+
+### Read from
+- Entire repository evidence surface (manifests, lockfiles, CI/CD, IaC, deploy configs)
+- `./.github/TECH.md` (if already present and partially populated)
+- `./PRD.md`, `./BACKLOG.md`, and `./CHANGELOG.md` (optional business context)
+
+### Write to
+- `./.github/TECH.md` (required canonical tech baseline)
+- `./CHANGELOG.md` (optional: append TECH baseline initialization/update when requested)
+
 ## Dynamic Runtime Input Handling
 When runtime input is provided:
 1. Extract repository root, target services, and any excluded directories.
@@ -53,6 +65,6 @@ When runtime input is provided:
 <!-- End of the custom sections  -->
 
 ## Output
-- Updated `TECH.md` aligned to the template structure.
+- Updated `.github/TECH.md` aligned to the template structure.
 - A short evidence summary listing key files used for discovery.
 - A review checklist of unknowns that require human confirmation.

@@ -30,6 +30,22 @@ Create technical designs that fit problem complexity, delivery goals, and standa
 - `spec/ACTIVE.md` — read this to determine the active feature slug. The design goes to `spec/<slug>/DESIGN.md`.
 - Approved backlog stories and acceptance criteria as design input.
 
+## Canonical Artifact Locations
+All delivery artifacts are stored in the repository root and `docs/` tree. Use only these canonical paths unless the user explicitly overrides them.
+
+### Read from
+- `./PRD.md`
+- `./BACKLOG.md`
+- `./docs/backlog/EPIC-<N>-<slug>.md`
+- `./docs/qa/ACL.md` (if present for acceptance-criteria traceability)
+- `./docs/architecture/ADL.md` and `./docs/architecture/ADR-<N>-<slug>.md` (if updating an existing design)
+- `./CHANGELOG.md` (for historical context)
+
+### Write to
+- `./docs/architecture/ADL.md` (required architecture design log/spec for current scope)
+- `./docs/architecture/ADR-<N>-<slug>.md` (required for significant architecture decisions)
+- `./CHANGELOG.md` (optional: append design-documentation updates when requested)
+
 ## Dynamic Runtime Input Handling
 When runtime input is provided:
 1. Parse scope boundaries and dependencies.

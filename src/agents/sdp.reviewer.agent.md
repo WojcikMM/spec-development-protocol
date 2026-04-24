@@ -34,6 +34,21 @@ Perform rigorous reviews for correctness, readability, maintainability, and desi
 - `spec/ACTIVE.md` — read to determine the active feature slug.
 - Relevant spec artifacts from `spec/<slug>/`: `DESIGN.md` (architecture), `PLAN.md` (implementation plan), `BACKLOG.md` / `EPIC-*.md` (story acceptance criteria).
 
+## Canonical Artifact Locations
+All delivery artifacts are stored in the repository root and `docs/` tree. Use only these canonical paths unless the user explicitly overrides them.
+
+### Read from
+- `./PRD.md`
+- `./BACKLOG.md` and `./docs/backlog/EPIC-<N>-<slug>.md`
+- `./docs/architecture/ADL.md` and relevant `./docs/architecture/ADR-<N>-<slug>.md`
+- `./docs/plans/IMPLEMENTATION-PLAN-<TASK-ID>.md`
+- `./docs/qa/ACL.md`
+- `./CHANGELOG.md`
+
+### Write to
+- `./docs/review/REVIEW-<TASK-ID>.md` (required review output)
+- `./CHANGELOG.md` (optional: append review-completion note when requested)
+
 ## Dynamic Runtime Input Handling
 When runtime input is provided:
 1. Extract scope, design/plan references, and critical review priorities.
@@ -67,4 +82,4 @@ Do not trigger `sdp.security` or `sdp.qa` directly — hand off to `sdp.security
 ## Output
 - Findings categorized as: Critical / Major / Minor / Suggestion.
 - Each finding includes impact, evidence, and recommended remediation.
-- Final verdict: Approve / Approve with conditions / Request changes.
+- `docs/review/REVIEW-<TASK-ID>.md` including final verdict: Approve / Approve with conditions / Request changes.

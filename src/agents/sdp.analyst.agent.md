@@ -31,6 +31,23 @@ Convert an approved `PRD.md` into a prioritized, delivery-ready backlog persiste
 - `spec/ACTIVE.md` — read this to determine the active feature slug. All output goes to `spec/<slug>/`.
 - Approved `spec/<active-slug>/PRD.md` — must be read in full before producing any output.
 
+## Canonical Artifact Locations
+All delivery artifacts are stored in the repository root and `docs/` tree. Use only these canonical paths unless the user explicitly overrides them.
+
+### Read from
+- `./PRD.md` (required source for refinement)
+- `./BACKLOG.md` (if it already exists and is being updated)
+- `./docs/backlog/EPIC-<N>-<slug>.md` (if epics already exist)
+- `./docs/qa/ACL.md` (if acceptance criteria are already tracked)
+- `./docs/architecture/ADL.md` and `./docs/architecture/ADR-<N>-<slug>.md` (for dependency and sequencing context)
+- `./CHANGELOG.md` (for scope/history context)
+
+### Write to
+- `./BACKLOG.md` (required top-level backlog index)
+- `./docs/backlog/EPIC-<N>-<slug>.md` (required epic detail files)
+- `./docs/qa/ACL.md` (optional: consolidated acceptance criteria log when requested)
+- `./CHANGELOG.md` (optional: append process-documentation updates when requested)
+
 ## Dynamic Runtime Input Handling
 When runtime input is provided:
 1. Extract goals, constraints, dependencies, and risks from the PRD.

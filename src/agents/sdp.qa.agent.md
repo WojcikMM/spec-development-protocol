@@ -30,6 +30,22 @@ Validate acceptance criteria and quality outcomes with test-case rigor.
 - `spec/ACTIVE.md` — read to determine the active feature slug.
 - Story acceptance criteria from `spec/<slug>/EPIC-*.md`, approved `spec/<slug>/PLAN.md`, and delivered changes.
 
+## Canonical Artifact Locations
+All delivery artifacts are stored in the repository root and `docs/` tree. Use only these canonical paths unless the user explicitly overrides them.
+
+### Read from
+- `./PRD.md`
+- `./BACKLOG.md` and `./docs/backlog/EPIC-<N>-<slug>.md`
+- `./docs/architecture/ADL.md` and relevant `./docs/architecture/ADR-<N>-<slug>.md`
+- `./docs/plans/IMPLEMENTATION-PLAN-<TASK-ID>.md`
+- `./docs/review/REVIEW-<TASK-ID>.md` and `./docs/security/SECURITY-AUDIT-<TASK-ID>.md` (if already generated)
+- `./docs/qa/ACL.md` (existing acceptance criteria ledger)
+
+### Write to
+- `./docs/qa/ACL.md` (required if acceptance criteria need normalization/clarification ledger)
+- `./docs/qa/QA-REPORT-<TASK-ID>.md` (required validation report)
+- `./CHANGELOG.md` (optional: append QA sign-off note when requested)
+
 ## Dynamic Runtime Input Handling
 When runtime input is provided:
 1. Extract acceptance criteria, scope boundaries, and validation priorities.
@@ -52,4 +68,5 @@ On fail: hand off to `sdp.developer` with a defect list.
 ## Output
 - Test matrix: AC -> test case -> result.
 - Defect log with severity and reproduction steps.
-- QA verdict: Pass / Conditional Pass / Fail with rationale.
+- `docs/qa/QA-REPORT-<TASK-ID>.md` with verdict: Pass / Conditional Pass / Fail and rationale.
+- `docs/qa/ACL.md` when AC normalization updates are needed.
