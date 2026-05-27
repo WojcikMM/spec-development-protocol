@@ -26,7 +26,6 @@ Use this file to define the local working contract for AI agents in this folder 
 - Key dependencies/contracts: `<define>`
 - Build/test command(s): `<define>`
 
-## Placement Guidance
-- Repository root: one global `AGENTS.md`.
-- `.NET`: add one `AGENTS.md` per meaningful library/service folder (usually next to each `.csproj`).
-- Frontend: add one `AGENTS.md` per app/package root (for example `apps/web`, `src/frontend`, `packages/ui`).
+## Context Resolution Notes
+- This file supplements (not replaces) parent `AGENTS.md` files.
+- For conflicts, the most specific (closest) `AGENTS.md` in the target path wins.

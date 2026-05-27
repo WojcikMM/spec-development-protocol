@@ -290,6 +290,11 @@ Installed layout in client repository:
 │   │   └── SKILL.md                 <- Agent Skills standard format
 │   └── ...
 └── templates/
+    ├── AGENTS.md
+    ├── TECH.md
+    ├── template.agent.md
+    ├── template.prompt.md
+    └── template.skill.md
 
 Recommended AGENTS.md placement in client repository:
 .
