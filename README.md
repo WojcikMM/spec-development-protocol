@@ -63,7 +63,17 @@ After installation, open `.github/TECH.md` — this is the single source of trut
 
 > **Working on an existing project?** Use `discover-tech` to trigger the `sdp.discover` agent, which reads your codebase and drafts `TECH.md` for review.
 
-### 2. Enable Agent Mode in VS Code
+### 2. Add `AGENTS.md` Context Maps
+
+To minimize context size and avoid broad repository scans, add scoped `AGENTS.md` files:
+
+- Repository root: one global `AGENTS.md` for high-level rules.
+- `.NET` backend: one `AGENTS.md` in each meaningful library/service folder (typically next to each `.csproj`).
+- Frontend: one `AGENTS.md` in each app/package root (for example `apps/web`, `src/frontend`, `packages/ui`).
+
+All SDP agents are configured to read the root + nearest module `AGENTS.md` files before deeper file discovery.
+
+### 3. Enable Agent Mode in VS Code
 
 SDP agents run in **GitHub Copilot Agent Mode**. Make sure you have the [GitHub Copilot](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot) extension installed and agent mode enabled in your editor settings.
 
@@ -221,6 +231,7 @@ SDP is designed to coexist with your own tooling:
 
 - **Custom agents:** add your own `.agent.md` files alongside the SDP ones — they won't be touched by updates.
 - **Custom instructions:** extend `.github/copilot-instructions.md` with project-specific rules.
+- **Scoped context with AGENTS.md:** add `AGENTS.md` files at root and module boundaries so agents can focus only on relevant folders.
 - **Custom prompts:** add prompts to `.github/prompts/` for team-specific workflows.
 - **Custom skills:** add your own skill folders to `.github/skills/` — each as `<skill-name>/SKILL.md` using the template.
 - **TECH.md is yours:** it's the one file you're expected to own and keep current.
@@ -232,6 +243,7 @@ SDP is designed to coexist with your own tooling:
 After installation, the `.github/templates/` folder in your project contains:
 
 - `TECH.md` — blank TECH.md template to copy when starting a new project.
+- `AGENTS.md` — scoped context-map template for root, `.NET` libraries, and frontend app/package folders.
 - `template.agent.md` — starter template for writing your own agents.
 - `template.prompt.md` — starter template for writing your own prompts.
 - `template.skill.md` — starter template for writing your own skills.
@@ -259,6 +271,11 @@ src/
 │   └── write-tests/
 │       └── SKILL.md
 └── templates/
+    ├── AGENTS.md
+    ├── TECH.md
+    ├── template.agent.md
+    ├── template.prompt.md
+    └── template.skill.md
 
 Installed layout in client repository:
 .github/
@@ -273,6 +290,17 @@ Installed layout in client repository:
 │   │   └── SKILL.md                 <- Agent Skills standard format
 │   └── ...
 └── templates/
+
+Recommended AGENTS.md placement in client repository:
+.
+├── AGENTS.md                        <- Global repository rules/context boundaries
+├── src/
+│   ├── Billing/
+│   │   ├── AGENTS.md                <- .NET library/service-local context
+│   │   └── Billing.csproj
+│   └── Frontend/
+│       ├── AGENTS.md                <- Frontend app/package-local context
+│       └── package.json
 
 Runtime artifacts created by agents in client repository:
 .

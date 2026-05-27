@@ -34,6 +34,21 @@ All agents read `spec/ACTIVE.md` to determine the working feature when no explic
 
 ---
 
+## AGENTS.md Context Convention
+
+Use `AGENTS.md` files to keep context targeted and reduce repository-wide scans.
+
+- Read the repository root `AGENTS.md` first (if present).
+- Read the nearest `AGENTS.md` for the current working subtree before analyzing or editing files.
+- Prefer scoped discovery in the selected module path instead of whole-repo exploration.
+- If multiple `AGENTS.md` files apply, the most specific file (closest to target files) has precedence for local work.
+
+Recommended placement in client repositories:
+- `.NET` backend: place an `AGENTS.md` in each meaningful library/service folder (typically where each `.csproj` lives).
+- Frontend: place an `AGENTS.md` in each application/package root (for example `apps/web`, `src/frontend`, `packages/ui`).
+
+---
+
 ## Gate 1: Discovery (PRD)
 **Objective:** Define the problem, users, business value, and success metrics.
 - Output: `spec/<feature-slug>/PRD.md`
@@ -93,6 +108,7 @@ Gates are sequential but failures route back to the appropriate gate — not to 
 
 ## Cross-Gate Rules
 - Always reference `@/.github/TECH.md` for stack and standards.
+- Always resolve the applicable `AGENTS.md` chain (root -> module) before broad file search.
 - Maintain bidirectional traceability: PRD -> backlog -> design -> plan -> code -> validation.
 - Block progression if current gate artifacts are incomplete or ambiguous.
 - One story/task at a time through Gates 4–6. Never bundle stories.

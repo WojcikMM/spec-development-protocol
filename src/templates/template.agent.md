@@ -28,8 +28,15 @@ You **HAVE TO** (if not empty) include the above runtime input in your reasoning
 
 ## Mandatory Context
 - [TECH.md](../TECH.md) for technology stack, standards, and Azure environment constraints.
+- Applicable `AGENTS.md` files (root + nearest module path) to keep context scoped.
 - Architecture and implementation artifacts
 - Current change scope and affected assets
+
+## AGENTS.md Context Strategy
+- Read root `AGENTS.md` first, then the closest `AGENTS.md` in the target module path.
+- Use `AGENTS.md` scope hints to avoid broad repository scans.
+- For `.NET` work, place and read `AGENTS.md` files near each `.csproj` or service/library root.
+- For frontend work, place and read `AGENTS.md` files in each app/package root.
 
 ## Dynamic Runtime Input Handling
 <agent-runtime-input-handling>

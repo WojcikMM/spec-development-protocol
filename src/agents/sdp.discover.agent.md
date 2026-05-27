@@ -27,7 +27,14 @@ Accelerate legacy-project onboarding by producing a high-confidence draft of `TE
 ## Mandatory Context
 - [templates/TECH.md](../templates/TECH.md) as the required output structure.
 - [sdlc-process.instructions.md](../instructions/sdlc-process.instructions.md) for process expectations.
+- Applicable `AGENTS.md` files (root + nearest module path) to constrain repository exploration.
 - Existing project files that indicate runtime stack, infrastructure, security controls, testing, and delivery workflows.
+
+## AGENTS.md Context Strategy
+- Read the root `AGENTS.md` first, then the closest `AGENTS.md` in the active module path.
+- Use this chain to narrow file discovery and avoid scanning unrelated repository areas.
+- For `.NET` code paths, prioritize `AGENTS.md` files near each `.csproj`/library root.
+- For frontend code paths, prioritize `AGENTS.md` files in app/package roots.
 
 ## Canonical Artifact Locations
 All delivery artifacts are stored in the repository root and `docs/` tree. Use only these canonical paths unless the user explicitly overrides them.

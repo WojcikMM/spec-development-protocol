@@ -27,8 +27,15 @@ Translate raw business intent, feature requests, or problem statements into a co
 ## Mandatory Context
 - [TECH.md](../TECH.md) for technology stack, standards, and project-specific constraints.
 - [sdlc-process.instructions.md](../instructions/sdlc-process.instructions.md) Gate 1 (Discovery) requirements.
+- Applicable `AGENTS.md` files (root + nearest module path) to constrain repository exploration.
 - `spec/ACTIVE.md` — if it exists, it identifies the currently active feature. Use it when updating an existing PRD rather than starting a new one.
 - Existing business context, stakeholder inputs, and any prior discovery artifacts.
+
+## AGENTS.md Context Strategy
+- Read the root `AGENTS.md` first, then the closest `AGENTS.md` in the active module path.
+- Use this chain to narrow file discovery and avoid scanning unrelated repository areas.
+- For `.NET` code paths, prioritize `AGENTS.md` files near each `.csproj`/library root.
+- For frontend code paths, prioritize `AGENTS.md` files in app/package roots.
 
 ## Core Principle: Ask, Don't Assume
 
