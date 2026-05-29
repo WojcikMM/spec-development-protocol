@@ -8,13 +8,27 @@ SDP turns GitHub Copilot Agent Mode into a disciplined delivery team: a PRD auth
 
 ## Quick Install
 
+### macOS / Linux (bash)
+
 Run this in the root of your project repository:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.sh | bash
 ```
 
-This copies the `.github/` framework files into your repository **without overwriting** any existing files. Your custom agents, instructions, and scripts stay untouched.
+### Windows (PowerShell)
+
+Run this in the root of your project repository from a PowerShell terminal (PowerShell 5.1+ or PowerShell 7+):
+
+```powershell
+iwr -useb https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.ps1 | iex
+```
+
+> **Note:** If you see a script execution policy error, run `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` first, then retry the command above.
+
+---
+
+Both installers copy the `.github/` framework files into your repository **without overwriting** any existing files. Your custom agents, instructions, and scripts stay untouched.
 
 In this template repository, framework sources are stored under `src/`. During install, they are copied into your project's `.github/` folder. A `.github/sdp-version` file is written so you always know which version is installed.
 
@@ -26,6 +40,8 @@ In this template repository, framework sources are stored under `src/`. During i
 | `SDP_FORCE`     | `false`           | Set to `true` to overwrite existing SDP files during upgrade                  |
 | `SDP_TECH_MODE` | `init`            | Control `.github/TECH.md`: `init` (create if missing), `overwrite`, or `skip` |
 | `SDP_TARGET`    | current directory | Target repository root                                                        |
+
+**bash examples:**
 
 ```bash
 # Install a specific version
@@ -39,6 +55,22 @@ SDP_FORCE=true SDP_TECH_MODE=skip curl -fsSL https://raw.githubusercontent.com/W
 
 # Re-initialize .github/TECH.md from template
 SDP_TECH_MODE=overwrite curl -fsSL https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.sh | bash
+```
+
+**PowerShell examples:**
+
+```powershell
+# Install a specific version
+$env:SDP_BRANCH='v1.0.0'; iwr -useb https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.ps1 | iex
+
+# Upgrade existing installation (overwrite SDP files)
+$env:SDP_FORCE='true'; iwr -useb https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.ps1 | iex
+
+# Upgrade SDP files but keep existing .github/TECH.md
+$env:SDP_FORCE='true'; $env:SDP_TECH_MODE='skip'; iwr -useb https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.ps1 | iex
+
+# Re-initialize .github/TECH.md from template
+$env:SDP_TECH_MODE='overwrite'; iwr -useb https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.ps1 | iex
 ```
 
 ### Manual Installation

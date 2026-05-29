@@ -10,6 +10,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 - `sdp.developer.agent.md` — new `Approve plan and proceed to implementation` handoff entry in frontmatter, providing a one-click option to approve the plan produced by `/plan-task` and immediately move to implement mode (alternative to manually invoking `/implement`)
+- `install.ps1` — PowerShell installer for Windows users (PowerShell 5.1+/7+), feature-parity with `install.sh`: same environment variables (`SDP_BRANCH`, `SDP_FORCE`, `SDP_TECH_MODE`, `SDP_TARGET`), TECH.md modes, commit-SHA versioning for branch installs, and `spec/` directory creation
+- `README.md` — Windows Quick Install section with PowerShell one-liner (`iwr … | iex`), execution-policy note, and PowerShell examples for all install scenarios
 
 ### Changed
 - `install.sh` — versioning now appends the short commit SHA when installing from a branch (e.g., `main@a1b2c3d`), making branch-based installs comparable and traceable; tag-based installs continue to use the tag name unchanged
