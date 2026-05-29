@@ -183,7 +183,7 @@ if ($INSTALLED_FROM -eq 'branch') {
     }
 }
 
-Set-Content -LiteralPath (Join-Path $DEST_DIR 'sdp-version') -Value $SDP_VERSION -NoNewline
+Set-Content -LiteralPath (Join-Path $DEST_DIR 'sdp-version') -Value $SDP_VERSION
 Write-SdpInfo "  SDP version    : $SDP_VERSION"
 
 # ---------------------------------------------------------------------------
