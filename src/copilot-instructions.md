@@ -7,6 +7,19 @@ You are operating under the **Spec Development Protocol (SDP)** — a spec-first
 2. Follow the 6-gate SDLC in `@/.github/instructions/sdlc-process.instructions.md` — never skip or reorder gates without explicit approval.
 3. Route specialized work through the agents in `@/.github/agents/`.
 4. Check `@/spec/ACTIVE.md` — if it exists, it names the currently active feature (slug + title). Use it as the default working context for all gate operations when no explicit feature is specified in the user's input.
+5. Resolve the `AGENTS.md` context chain before broad repo exploration: read root-level `AGENTS.md` plus the nearest `AGENTS.md` files in the target module path and follow their scope constraints.
+
+## AGENTS.md Context Strategy (Required)
+- Use `AGENTS.md` files as scoped context maps to avoid loading unrelated repository areas.
+- Resolution order:
+  1. Repository root `AGENTS.md` (global rules and boundaries)
+  2. Nearest domain-level `AGENTS.md` (for example solution/app folder)
+  3. Nearest module-level `AGENTS.md` in the exact implementation path
+- If instructions conflict, the most specific (closest) `AGENTS.md` wins for that module.
+- Before searching for files, identify the target module and read only its relevant `AGENTS.md` chain.
+- Suggested placement in client repositories:
+  - One `AGENTS.md` in each meaningful `.NET` library/service folder (typically next to each `.csproj` or library root).
+  - One `AGENTS.md` in each frontend app/package root (for example `apps/web`, `src/frontend`, `packages/ui`).
 
 ## Agent Routing
 | Task | Agent |

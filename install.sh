@@ -69,14 +69,15 @@ print_info "Downloading archive..."
 
 ARCHIVE_HEADS_URL="https://github.com/${REPO}/archive/refs/heads/${BRANCH}.tar.gz"
 ARCHIVE_TAGS_URL="https://github.com/${REPO}/archive/refs/tags/${BRANCH}.tar.gz"
+INSTALLED_FROM="tag"  # assume tag; overwritten to "branch" if heads URL succeeds
 
-if ! curl -fsSL "$ARCHIVE_HEADS_URL" -o "$WORK_DIR/sdp.tar.gz"; then
-  if ! curl -fsSL "$ARCHIVE_TAGS_URL" -o "$WORK_DIR/sdp.tar.gz"; then
-    print_error "Failed to download archive for '${BRANCH}'"
-    print_error "Tried branch URL: $ARCHIVE_HEADS_URL"
-    print_error "Tried tag URL:    $ARCHIVE_TAGS_URL"
-    exit 1
-  fi
+if curl -fsSL "$ARCHIVE_HEADS_URL" -o "$WORK_DIR/sdp.tar.gz"; then
+  INSTALLED_FROM="branch"
+elif ! curl -fsSL "$ARCHIVE_TAGS_URL" -o "$WORK_DIR/sdp.tar.gz"; then
+  print_error "Failed to download archive for '${BRANCH}'"
+  print_error "Tried branch URL: $ARCHIVE_HEADS_URL"
+  print_error "Tried tag URL:    $ARCHIVE_TAGS_URL"
+  exit 1
 fi
 
 tar -xzf "$WORK_DIR/sdp.tar.gz" -C "$WORK_DIR"
@@ -159,8 +160,27 @@ fi
 # Write version marker
 # ---------------------------------------------------------------------------
 
-printf '%s\n' "$BRANCH" > "$DEST_DIR/sdp-version"
-print_info "  SDP version    : ${BRANCH}"
+SDP_VERSION="${BRANCH}"
+
+if [[ "$INSTALLED_FROM" == "branch" ]]; then
+  COMMIT_SHA_URL="https://api.github.com/repos/${REPO}/commits/${BRANCH}"
+  API_RESPONSE=$(curl -fsSL -H "Accept: application/vnd.github+json" "$COMMIT_SHA_URL" 2>/dev/null || true)
+  if [[ -n "$API_RESPONSE" ]]; then
+    if command -v jq &>/dev/null; then
+      COMMIT_SHA=$(printf '%s' "$API_RESPONSE" | jq -r '.sha // empty' 2>/dev/null | cut -c1-7 || true)
+    else
+      COMMIT_SHA=$(printf '%s' "$API_RESPONSE" | grep -m1 '"sha"' | sed 's/.*"sha": *"\([a-f0-9]*\)".*/\1/' | cut -c1-7 || true)
+    fi
+  fi
+  if [[ -n "$COMMIT_SHA" ]]; then
+    SDP_VERSION="${BRANCH}@${COMMIT_SHA}"
+  else
+    print_warn "Could not resolve commit SHA for branch '${BRANCH}'; version marker will use branch name only."
+  fi
+fi
+
+printf '%s\n' "$SDP_VERSION" > "$DEST_DIR/sdp-version"
+print_info "  SDP version    : ${SDP_VERSION}"
 
 # ---------------------------------------------------------------------------
 # Create spec/ directory for feature folders

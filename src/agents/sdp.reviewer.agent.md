@@ -31,8 +31,15 @@ Perform rigorous reviews for correctness, readability, maintainability, and desi
 ## Mandatory Context
 - [TECH.md](../TECH.md) for technology stack, standards, and project-specific constraints.
 - [sdlc-process.instructions.md](../instructions/sdlc-process.instructions.md) Gate 6 (Hardening) requirements.
+- Applicable `AGENTS.md` files (root + nearest module path) to constrain repository exploration.
 - `spec/ACTIVE.md` — read to determine the active feature slug.
 - Relevant spec artifacts from `spec/<slug>/`: `DESIGN.md` (architecture), `PLAN.md` (implementation plan), `BACKLOG.md` / `EPIC-*.md` (story acceptance criteria).
+
+## AGENTS.md Context Strategy
+- Read the root `AGENTS.md` first, then the closest `AGENTS.md` in the active module path.
+- Use this chain to narrow file discovery and avoid scanning unrelated repository areas.
+- For `.NET` code paths, prioritize `AGENTS.md` files near each `.csproj`/library root.
+- For frontend code paths, prioritize `AGENTS.md` files in app/package roots.
 
 ## Canonical Artifact Locations
 All delivery artifacts are stored in the repository root and `docs/` tree. Use only these canonical paths unless the user explicitly overrides them.
