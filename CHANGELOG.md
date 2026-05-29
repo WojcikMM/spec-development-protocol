@@ -13,8 +13,6 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 - `install.sh` — versioning now appends the short commit SHA when installing from a branch (e.g., `main@a1b2c3d`), making branch-based installs comparable and traceable; tag-based installs continue to use the tag name unchanged
-
-### Changed
 - `src/skills/` restructured to comply with the [Agent Skills open standard](https://agentskills.io): each skill is now a subfolder (`<skill-name>/`) containing a `SKILL.md` file instead of a flat `sdp.skill.<name>.md` file
   - `sdp.skill.write-tests.md` → `write-tests/SKILL.md`
   - `sdp.skill.create-api-endpoint.md` → `create-api-endpoint/SKILL.md`

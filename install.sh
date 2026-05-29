@@ -164,10 +164,18 @@ SDP_VERSION="${BRANCH}"
 
 if [[ "$INSTALLED_FROM" == "branch" ]]; then
   COMMIT_SHA_URL="https://api.github.com/repos/${REPO}/commits/${BRANCH}"
-  COMMIT_SHA=$(curl -fsSL -H "Accept: application/vnd.github+json" "$COMMIT_SHA_URL" \
-    2>/dev/null | grep -m1 '"sha"' | sed 's/.*"sha": *"\([a-f0-9]*\)".*/\1/' | cut -c1-7 || true)
+  API_RESPONSE=$(curl -fsSL -H "Accept: application/vnd.github+json" "$COMMIT_SHA_URL" 2>/dev/null || true)
+  if [[ -n "$API_RESPONSE" ]]; then
+    if command -v jq &>/dev/null; then
+      COMMIT_SHA=$(printf '%s' "$API_RESPONSE" | jq -r '.sha // empty' 2>/dev/null | cut -c1-7 || true)
+    else
+      COMMIT_SHA=$(printf '%s' "$API_RESPONSE" | grep -m1 '"sha"' | sed 's/.*"sha": *"\([a-f0-9]*\)".*/\1/' | cut -c1-7 || true)
+    fi
+  fi
   if [[ -n "$COMMIT_SHA" ]]; then
     SDP_VERSION="${BRANCH}@${COMMIT_SHA}"
+  else
+    print_warn "Could not resolve commit SHA for branch '${BRANCH}'; version marker will use branch name only."
   fi
 fi
 

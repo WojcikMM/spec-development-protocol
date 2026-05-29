@@ -3,7 +3,7 @@ description: Plans and implements one approved story/task at a time with minimal
 handoffs:
   - label: Approve plan and proceed to implementation
     agent: sdp.developer
-    prompt: The implementation plan has been reviewed and approved. Please switch to implement mode and execute the approved plan.
+    prompt: I have reviewed the implementation plan and approve it. Please switch to implement mode and execute the approved plan.
     send: true
   - label: Review implemented changes
     agent: sdp.reviewer
