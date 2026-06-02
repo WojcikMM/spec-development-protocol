@@ -1,0 +1,33 @@
+manifest:
+  version: 0.2.0
+  description: An AI-agentic framework for spec-driven engineering — structured, traceable, and ready for both greenfield and legacy web projects.
+  author: Michal Wojcik
+  license: MIT
+  
+files:
+  - path: ./src/
+    destination: ./
+  - path: ./README.md
+    destination: ./
+  - path: ./LICENSE
+    destination: ./
+  - path: ./CHANGELOG.md
+    destination: ./
+
+ignore:
+  - ./src/templates/ACTIVE.md
+  - ./.github
+  - ./apm.json
+  - ./apm.yml
+  - ./package.json
+  - ./install.sh
+  - ./install.ps1
+  - ./.git
+  - ./node_modules
+  - ./apm_packages
+
+scripts:
+  preinstall:
+    - echo "Pre-installation script"
+  postinstall:
+    - echo "Post-installation script"
