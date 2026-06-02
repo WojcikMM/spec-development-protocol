@@ -8,7 +8,9 @@ SDP turns GitHub Copilot Agent Mode into a disciplined delivery team: a PRD auth
 
 ## Quick Install
 
-### macOS / Linux (bash)
+### Method 1: Direct Installation (Recommended)
+
+#### macOS / Linux (bash)
 
 Run this in the root of your project repository:
 
@@ -16,7 +18,7 @@ Run this in the root of your project repository:
 curl -fsSL https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.sh | bash
 ```
 
-### Windows (PowerShell)
+#### Windows (PowerShell)
 
 Run this in the root of your project repository from a PowerShell terminal (PowerShell 5.1+ or PowerShell 7+):
 
@@ -25,6 +27,20 @@ iwr -useb https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/m
 ```
 
 > **Note:** If you see a script execution policy error, run `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` first, then retry the command above.
+
+### Method 2: APM (Agent Package Manager)
+
+If your environment supports APM, you can install SDP as a package:
+
+```bash
+# Install from GitHub repository
+apm install WojcikMM/spec-development-protocol
+
+# Or using npm (if published)
+npm install -g @wojcikmm/spec-development-protocol
+```
+
+The package manifest (`apm.json`) defines all agents, skills, prompts, and templates included in SDP.
 
 ---
 
@@ -279,6 +295,26 @@ After installation, the `.github/templates/` folder in your project contains:
 - `template.agent.md` — starter template for writing your own agents.
 - `template.prompt.md` — starter template for writing your own prompts.
 - `template.skill.md` — starter template for writing your own skills.
+
+---
+
+## APM Package Structure
+
+SDP is distributed as an **Agent Package Manager (APM)** compatible package. The package manifest (`apm.json`) defines all framework components:
+
+- **Type:** `agent-framework` — a complete SDLC workflow system
+- **Components:**
+  - 8 agents (PRD, Discover, Analyst, Architect, Developer, Reviewer, Security, QA)
+  - 9 prompts (gate triggers for each agent mode)
+  - 5 skills (reusable technical guidance files)
+  - Global instructions and templates
+- **Installers:** Both bash and PowerShell scripts included
+- **Install Path:** `.github/` in target repository
+- **Source Directory:** `src/` in this repository
+
+The `apm.json` manifest makes SDP discoverable and installable via package managers, while maintaining compatibility with direct shell-based installation.
+
+For npm ecosystem compatibility, a `package.json` is also provided, enabling installation via `npm install` or similar tools.
 
 ---
 
