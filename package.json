@@ -1,0 +1,45 @@
+{
+  "name": "@wojcikmm/spec-development-protocol",
+  "version": "0.2.0",
+  "description": "An AI-agentic framework for spec-driven engineering — structured, traceable, and ready for both greenfield and legacy web projects.",
+  "author": "Michał Wójcik <m.mwojcik@outlook.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WojcikMM/spec-development-protocol.git"
+  },
+  "bugs": {
+    "url": "https://github.com/WojcikMM/spec-development-protocol/issues"
+  },
+  "homepage": "https://github.com/WojcikMM/spec-development-protocol#readme",
+  "keywords": [
+    "copilot",
+    "agent",
+    "sdlc",
+    "spec-driven",
+    "development",
+    "workflow",
+    "agent-framework",
+    "github-copilot",
+    "agentic",
+    "prd",
+    "design",
+    "qa"
+  ],
+  "files": [
+    "src/",
+    "install.sh",
+    "install.ps1",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "apm.json"
+  ],
+  "scripts": {
+    "install:bash": "bash install.sh",
+    "install:powershell": "pwsh install.ps1"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

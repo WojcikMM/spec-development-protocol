@@ -1,0 +1,83 @@
+{
+  "name": "spec-development-protocol",
+  "version": "0.2.0",
+  "description": "An AI-agentic framework for spec-driven engineering — structured, traceable, and ready for both greenfield and legacy web projects.",
+  "author": "Michał Wójcik",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/WojcikMM/spec-development-protocol.git"
+  },
+  "homepage": "https://github.com/WojcikMM/spec-development-protocol",
+  "keywords": [
+    "copilot",
+    "agent",
+    "sdlc",
+    "spec-driven",
+    "development",
+    "workflow",
+    "agent-framework",
+    "github-copilot"
+  ],
+  "apm": {
+    "type": "agent-framework",
+    "installPath": ".github",
+    "sourceDir": "src",
+    "components": {
+      "agents": [
+        "sdp.prd",
+        "sdp.discover",
+        "sdp.analyst",
+        "sdp.architect",
+        "sdp.developer",
+        "sdp.reviewer",
+        "sdp.security",
+        "sdp.qa"
+      ],
+      "instructions": [
+        "copilot-instructions.md",
+        "sdlc-process.instructions.md"
+      ],
+      "prompts": [
+        "create-prd",
+        "discover-tech",
+        "refine-backlog",
+        "design-system",
+        "plan-task",
+        "implement",
+        "run-review",
+        "audit-security",
+        "qa-validate"
+      ],
+      "skills": [
+        "write-tests",
+        "create-api-endpoint",
+        "create-ui-component",
+        "database-migration",
+        "error-handling"
+      ],
+      "templates": [
+        "TECH.md",
+        "AGENTS.md",
+        "template.agent.md",
+        "template.prompt.md",
+        "template.skill.md"
+      ]
+    },
+    "installers": {
+      "bash": "install.sh",
+      "powershell": "install.ps1"
+    }
+  },
+  "engines": {
+    "copilot": ">=1.0.0"
+  },
+  "files": [
+    "src/",
+    "install.sh",
+    "install.ps1",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ]
+}
