@@ -1,5 +1,5 @@
 ---
-name: Write Database Migration
+name: database-migration
 description: Guidance for writing safe, reversible database schema migrations with consistent naming, rollback support, and zero data-loss defaults.
 ---
 # Skill: Write Database Migration

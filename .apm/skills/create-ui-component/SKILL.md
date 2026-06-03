@@ -1,5 +1,5 @@
 ---
-name: Create UI Component
+name: create-ui-component
 description: Guidance for building a well-structured, accessible, and testable frontend UI component aligned with the project's component model and design system.
 ---
 # Skill: Create UI Component

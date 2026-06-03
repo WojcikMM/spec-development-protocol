@@ -1,5 +1,5 @@
 ---
-name: Create REST API Endpoint
+name: create-api-endpoint
 description: Guidance for designing and implementing a well-structured REST API endpoint with proper validation, error handling, authentication, and documentation.
 ---
 # Skill: Create REST API Endpoint

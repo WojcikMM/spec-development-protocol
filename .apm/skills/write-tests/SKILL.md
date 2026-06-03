@@ -1,5 +1,5 @@
 ---
-name: Write Tests
+name: write-tests
 description: Guidance for writing unit and integration tests following the Arrange-Act-Assert pattern, aligned with the project's testing stack in TECH.md.
 ---
 # Skill: Write Tests
