@@ -1,13 +1,16 @@
 ---
-description: Conducts security-focused review of web application code and infrastructure using OWASP and web security baselines, with prioritized mitigations.
+description: |
+  Conducts security-focused review of web application code and infrastructure using OWASP and web security baselines, with prioritized mitigations.
 handoffs:
   - label: QA validate after security sign-off
     agent: sdp.qa
-    prompt: Security audit is signed off. Please validate the acceptance criteria and run regression checks on the delivered changes.
+    prompt: |
+      Security audit is signed off. Please validate the acceptance criteria and run regression checks on the delivered changes.
     send: true
   - label: Request developer fixes for security findings
     agent: sdp.developer
-    prompt: "Security audit is complete. Please implement fixes for the following security findings: $ARGUMENTS"
+    prompt: |
+      Security audit is complete. Please implement fixes for the following security findings: $ARGUMENTS
     send: false
 ---
 # Security Agent ("The Shield")

@@ -1,6 +1,6 @@
 ---
 description: This file outlines the 6-stage gate process for software development lifecycle (SDLC) to ensure structured and quality delivery.
-applyTo: **/*
+applyTo: "**/*"
 ---
 # SDLC Process Instructions (6-Stage Gates)
 

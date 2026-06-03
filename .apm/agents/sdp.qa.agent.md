@@ -1,9 +1,11 @@
 ---
-description: Validates acceptance criteria with structured test cases, regression checks, and clear pass/fail quality verdicts.
+description: |
+  Validates acceptance criteria with structured test cases, regression checks, and clear pass/fail quality verdicts.
 handoffs:
   - label: Request developer fixes for failed test cases
     agent: sdp.developer
-    prompt: "QA validation is complete. Please implement fixes for the following failed test cases: $ARGUMENTS"
+    prompt: |
+      QA validation is complete. Please implement fixes for the following failed test cases: $ARGUMENTS
     send: false
 ---
 # QA Agent

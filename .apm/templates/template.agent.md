@@ -1,13 +1,13 @@
 ---
-description: `<agent-description>` # A concise description of the agent's purpose and capabilities.
-model: `<agent-model>` # Optional: Specify the language model to use (e.g., GPT-4.1, Claude Sonnet 4.5). If not specified, the default model will be used.
-tools: [<agent-tools>] # Optional: List of tools the agent can use (e.g., execute, read, edit, search, web, agent, todo).
+description: "<agent-description> # A concise description of the agent's purpose and capabilities."
+model: "<agent-model> # Optional: Specify the language model to use (e.g., GPT-4.1, Claude Sonnet 4.5). If not specified, the default model will be used."
+tools: "[<agent-tools>] # Optional: List of tools the agent can use (e.g., execute, read, edit, search, web, agent, todo)."
 handoffs: # Optional: Define handoffs to other agents with specific prompts and models.
-  - label: `<handoff-label>`
-    agent: `<handoff-agent>`
-    prompt: `<handoff-prompt>`
+  - label: "<handoff-label>"
+    agent: "<handoff-agent>"
+    prompt: "<handoff-prompt>"
     send: true
-    model: `<handoff-model>`
+    model: "<handoff-model>"
 
 ---
 # `<Agent-Name>`

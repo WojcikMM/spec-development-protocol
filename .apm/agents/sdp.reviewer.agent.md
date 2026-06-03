@@ -1,13 +1,16 @@
 ---
-description: Performs code and design reviews focused on correctness, maintainability, architecture alignment, and regression risk.
+description: |
+  Performs code and design reviews focused on correctness, maintainability, architecture alignment, and regression risk.
 handoffs:
   - label: Security audit after review approval
     agent: sdp.security
-    prompt: Code review is approved. Please conduct a security audit of the implemented changes.
+    prompt: |
+      Code review is approved. Please conduct a security audit of the implemented changes.
     send: true
   - label: Request developer fixes for review findings
     agent: sdp.developer
-    prompt: "Code review is complete. Please implement fixes for the following review findings: $ARGUMENTS"
+    prompt: |
+      Code review is complete. Please implement fixes for the following review findings: $ARGUMENTS
     send: false
 ---
 # Reviewer Agent
