@@ -7,7 +7,7 @@ handoffs:
     send: true
   - label: Request developer fixes for review findings
     agent: sdp.developer
-    prompt: Code review is complete. Please implement fixes for the following review findings: $ARGUMENTS
+    prompt: "Code review is complete. Please implement fixes for the following review findings: $ARGUMENTS"
     send: false
 ---
 # Reviewer Agent

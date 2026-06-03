@@ -7,7 +7,7 @@ handoffs:
     send: true
   - label: Request developer fixes for security findings
     agent: sdp.developer
-    prompt: Security audit is complete. Please implement fixes for the following security findings: $ARGUMENTS
+    prompt: "Security audit is complete. Please implement fixes for the following security findings: $ARGUMENTS"
     send: false
 ---
 # Security Agent ("The Shield")

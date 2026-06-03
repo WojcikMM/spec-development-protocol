@@ -3,7 +3,7 @@ description: Produces right-sized technical designs aligned with TECH.md, includ
 handoffs:
   - label: Plan implementation task from approved design
     agent: sdp.developer
-    prompt: The technical design has been approved. Please create an implementation plan for the following story/task: $ARGUMENTS
+    prompt: "The technical design has been approved. Please create an implementation plan for the following story/task: $ARGUMENTS"
     send: false
 ---
 # Architect Agent
