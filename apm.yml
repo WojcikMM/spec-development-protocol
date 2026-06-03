@@ -5,8 +5,8 @@ manifest:
   license: MIT
   
 files:
-  - path: ./src/
-    destination: ./
+  - path: ./.apm/
+    destination: ./.github/
   - path: ./README.md
     destination: ./
   - path: ./LICENSE
