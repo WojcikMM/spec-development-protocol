@@ -82,10 +82,10 @@ fi
 
 tar -xzf "$WORK_DIR/sdp.tar.gz" -C "$WORK_DIR"
 
-SRC_DIR="$WORK_DIR/${EXTRACTED_SUBDIR}/src"
+SRC_DIR="$WORK_DIR/${EXTRACTED_SUBDIR}/.apm"
 
 if [[ ! -d "$SRC_DIR" ]]; then
-  print_error "Expected src directory not found in archive."
+  print_error "Expected .apm directory not found in archive."
   exit 1
 fi
 

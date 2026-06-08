@@ -4,7 +4,7 @@ You are maintaining the Spec Development Protocol (SDP) template repository.
 
 ## Repository Model
 
-- Source files for distribution are stored in `src/`.
+- Source files for distribution are stored in `.apm/`.
 - Client projects must receive these files under `.github/` after running `install.sh`.
 - This repository's own `.github/` folder is for maintainer workflow and automation only.
 
@@ -13,16 +13,16 @@ You are maintaining the Spec Development Protocol (SDP) template repository.
 Keep the library consistent, versionable, and safe to reuse across projects.
 Every change must preserve the contract:
 
-- `src/*` is the canonical template source.
-- Installer copies `src/*` to client `.github/*`.
+- `.apm/*` is the canonical template source.
+- Installer copies `.apm/*` to client `.github/*`.
 
 ## Change Flow (Required)
 
 1. Identify the requested change and map it to one or more areas:
-	 - Template content (`src/agents`, `src/prompts`, `src/instructions`, `src/templates`, `src/copilot-instructions.md`)
+	 - Template content (`.apm/agents`, `.apm/prompts`, `.apm/instructions`, `.apm/templates`)
 	 - Installation behavior (`install.sh`)
 	 - User documentation (`README.md`)
-2. Implement content changes in `src/` first (never in repository `.github/` as template source).
+2. Implement content changes in `.apm/` first (never in repository `.github/` as template source).
 3. Update `install.sh` if source layout, copy logic, or install-time behavior changes.
 4. Update `README.md` whenever behavior, structure, commands, or setup expectations change.
 5. Validate and summarize what changed and why.
@@ -31,10 +31,10 @@ Every change must preserve the contract:
 
 When any of the following happens, updates are required:
 
-- New file/folder added in `src/`:
+- New file/folder added in `.apm/`:
 	- Update `README.md` structure or usage sections if users should know about it.
 	- Verify `install.sh` still copies it to client `.github/`.
-- File/folder renamed/moved in `src/`:
+- File/folder renamed/moved in `.apm/`:
 	- Update `install.sh` assumptions if needed.
 	- Update all affected paths in `README.md`.
 - Install behavior changed:
@@ -62,7 +62,7 @@ Do not leave behavior and docs out of sync.
 ## Validation Checklist (Run Before Finishing)
 
 1. `bash -n install.sh` passes.
-2. New/changed paths in `src/` are correctly reflected in documentation.
+2. New/changed paths in `.apm/` are correctly reflected in documentation.
 3. `README.md` examples match actual installer behavior.
 4. If install behavior changed, output messages remain accurate.
 5. If template structure changed, confirm installed destination is still `.github/` in client repositories.
@@ -71,7 +71,7 @@ Do not leave behavior and docs out of sync.
 
 When completing a change, always report:
 
-- What changed in `src/`
+- What changed in `.apm/`
 - Whether `README.md` was updated
 - Whether `install.sh` was updated
 - Why each update was or was not required
