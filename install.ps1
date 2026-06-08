@@ -95,10 +95,10 @@ if (-not $downloaded) {
 
 Expand-Archive -LiteralPath $ARCHIVE_PATH -DestinationPath $WORK_DIR -Force
 
-$SRC_DIR = Join-Path $WORK_DIR "$EXTRACTED_SUBDIR\src"
+$SRC_DIR = Join-Path $WORK_DIR "$EXTRACTED_SUBDIR\.apm"
 
 if (-not (Test-Path -LiteralPath $SRC_DIR -PathType Container)) {
-    Write-SdpError "Expected src directory not found in archive."
+    Write-SdpError "Expected .apm directory not found in archive."
     exit 1
 }
 

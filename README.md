@@ -113,7 +113,7 @@ The `apm.yml` manifest defines all agents, skills, prompts, and templates includ
 
 1. Clone or download this repository.
 2. Create `.github/` in the target project root if it does not already exist.
-3. Copy the entire contents of `src/` into `.github/`.
+3. Copy the entire contents of `.apm/` into `.github/`.
 4. Do not overwrite existing files in `.github/` unless you intend to upgrade.
 
 ---
@@ -373,7 +373,7 @@ SDP is designed to coexist with existing tooling and custom workflows. SDP-manag
 ### Source Layout (this repository)
 
 ```
-src/
+.apm/
 ├── copilot-instructions.md          <- Global AI coding standards
 ├── agents/                          <- Agent definition files
 ├── instructions/                    <- Shared SDLC process instructions
@@ -458,7 +458,7 @@ SDP is distributed as an [Agent Package Manager (APM)](https://agentpackagemanag
 - **Package type:** `agent-framework` — a complete SDLC workflow system
 - **Components:** 8 agents, 9 prompts, 5 skills, global instructions, and templates
 - **Install path:** `.github/` in the target repository
-- **Source directory:** `src/` in this repository
+- **Source directory:** `.apm/` in this repository
 - **Installers:** bash (`install.sh`) and PowerShell (`install.ps1`)
 
 A `package.json` is also provided for npm ecosystem compatibility.
@@ -469,8 +469,8 @@ A `package.json` is also provided for npm ecosystem compatibility.
 
 Contributions are welcome. Please follow these guidelines:
 
-1. **Source changes belong in `src/`** — never edit files under `.github/` as template source. The `.github/` folder in this repository is for maintainer automation only.
-2. **Keep templates generic** — all files in `src/` must be reusable across different project types and tech stacks.
+1. **Source changes belong in `.apm/`** — never edit files under `.github/` as template source. The `.github/` folder in this repository is for maintainer automation only.
+2. **Keep templates generic** — all files in `.apm/` must be reusable across different project types and tech stacks.
 3. **Update documentation** — if you change behavior in `install.sh` or `install.ps1`, update the corresponding sections in this `README.md`.
 4. **Validate the installer** — run `bash -n install.sh` to check for syntax errors before submitting a pull request.
 5. **Preserve gate discipline** — changes to agents or prompts must maintain the 6-gate sequential process and human-approval model.
