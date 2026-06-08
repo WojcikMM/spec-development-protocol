@@ -3,7 +3,7 @@ description: Translates business intent into a structured PRD.md through interac
 handoffs:
   - label: Refine backlog from approved PRD
     agent: sdp.analyst
-    prompt: PRD approved. Refine the backlog into epics and user stories.
+    prompt: 'PRD approved. Refine the backlog into epics and user stories.'
     send: true
 ---
 # PRD Agent

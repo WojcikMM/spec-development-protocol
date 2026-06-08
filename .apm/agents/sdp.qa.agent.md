@@ -3,7 +3,7 @@ description: Validates acceptance criteria with structured test cases and clear 
 handoffs:
   - label: Request developer fixes for failed test cases
     agent: sdp.developer
-    prompt: QA failed. Fix the following failed test cases: $ARGUMENTS
+    prompt: 'QA failed. Fix the following failed test cases: $ARGUMENTS'
     send: false
 ---
 # QA Agent

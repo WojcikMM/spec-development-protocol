@@ -1,5 +1,5 @@
 ---
-description: Defines the 6-stage SDLC gate process for structured delivery.
+description: This file defines the global coding standards for all code produced by agents in the Spec Development Protocol (SDP). These standards apply across all languages, frameworks, and project types. They are designed to ensure high code quality, maintainability, security, and consistency with the project's technical guidelines as defined in `TECH.md`.
 applyTo: "**/*"
 ---
 

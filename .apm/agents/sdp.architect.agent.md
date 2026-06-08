@@ -3,7 +3,7 @@ description: Creates right-sized technical designs for approved backlog stories,
 handoffs:
   - label: Plan implementation task from approved design
     agent: sdp.developer
-    prompt: Design approved. Create an implementation plan for story/task: $ARGUMENTS
+    prompt: 'Design approved. Create an implementation plan for story/task: $ARGUMENTS'
     send: false
 ---
 # Architect Agent

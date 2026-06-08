@@ -3,7 +3,7 @@ description: Refines an approved PRD into a prioritized backlog of epics and use
 handoffs:
   - label: Design architecture for approved stories
     agent: sdp.architect
-    prompt: Backlog refined. Produce a technical design for the approved stories.
+    prompt: 'Backlog refined. Produce a technical design for the approved stories.'
     send: true
 ---
 # Analyst Agent

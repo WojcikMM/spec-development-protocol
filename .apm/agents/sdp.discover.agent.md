@@ -3,7 +3,7 @@ description: Discovers the tech stack from a legacy codebase to draft a TECH.md 
 handoffs:
   - label: Create PRD from discovered context
     agent: sdp.prd
-    prompt: TECH.md drafted. Create a PRD for the requested change.
+    prompt: 'TECH.md drafted. Create a PRD for the requested change.'
     send: true
 ---
 # Discover Agent

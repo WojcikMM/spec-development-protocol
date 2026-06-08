@@ -3,11 +3,11 @@ description: Reviews code for correctness, maintainability, and alignment with t
 handoffs:
   - label: Security audit after review approval
     agent: sdp.security
-    prompt: Code review approved. Conduct a security audit.
+    prompt: 'Code review approved. Conduct a security audit.'
     send: true
   - label: Request developer fixes for review findings
     agent: sdp.developer
-    prompt: Code review complete. Fix the following findings: $ARGUMENTS
+    prompt: 'Code review complete. Fix the following findings: $ARGUMENTS'
     send: false
 ---
 # Reviewer Agent

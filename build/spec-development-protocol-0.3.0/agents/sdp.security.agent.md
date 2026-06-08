@@ -3,11 +3,11 @@ description: Audits code changes for security vulnerabilities based on OWASP Top
 handoffs:
   - label: QA validate after security sign-off
     agent: sdp.qa
-    prompt: Security audit passed. Validate acceptance criteria and run regression checks.
+    prompt: 'Security audit passed. Validate acceptance criteria and run regression checks.'
     send: true
   - label: Request developer fixes for security findings
     agent: sdp.developer
-    prompt: Security audit failed. Fix the following findings: $ARGUMENTS
+    prompt: 'Security audit failed. Fix the following findings: $ARGUMENTS'
     send: false
 ---
 # Security Agent ("The Shield")

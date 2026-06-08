@@ -3,11 +3,11 @@ description: Plans and implements one approved story at a time with minimal, tes
 handoffs:
   - label: Approve plan and proceed to implementation
     agent: sdp.developer
-    prompt: Plan approved. Implement the plan.
+    prompt: 'Plan approved. Implement the plan.'
     send: true
   - label: Review implemented changes
     agent: sdp.reviewer
-    prompt: Implementation complete. Review the changes.
+    prompt: 'Implementation complete. Review the changes.'
     send: true
 ---
 # Developer Agent
