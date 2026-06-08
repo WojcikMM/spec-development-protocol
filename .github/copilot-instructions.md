@@ -19,7 +19,7 @@ Every change must preserve the contract:
 ## Change Flow (Required)
 
 1. Identify the requested change and map it to one or more areas:
-	 - Template content (`.apm/agents`, `.apm/prompts`, `.apm/instructions`, `.apm/templates`, `.apm/copilot-instructions.md`)
+	 - Template content (`.apm/agents`, `.apm/prompts`, `.apm/instructions`, `.apm/templates`)
 	 - Installation behavior (`install.sh`)
 	 - User documentation (`README.md`)
 2. Implement content changes in `.apm/` first (never in repository `.github/` as template source).

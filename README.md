@@ -359,7 +359,7 @@ SDP is designed to coexist with existing tooling and custom workflows. SDP-manag
 
 | What to customize | How |
 |---|---|
-| Project-specific AI coding standards | Extend `.github/copilot-instructions.md` |
+| Project-specific AI coding standards | Extend `.github/instructions/coding-standards.instructions.md` |
 | Custom agents | Add `.agent.md` files to `.github/agents/` — SDP updates will not touch them |
 | Custom prompts | Add prompt files to `.github/prompts/` |
 | Custom skills | Add `<skill-name>/SKILL.md` folders to `.github/skills/` using the provided template |
@@ -374,9 +374,8 @@ SDP is designed to coexist with existing tooling and custom workflows. SDP-manag
 
 ```
 .apm/
-├── copilot-instructions.md          <- Global AI coding standards
 ├── agents/                          <- Agent definition files
-├── instructions/                    <- Shared SDLC process instructions
+├── instructions/                    <- Shared SDLC process instructions (includes coding-standards.instructions.md)
 ├── prompts/                         <- Gate trigger prompts
 ├── skills/
 │   ├── create-api-endpoint/
@@ -405,9 +404,8 @@ After running the installer, the following structure is created under `.github/`
 .github/
 ├── TECH.md                          <- Project technology context (fill this in)
 ├── sdp-version                      <- Installed SDP version marker
-├── copilot-instructions.md          <- Global AI coding standards (auto-loaded by Copilot)
 ├── agents/                          <- SDP agent definitions
-├── instructions/                    <- SDLC process instructions
+├── instructions/                    <- SDLC process instructions (includes coding-standards.instructions.md)
 ├── prompts/                         <- Gate trigger prompts
 ├── skills/
 │   ├── <skill-name>/

@@ -1,3 +1,8 @@
+---
+description: Defines the 6-stage SDLC gate process for structured delivery.
+applyTo: "**/*"
+---
+
 # Copilot SDP Orchestrator
 
 You are operating under the **Spec Development Protocol (SDP)** — a spec-first, gate-driven engineering framework for both greenfield and legacy projects.
