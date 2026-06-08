@@ -1,100 +1,165 @@
 # Spec Development Protocol (SDP)
 
-An AI-agentic framework for spec-driven engineering — structured, traceable, and ready for both greenfield and legacy web projects.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![GitHub release](https://img.shields.io/github/v/release/WojcikMM/spec-development-protocol)](https://github.com/WojcikMM/spec-development-protocol/releases)
+[![GitHub stars](https://img.shields.io/github/stars/WojcikMM/spec-development-protocol)](https://github.com/WojcikMM/spec-development-protocol/stargazers)
 
-SDP turns GitHub Copilot Agent Mode into a disciplined delivery team: a PRD author, analyst, architect, developer, reviewer, security auditor, and QA validator — all following a 6-gate SDLC process so nothing gets built without being properly specified first.
+**SDP** is an open-source, AI-agentic framework that enforces spec-driven software delivery using GitHub Copilot Agent Mode. It structures your development workflow into a repeatable 6-gate SDLC process — from product requirements through hardening — so no code is written without a specification, and no specification is incomplete.
+
+SDP installs into the `.github/` folder of any project repository and works with both greenfield projects and existing codebases.
 
 ---
 
-## Quick Install
+## Table of Contents
+
+- [Why SDP?](#why-sdp)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+  - [Method 1: Direct Installation (Recommended)](#method-1-direct-installation-recommended)
+  - [Method 2: APM (Agent Package Manager)](#method-2-apm-agent-package-manager)
+  - [Method 3: Manual Installation](#method-3-manual-installation)
+  - [Installer Options](#installer-options)
+- [Setup](#setup)
+- [Quick Start: End-to-End Example](#quick-start-end-to-end-example)
+- [How It Works](#how-it-works)
+  - [The 6-Gate SDLC Process](#the-6-gate-sdlc-process)
+  - [Feature Folder Structure](#feature-folder-structure)
+  - [Working on a Legacy Project](#working-on-a-legacy-project)
+- [Reference](#reference)
+  - [Agents](#agents)
+  - [Prompts](#prompts)
+  - [Skills](#skills)
+  - [Templates](#templates)
+- [Customization](#customization)
+- [Project Structure](#project-structure)
+- [Package Distribution](#package-distribution)
+- [Contributing](#contributing)
+- [License](#license)
+
+---
+
+## Why SDP?
+
+AI coding assistants are powerful but undisciplined by default — they generate code immediately, skip design, and ignore traceability. SDP solves this by layering a structured delivery protocol on top of GitHub Copilot:
+
+- **Specification before code** — every feature starts with a PRD and is refined into stories before any implementation begins.
+- **Traceable decisions** — architecture choices, plans, and history are recorded in versioned Markdown files alongside your code.
+- **Role-separated agents** — dedicated agents for product, analysis, architecture, development, review, security, and QA enforce separation of concerns.
+- **Human approval at every gate** — agents propose; you approve. No gate advances automatically.
+- **Safe for existing codebases** — install into any repository without modifying source files.
+
+---
+
+## Prerequisites
+
+Before installing SDP, ensure the following are in place:
+
+| Requirement | Version | Notes |
+|---|---|---|
+| [Visual Studio Code](https://code.visualstudio.com/) | Latest | Required to run agents |
+| [GitHub Copilot extension](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot) | Latest | Agent Mode must be enabled |
+| GitHub Copilot subscription | — | Individual, Team, or Enterprise |
+| `bash` or PowerShell | bash 3.2+ / PS 5.1+ | Required for the installer scripts |
+| `curl` | Any recent | Required for direct bash installation |
+
+> **Agent Mode** must be enabled in VS Code. Open the Copilot Chat panel and confirm the agent icon is available in the input toolbar.
+
+---
+
+## Installation
 
 ### Method 1: Direct Installation (Recommended)
 
-#### macOS / Linux (bash)
+Run the installer from the root directory of the target project repository.
 
-Run this in the root of your project repository:
+#### macOS / Linux
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.sh | bash
 ```
 
-#### Windows (PowerShell)
-
-Run this in the root of your project repository from a PowerShell terminal (PowerShell 5.1+ or PowerShell 7+):
+#### Windows (PowerShell 5.1+ or PowerShell 7+)
 
 ```powershell
 iwr -useb https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.ps1 | iex
 ```
 
-> **Note:** If you see a script execution policy error, run `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` first, then retry the command above.
+> **Execution policy note:** If you encounter a script execution policy error on Windows, run `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` and retry.
 
-### Method 2: APM (Agent Package Manager)
-
-If your environment supports APM, you can install SDP as a package:
-
-```bash
-# Install from GitHub repository
-apm install WojcikMM/spec-development-protocol
-
-# Or using npm (if published)
-npm install -g @wojcikmm/spec-development-protocol
-```
-
-The package manifest (`apm.json`) defines all agents, skills, prompts, and templates included in SDP.
+Both installers copy the `.github/` framework files into the target repository **without overwriting any existing files**. A `.github/sdp-version` marker file records the installed version.
 
 ---
 
-Both installers copy the `.github/` framework files into your repository **without overwriting** any existing files. Your custom agents, instructions, and scripts stay untouched.
+### Method 2: APM (Agent Package Manager)
 
-In this template repository, framework sources are stored under `src/`. During install, they are copied into your project's `.github/` folder. A `.github/sdp-version` file is written so you always know which version is installed.
+If your environment supports APM:
 
-**Options (via environment variables):**
+```bash
+# Install from the GitHub repository
+apm install WojcikMM/spec-development-protocol
+```
 
-| Variable        | Default           | Description                                                                   |
-| --------------- | ----------------- | ----------------------------------------------------------------------------- |
-| `SDP_BRANCH`    | `main`            | Install from a specific branch or release tag                                 |
-| `SDP_FORCE`     | `false`           | Set to `true` to overwrite existing SDP files during upgrade                  |
-| `SDP_TECH_MODE` | `init`            | Control `.github/TECH.md`: `init` (create if missing), `overwrite`, or `skip` |
-| `SDP_TARGET`    | current directory | Target repository root                                                        |
+For npm ecosystem compatibility:
+
+```bash
+npm install -g @wojcikmm/spec-development-protocol
+```
+
+The `apm.yml` manifest defines all agents, skills, prompts, and templates included in SDP.
+
+---
+
+### Method 3: Manual Installation
+
+1. Clone or download this repository.
+2. Create `.github/` in the target project root if it does not already exist.
+3. Copy the entire contents of `src/` into `.github/`.
+4. Do not overwrite existing files in `.github/` unless you intend to upgrade.
+
+---
+
+### Installer Options
+
+The direct installers accept configuration via environment variables:
+
+| Variable        | Default           | Description                                                                    |
+| --------------- | ----------------- | ------------------------------------------------------------------------------ |
+| `SDP_BRANCH`    | `main`            | Install from a specific branch or release tag                                  |
+| `SDP_FORCE`     | `false`           | Set to `true` to overwrite existing SDP files during an upgrade                |
+| `SDP_TECH_MODE` | `init`            | Controls `.github/TECH.md`: `init` (create if missing), `overwrite`, or `skip` |
+| `SDP_TARGET`    | current directory | Target repository root path                                                    |
 
 **bash examples:**
 
 ```bash
-# Install a specific version
+# Install a specific release version
 SDP_BRANCH=v1.0.0 curl -fsSL https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.sh | bash
 
-# Upgrade existing installation (overwrite SDP files)
+# Upgrade an existing installation (overwrite SDP-managed files)
 SDP_FORCE=true curl -fsSL https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.sh | bash
 
-# Upgrade SDP files but keep existing .github/TECH.md
+# Upgrade SDP files but preserve the existing TECH.md
 SDP_FORCE=true SDP_TECH_MODE=skip curl -fsSL https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.sh | bash
 
-# Re-initialize .github/TECH.md from template
+# Reset TECH.md from the template (useful when re-initializing a project)
 SDP_TECH_MODE=overwrite curl -fsSL https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.sh | bash
 ```
 
 **PowerShell examples:**
 
 ```powershell
-# Install a specific version
+# Install a specific release version
 $env:SDP_BRANCH='v1.0.0'; iwr -useb https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.ps1 | iex
 
-# Upgrade existing installation (overwrite SDP files)
+# Upgrade an existing installation (overwrite SDP-managed files)
 $env:SDP_FORCE='true'; iwr -useb https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.ps1 | iex
 
-# Upgrade SDP files but keep existing .github/TECH.md
+# Upgrade SDP files but preserve the existing TECH.md
 $env:SDP_FORCE='true'; $env:SDP_TECH_MODE='skip'; iwr -useb https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.ps1 | iex
 
-# Re-initialize .github/TECH.md from template
+# Reset TECH.md from the template (useful when re-initializing a project)
 $env:SDP_TECH_MODE='overwrite'; iwr -useb https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.ps1 | iex
 ```
-
-### Manual Installation
-
-1. Clone or download this repository.
-2. Create `.github/` in your project root if missing.
-3. Copy the **contents of `src/`** into your project's `.github/` folder.
-4. Existing files in your `.github/` folder should not be overwritten unless you explicitly choose to.
 
 ---
 
@@ -102,231 +167,217 @@ $env:SDP_TECH_MODE='overwrite'; iwr -useb https://raw.githubusercontent.com/Wojc
 
 ### 1. Fill in `TECH.md`
 
-After installation, open `.github/TECH.md` — this is the single source of truth SDP agents read before doing anything. Fill it in with your project's:
+After installation, open `.github/TECH.md`. This file is the single source of truth that all SDP agents read before taking any action. Populate it with your project's:
 
-- Frontend and backend stack
-- CI/CD system and deployment environment
+- Frontend and backend technology stack
+- CI/CD pipeline and deployment environment
 - Coding standards and conventions
-- Security and identity baseline
+- Security baseline and identity model
 
-> **Working on an existing project?** Use `discover-tech` to trigger the `sdp.discover` agent, which reads your codebase and drafts `TECH.md` for review.
+`TECH.md` is your file — SDP updates will never overwrite it unless you explicitly set `SDP_TECH_MODE=overwrite`.
+
+> **Existing project?** Run the `discover-tech` prompt to invoke the `sdp.discover` agent, which scans your codebase and generates a draft `TECH.md` for your review.
 
 ### 2. Add `AGENTS.md` Context Maps
 
-To minimize context size and avoid broad repository scans, add scoped `AGENTS.md` files:
+`AGENTS.md` files scope agent context to relevant portions of the repository, reducing noise and improving response quality. Place them as follows:
 
-- Repository root: one global `AGENTS.md` for high-level rules.
-- `.NET` backend: one `AGENTS.md` in each meaningful library/service folder (typically next to each `.csproj`).
-- Frontend: one `AGENTS.md` in each app/package root (for example `apps/web`, `src/frontend`, `packages/ui`).
+- **Repository root** — one global `AGENTS.md` for project-wide rules and boundaries.
+- **Backend modules** — one `AGENTS.md` per library or service folder (e.g., next to each `.csproj` file).
+- **Frontend packages** — one `AGENTS.md` per app or package root (e.g., `apps/web`, `packages/ui`).
 
-All SDP agents are configured to read the root + nearest module `AGENTS.md` files before deeper file discovery.
+All SDP agents are pre-configured to read the root `AGENTS.md` and the nearest module-level `AGENTS.md` before performing deeper file discovery.
+
+A starter template is available at `.github/templates/AGENTS.md` after installation.
 
 ### 3. Enable Agent Mode in VS Code
 
-SDP agents run in **GitHub Copilot Agent Mode**. Make sure you have the [GitHub Copilot](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot) extension installed and agent mode enabled in your editor settings.
+SDP agents require **GitHub Copilot Agent Mode** in VS Code. Verify that the [GitHub Copilot](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot) extension is installed and that agent mode is available in the Copilot Chat panel.
 
 ---
 
 ## Quick Start: End-to-End Example
 
-> New to SDP? Here is the full flow for adding a feature to a web app, step by step.
+The following example walks through adding a "User Registration" feature to an existing web application using the full SDP gate sequence.
 
-**Goal:** Add a "User Registration" feature to an existing web application.
-
-| Step | What you do | Prompt to run | Output |
+| Step | Action | Prompt | Output |
 |---|---|---|---|
-| 1 | Describe the feature idea in plain language | `create-prd` | `spec/user-registration/PRD.md` + `spec/ACTIVE.md` |
-| 2 | Review and approve `PRD.md`, then break it into stories | `refine-backlog` | `spec/user-registration/BACKLOG.md` + `spec/user-registration/EPIC-1-core-flow.md` |
+| 1 | Describe the feature in plain language | `create-prd` | `spec/user-registration/PRD.md`, `spec/ACTIVE.md` |
+| 2 | Review and approve `PRD.md`, then break it into stories | `refine-backlog` | `spec/user-registration/BACKLOG.md`, `EPIC-1-core-flow.md` |
 | 3 | Design the technical solution | `design-system` | `spec/user-registration/DESIGN.md` |
-| 4 | Pick story `US-1`, create an implementation plan (no code yet) | `plan-task` with "US-1" | `spec/user-registration/PLAN.md` |
-| 5 | Review and approve the plan, then implement | `implement` with "US-1" | Code + tests + `spec/user-registration/HISTORY.md` updated |
-| 6a | Review the code | `run-review` | Review findings |
-| 6b | Security audit | `audit-security` | Security sign-off |
-| 6c | QA validation | `qa-validate` with "US-1" | Pass / Fail verdict |
-| 7 | Repeat from step 4 for the next story | `plan-task` with "US-2" | — |
+| 4 | Select story `US-1` and create an implementation plan (no code yet) | `plan-task` + "US-1" | `spec/user-registration/PLAN.md` |
+| 5 | Review and approve the plan, then implement | `implement` + "US-1" | Source code, tests, `HISTORY.md` updated |
+| 6a | Review the implementation | `run-review` | Review findings report |
+| 6b | Perform a security audit | `audit-security` | Security sign-off or findings |
+| 6c | Validate acceptance criteria | `qa-validate` + "US-1" | Pass / Fail verdict |
+| 7 | Repeat Steps 4–6 for the next story | `plan-task` + "US-2" | — |
 
-Each story goes through Gates 4–6 independently. You stay in control at every approval checkpoint.
+Each user story passes through Gates 4–6 independently. You retain full control at every approval checkpoint — no agent advances the process without your confirmation.
 
 ---
 
 ## How It Works
 
-SDP enforces a **6-gate SDLC process**. Work progresses gate by gate — no coding until the design is approved, no design without a backlog, no backlog without a PRD.
+### The 6-Gate SDLC Process
+
+SDP enforces a sequential gate model. Work cannot advance to the next gate until the current gate is approved. This prevents scope creep, undocumented decisions, and code written without a specification.
 
 ```
 Gate 1: Discovery      → spec/<slug>/PRD.md  +  spec/ACTIVE.md
 Gate 2: Refinement     → spec/<slug>/BACKLOG.md + EPIC-*.md
 Gate 3: Architecture   → spec/<slug>/DESIGN.md
-Gate 4: Planning       → spec/<slug>/PLAN.md (one story at a time)
-Gate 5: Implementation → Code + tests  →  spec/<slug>/HISTORY.md updated
-Gate 6: Hardening      → Review → Security audit → QA validation
+Gate 4: Planning       → spec/<slug>/PLAN.md  (one story at a time)
+Gate 5: Implementation → Source code + tests  →  spec/<slug>/HISTORY.md updated
+Gate 6: Hardening      → Code review → Security audit → QA validation
 ```
 
-**Feedback loops** — when a gate fails, work returns to the appropriate earlier gate, not the beginning:
+**Feedback loops** — gate failures route work back to the correct earlier gate, not the beginning:
 
-- Review failure → back to Gate 5 (fix + re-run Gate 6 from the start)
-- Security finding (Critical/High) → back to Gate 5
-- QA failure → back to Gate 5
-- Architecture-level security issue → back to Gate 3
-
-### Starting a New Feature
-
-Use the prompts in `.github/prompts/` to trigger the right agent at each gate:
-
-| Step | Prompt file | What happens |
-|---|---|---|
-| 1 | `create-prd` | Describe your idea — the PRD agent drafts `PRD.md` |
-| 2 | `refine-backlog` | Analyst breaks PRD into epics and user stories |
-| 3 | `design-system` | Architect produces a technical design |
-| 4 | `plan-task` | Developer plans one story (no code yet) |
-| 5 | `implement` | Developer implements the approved plan |
-| 6 | `run-review` → `audit-security` → `qa-validate` | Reviewer, Security, and QA validate in sequence |
+| Failure | Returns to |
+|---|---|
+| Code review failure | Gate 5 — fix and re-run Gate 6 from the start |
+| Security finding (Critical or High severity) | Gate 5 |
+| QA validation failure | Gate 5 |
+| Security finding requiring architectural change | Gate 3 |
 
 ### Feature Folder Structure
 
-All spec artifacts for a feature live together in `spec/<feature-slug>/` at the project root. You do not need to remember where files go — agents create and update them automatically.
+All specification artifacts for a feature are co-located in `spec/<feature-slug>/` at the project root. Agents create and update these files automatically — you do not need to manage file placement manually.
 
 ```
 spec/
-  ACTIVE.md                        ← which feature is currently active
+  ACTIVE.md                          <- identifies the currently active feature
   user-registration/
-    PRD.md                         ← Gate 1: product requirements
-    BACKLOG.md                     ← Gate 2: epic index
-    EPIC-1-core-registration.md    ← Gate 2: stories + acceptance criteria
-    DESIGN.md                      ← Gate 3: technical design
-    PLAN.md                        ← Gate 4: current implementation plan
-    HISTORY.md                     ← Gate 5: running log of completed tasks
+    PRD.md                           <- Gate 1: product requirements document
+    BACKLOG.md                       <- Gate 2: epic index
+    EPIC-1-core-registration.md      <- Gate 2: stories and acceptance criteria
+    DESIGN.md                        <- Gate 3: technical design document
+    PLAN.md                          <- Gate 4: current story implementation plan
+    HISTORY.md                       <- Gate 5: running log of completed work
   checkout-flow/
     PRD.md
     ...
 ```
 
-**`spec/ACTIVE.md`** is the key file — it tells all agents which feature is currently in flight:
+**`spec/ACTIVE.md`** declares which feature is currently in progress:
 
-```
+```yaml
 slug: user-registration
 title: User Registration
 ```
 
-When you start a new PRD, the `sdp.prd` agent derives the slug from the feature title, creates the folder, and updates `ACTIVE.md` for you. All subsequent agents read it automatically — you don't need to mention which feature you're working on in every chat.
+When a new PRD is created, `sdp.prd` derives the slug from the feature title, initializes the feature folder, and writes `ACTIVE.md`. All subsequent agents read this file automatically — you do not need to specify the active feature in each chat session.
 
-To switch to a different feature, update `slug` and `title` in `spec/ACTIVE.md`, or run `create-prd` for the new feature.
+To switch to a different feature, update `spec/ACTIVE.md` directly, or run `create-prd` for the new feature.
 
 ### Working on a Legacy Project
 
-SDP works equally well on existing codebases:
+SDP is fully compatible with existing codebases:
 
-1. Fill `TECH.md` with your current stack (or generate a draft with the discovery agent).
-2. Use `create-prd` to describe a specific change, bug fix, or improvement area.
-3. Follow the gate sequence from there — the agents will respect your existing architecture and constraints.
+1. Populate `TECH.md` with the current stack, or run `discover-tech` to generate a draft automatically.
+2. Run `create-prd` to describe the change, bug fix, or improvement area.
+3. Follow the gate sequence from there. Agents respect the existing architecture and constraints defined in `TECH.md`.
 
 ---
 
-## Agents
+## Reference
 
-| Agent           | File                            | Purpose                                             |
+### Agents
+
+Each SDP agent has a single, well-defined responsibility. Agents are implemented as `.agent.md` files and invoked via the Copilot Chat panel in Agent Mode.
+
+| Agent | File | Responsibility |
 | --------------- | ------------------------------- | --------------------------------------------------- |
-| `sdp.prd`       | `agents/sdp.prd.agent.md`       | Writes `PRD.md` from business intent                |
-| `sdp.discover`  | `agents/sdp.discover.agent.md`  | Discovers legacy stack signals and drafts `TECH.md` |
-| `sdp.analyst`   | `agents/sdp.analyst.agent.md`   | Refines PRD into epics, features, and user stories  |
-| `sdp.architect` | `agents/sdp.architect.agent.md` | Produces right-sized technical designs              |
-| `sdp.developer` | `agents/sdp.developer.agent.md` | Plans and implements one story at a time            |
-| `sdp.reviewer`  | `agents/sdp.reviewer.agent.md`  | Code and design review                              |
-| `sdp.security`  | `agents/sdp.security.agent.md`  | Security audit (OWASP web baselines)                |
-| `sdp.qa`        | `agents/sdp.qa.agent.md`        | Validates acceptance criteria                       |
+| `sdp.prd` | `agents/sdp.prd.agent.md` | Authors `PRD.md` from a business intent description |
+| `sdp.discover` | `agents/sdp.discover.agent.md` | Scans an existing codebase and drafts `TECH.md` |
+| `sdp.analyst` | `agents/sdp.analyst.agent.md` | Refines a PRD into epics, features, and user stories |
+| `sdp.architect` | `agents/sdp.architect.agent.md` | Produces a right-sized technical design document |
+| `sdp.developer` | `agents/sdp.developer.agent.md` | Plans and implements one user story at a time |
+| `sdp.reviewer` | `agents/sdp.reviewer.agent.md` | Performs code and design review |
+| `sdp.security` | `agents/sdp.security.agent.md` | Conducts a security audit against OWASP web baselines |
+| `sdp.qa` | `agents/sdp.qa.agent.md` | Validates story acceptance criteria |
 
-Agents suggest handoffs to the next step — after review, the reviewer agent offers to trigger the security agent; after security sign-off, the security agent offers to trigger QA. Each handoff requires your confirmation.
+Agents propose handoffs to the next role — for example, the reviewer agent offers to invoke the security agent after completing its review. Each handoff requires explicit confirmation before proceeding.
 
 ---
 
-## Prompts
+### Prompts
 
-Prompts are the entry points that activate agents with the correct mode. Each prompt file includes a checklist of prerequisites and describes what will happen before you commit to running it.
+Prompts are the entry points that activate agents in the correct mode. Each prompt file documents its prerequisites and describes the expected outcome before the operation begins.
 
-| Prompt           | Triggers                         | Gate              |
+| Prompt | Activates | Gate |
 | ---------------- | -------------------------------- | ----------------- |
-| `discover-tech`  | `sdp.discover`                   | Legacy onboarding |
-| `create-prd`     | `sdp.prd`                        | Gate 1            |
-| `refine-backlog` | `sdp.analyst`                    | Gate 2            |
-| `design-system`  | `sdp.architect`                  | Gate 3            |
-| `plan-task`      | `sdp.developer` (plan mode)      | Gate 4            |
-| `implement`      | `sdp.developer` (implement mode) | Gate 5            |
-| `run-review`     | `sdp.reviewer`                   | Gate 6            |
-| `audit-security` | `sdp.security`                   | Gate 6            |
-| `qa-validate`    | `sdp.qa`                         | Gate 6            |
+| `discover-tech` | `sdp.discover` | Legacy onboarding |
+| `create-prd` | `sdp.prd` | Gate 1 |
+| `refine-backlog` | `sdp.analyst` | Gate 2 |
+| `design-system` | `sdp.architect` | Gate 3 |
+| `plan-task` | `sdp.developer` (plan mode) | Gate 4 |
+| `implement` | `sdp.developer` (implement mode) | Gate 5 |
+| `run-review` | `sdp.reviewer` | Gate 6 |
+| `audit-security` | `sdp.security` | Gate 6 |
+| `qa-validate` | `sdp.qa` | Gate 6 |
+
+Prompts are located in `.github/prompts/` after installation and are accessible from the Copilot Chat prompt picker.
 
 ---
 
-## Skills
+### Skills
 
-Skills are focused, reusable technical guidance files that agents and developers can reference for specific programming tasks. They live in `.github/skills/` and encode the "how to do it right" knowledge for common web development patterns.
+Skills are focused, reusable technical guidance files that agents reference when performing specific programming tasks. They encode implementation patterns, conventions, and quality criteria for common web development operations.
+
+Skills are located in `.github/skills/` and follow the [Agent Skills open standard](https://agentskills.io) — each skill is a folder containing a `SKILL.md` file with metadata and instructions.
 
 | Skill | Folder | Purpose |
 |---|---|---|
-| Write Tests | `skills/write-tests/` | Unit and integration tests with AAA pattern, TDD guidance |
-| Create REST API Endpoint | `skills/create-api-endpoint/` | Route design, input validation, auth, error responses, documentation |
-| Create UI Component | `skills/create-ui-component/` | Component structure, accessibility, state, testing |
-| Database Migration | `skills/database-migration/` | Safe schema changes, rollback, zero-downtime patterns |
-| Error Handling | `skills/error-handling/` | Error classification, logging, safe responses, retries |
+| Write Tests | `skills/write-tests/` | Unit and integration tests using the AAA pattern; TDD guidance |
+| Create REST API Endpoint | `skills/create-api-endpoint/` | Route design, input validation, authentication, error responses, and documentation |
+| Create UI Component | `skills/create-ui-component/` | Component structure, accessibility, state management, and testing |
+| Database Migration | `skills/database-migration/` | Safe schema changes, rollback strategies, and zero-downtime patterns |
+| Error Handling | `skills/error-handling/` | Error classification, structured logging, safe error responses, and retry logic |
 
-Each skill is a folder containing a `SKILL.md` file with metadata (`name`, `description`) and instructions, following the [Agent Skills open standard](https://agentskills.io). Skills can be referenced directly in Copilot chat or invoked by agents when a specific technical pattern is needed. To create your own skill, create a new folder under `.github/skills/` and add a `SKILL.md` file using `.github/templates/template.skill.md` as a starting point.
+To add a custom skill, create a new folder under `.github/skills/` and add a `SKILL.md` file using `.github/templates/template.skill.md` as the starting point.
+
+---
+
+### Templates
+
+The `.github/templates/` folder contains starter files for extending SDP:
+
+| File | Purpose |
+|---|---|
+| `TECH.md` | Blank technology context template for new projects |
+| `AGENTS.md` | Scoped context-map template for repository root, backend modules, and frontend packages |
+| `template.agent.md` | Starter template for authoring a custom agent |
+| `template.prompt.md` | Starter template for authoring a custom prompt |
+| `template.skill.md` | Starter template for authoring a custom skill |
 
 ---
 
 ## Customization
 
-SDP is designed to coexist with your own tooling:
+SDP is designed to coexist with existing tooling and custom workflows. SDP-managed files are isolated and will not conflict with your own additions.
 
-- **Custom agents:** add your own `.agent.md` files alongside the SDP ones — they won't be touched by updates.
-- **Custom instructions:** extend `.github/copilot-instructions.md` with project-specific rules.
-- **Scoped context with AGENTS.md:** add `AGENTS.md` files at root and module boundaries so agents can focus only on relevant folders.
-- **Custom prompts:** add prompts to `.github/prompts/` for team-specific workflows.
-- **Custom skills:** add your own skill folders to `.github/skills/` — each as `<skill-name>/SKILL.md` using the template.
-- **TECH.md is yours:** it's the one file you're expected to own and keep current.
-
----
-
-## Templates
-
-After installation, the `.github/templates/` folder in your project contains:
-
-- `TECH.md` — blank TECH.md template to copy when starting a new project.
-- `AGENTS.md` — scoped context-map template for root, `.NET` libraries, and frontend app/package folders.
-- `template.agent.md` — starter template for writing your own agents.
-- `template.prompt.md` — starter template for writing your own prompts.
-- `template.skill.md` — starter template for writing your own skills.
-
----
-
-## APM Package Structure
-
-SDP is distributed as an **Agent Package Manager (APM)** compatible package. The package manifest (`apm.json`) defines all framework components:
-
-- **Type:** `agent-framework` — a complete SDLC workflow system
-- **Components:**
-  - 8 agents (PRD, Discover, Analyst, Architect, Developer, Reviewer, Security, QA)
-  - 9 prompts (gate triggers for each agent mode)
-  - 5 skills (reusable technical guidance files)
-  - Global instructions and templates
-- **Installers:** Both bash and PowerShell scripts included
-- **Install Path:** `.github/` in target repository
-- **Source Directory:** `src/` in this repository
-
-The `apm.json` manifest makes SDP discoverable and installable via package managers, while maintaining compatibility with direct shell-based installation.
-
-For npm ecosystem compatibility, a `package.json` is also provided, enabling installation via `npm install` or similar tools.
+| What to customize | How |
+|---|---|
+| Project-specific AI coding standards | Extend `.github/copilot-instructions.md` |
+| Custom agents | Add `.agent.md` files to `.github/agents/` — SDP updates will not touch them |
+| Custom prompts | Add prompt files to `.github/prompts/` |
+| Custom skills | Add `<skill-name>/SKILL.md` folders to `.github/skills/` using the provided template |
+| Scoped agent context | Add `AGENTS.md` files at repository root and module boundaries |
+| Technology context | Edit `.github/TECH.md` — this file is never overwritten by SDP updates unless explicitly requested |
 
 ---
 
 ## Project Structure
 
+### Source Layout (this repository)
+
 ```
-Repository source layout:
 src/
-├── copilot-instructions.md
-├── agents/
-├── instructions/
-├── prompts/
+├── copilot-instructions.md          <- Global AI coding standards
+├── agents/                          <- Agent definition files
+├── instructions/                    <- Shared SDLC process instructions
+├── prompts/                         <- Gate trigger prompts
 ├── skills/
 │   ├── create-api-endpoint/
 │   │   └── SKILL.md
@@ -344,18 +395,23 @@ src/
     ├── template.agent.md
     ├── template.prompt.md
     └── template.skill.md
+```
 
-Installed layout in client repository:
+### Installed Layout (client repository)
+
+After running the installer, the following structure is created under `.github/` in the target repository:
+
+```
 .github/
-├── TECH.md                          <- Fill this in for your project
+├── TECH.md                          <- Project technology context (fill this in)
 ├── sdp-version                      <- Installed SDP version marker
-├── copilot-instructions.md          <- Global AI coding standards (auto-loaded)
-├── agents/
-├── instructions/
-├── prompts/
+├── copilot-instructions.md          <- Global AI coding standards (auto-loaded by Copilot)
+├── agents/                          <- SDP agent definitions
+├── instructions/                    <- SDLC process instructions
+├── prompts/                         <- Gate trigger prompts
 ├── skills/
 │   ├── <skill-name>/
-│   │   └── SKILL.md                 <- Agent Skills standard format
+│   │   └── SKILL.md
 │   └── ...
 └── templates/
     ├── AGENTS.md
@@ -363,31 +419,63 @@ Installed layout in client repository:
     ├── template.agent.md
     ├── template.prompt.md
     └── template.skill.md
+```
 
-Recommended AGENTS.md placement in client repository:
-.
-├── AGENTS.md                        <- Global repository rules/context boundaries
+### Recommended `AGENTS.md` Placement
+
+```
+<repository root>/
+├── AGENTS.md                        <- Global context boundaries and repository rules
 ├── src/
 │   ├── Billing/
-│   │   ├── AGENTS.md                <- .NET library/service-local context
+│   │   ├── AGENTS.md                <- Service-local context (e.g., next to .csproj)
 │   │   └── Billing.csproj
 │   └── Frontend/
-│       ├── AGENTS.md                <- Frontend app/package-local context
+│       ├── AGENTS.md                <- App/package-local context
 │       └── package.json
-
-Runtime artifacts created by agents in client repository:
-.
-├── PRD.md
-├── BACKLOG.md
-├── CHANGELOG.md
-└── docs/
-	├── backlog/
-	├── architecture/
-	├── plans/
-	├── review/
-	├── security/
-	└── qa/
 ```
+
+### Runtime Artifacts (created by agents in the client repository)
+
+```
+spec/
+├── ACTIVE.md                        <- Currently active feature
+└── <feature-slug>/
+    ├── PRD.md
+    ├── BACKLOG.md
+    ├── EPIC-*.md
+    ├── DESIGN.md
+    ├── PLAN.md
+    └── HISTORY.md
+```
+
+---
+
+## Package Distribution
+
+SDP is distributed as an [Agent Package Manager (APM)](https://agentpackagemanager.io) compatible package. The `apm.yml` manifest defines all framework components:
+
+- **Package type:** `agent-framework` — a complete SDLC workflow system
+- **Components:** 8 agents, 9 prompts, 5 skills, global instructions, and templates
+- **Install path:** `.github/` in the target repository
+- **Source directory:** `src/` in this repository
+- **Installers:** bash (`install.sh`) and PowerShell (`install.ps1`)
+
+A `package.json` is also provided for npm ecosystem compatibility.
+
+---
+
+## Contributing
+
+Contributions are welcome. Please follow these guidelines:
+
+1. **Source changes belong in `src/`** — never edit files under `.github/` as template source. The `.github/` folder in this repository is for maintainer automation only.
+2. **Keep templates generic** — all files in `src/` must be reusable across different project types and tech stacks.
+3. **Update documentation** — if you change behavior in `install.sh` or `install.ps1`, update the corresponding sections in this `README.md`.
+4. **Validate the installer** — run `bash -n install.sh` to check for syntax errors before submitting a pull request.
+5. **Preserve gate discipline** — changes to agents or prompts must maintain the 6-gate sequential process and human-approval model.
+
+For significant changes, open an issue first to discuss the proposed direction before submitting a pull request.
 
 ---
 

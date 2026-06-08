@@ -1,31 +1,21 @@
 # AGENTS.md — Scoped Context Map
 
-Use this file to define the local working contract for AI agents in this folder subtree.
+This file defines the local working contract for AI agents in this folder.
 
 ## Scope
-- Applies to: `<folder subtree this file governs>`
-- Parent context: inherits higher-level `AGENTS.md` unless overridden below.
+- Applies to: `<folder subtree>`
 
 ## Purpose
-- Describe what this module owns.
-- Point agents to key files and directories.
+- Describe the module's ownership.
+- Point agents to key files.
 - Reduce unnecessary repository-wide scanning.
 
-## Preferred Entry Points
+## Entry Points
 - Code: `<primary source folders>`
 - Tests: `<primary test folders>`
-- Docs/specs: `<relevant docs paths>`
-
-## File Discovery Rules
-- Start in this subtree first.
-- Do not scan unrelated folders unless required by a dependency or explicit user request.
-- If cross-module work is needed, read the target module's `AGENTS.md` before continuing.
+- Docs: `<relevant docs paths>`
 
 ## Tech/Module Notes
 - Runtime/framework: `<define>`
-- Key dependencies/contracts: `<define>`
-- Build/test command(s): `<define>`
-
-## Context Resolution Notes
-- This file supplements (not replaces) parent `AGENTS.md` files.
-- For conflicts, the most specific (closest) `AGENTS.md` in the target path wins.
+- Key dependencies: `<define>`
+- Build/test command: `<define>`

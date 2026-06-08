@@ -1,27 +1,25 @@
 ---
-description: This file outlines the 6-stage gate process for software development lifecycle (SDLC) to ensure structured and quality delivery.
+description: Defines the 6-stage SDLC gate process for structured delivery.
 applyTo: "**/*"
 ---
-# SDLC Process Instructions (6-Stage Gates)
+# SDLC Process Instructions
 
-All work must progress through these gates in order unless an explicit exception is recorded.
-
----
+All work must follow these gates sequentially.
 
 ## Feature Folder Convention
 
-All spec artifacts for a feature live together under `spec/<feature-slug>/` in the project root.
+All artifacts for a feature are stored in `spec/<feature-slug>/`.
 
 ```
 spec/
-  ACTIVE.md                    ← slug + title of the currently active feature
+  ACTIVE.md              # Active feature slug and title
   <feature-slug>/
-    PRD.md                     ← Gate 1 output
-    BACKLOG.md                 ← Gate 2 output (epic index)
-    EPIC-<N>-<slug>.md         ← Gate 2 output (one per epic)
-    DESIGN.md                  ← Gate 3 output
-    PLAN.md                    ← Gate 4 output (current implementation plan)
-    HISTORY.md                 ← running log of implemented tasks and decisions
+    PRD.md               # Gate 1: Product Requirements
+    BACKLOG.md           # Gate 2: Epics and stories
+    EPIC-<N>-<slug>.md   # Gate 2: Epic details
+    DESIGN.md            # Gate 3: Technical design
+    PLAN.md              # Gate 4: Implementation plan
+    HISTORY.md           # Log of completed tasks
 ```
 
 `ACTIVE.md` format:
@@ -29,87 +27,64 @@ spec/
 slug: <feature-slug>
 title: <Human Readable Feature Title>
 ```
-
-All agents read `spec/ACTIVE.md` to determine the working feature when no explicit feature is given in the user's input.
-
----
+Agents read `spec/ACTIVE.md` to determine the current feature context.
 
 ## AGENTS.md Context Convention
 
-Use `AGENTS.md` files to keep context targeted and reduce repository-wide scans.
-
-- Read the repository root `AGENTS.md` first (if present).
-- Read the nearest `AGENTS.md` for the current working subtree before analyzing or editing files.
-- Prefer scoped discovery in the selected module path instead of whole-repo exploration.
-- If multiple `AGENTS.md` files apply, the most specific file (closest to target files) has precedence for local work.
-
-Recommended placement in client repositories:
-- `.NET` backend: place an `AGENTS.md` in each meaningful library/service folder (typically where each `.csproj` lives).
-- Frontend: place an `AGENTS.md` in each application/package root (for example `apps/web`, `src/frontend`, `packages/ui`).
+Use `AGENTS.md` to scope context and reduce repository-wide scans.
+- Read repository root `AGENTS.md` first.
+- Read nearest `AGENTS.md` for the current working subtree.
+- The most specific `AGENTS.md` (closest to target files) has precedence.
 
 ---
 
-## Gate 1: Discovery (PRD)
-**Objective:** Define the problem, users, business value, and success metrics.
-- Output: `spec/<feature-slug>/PRD.md`
-- Owner: `sdp.prd`
-- Exit criteria: goals, scope, constraints, risks, and measurable outcomes are clear.
-- Side effect: creates `spec/<feature-slug>/` folder and sets `spec/ACTIVE.md`.
+## The 6 Gates
 
-## Gate 2: Refinement (Epics/Stories)
-**Objective:** Convert PRD into delivery-ready backlog.
-- Output: `spec/<feature-slug>/BACKLOG.md` + `spec/<feature-slug>/EPIC-<N>-<slug>.md`
-- Owner: `sdp.analyst`
-- Exit criteria: stories are testable, scoped, and sequenced.
+1.  **Discovery (PRD)**: Define the "what" and "why".
+    - **Owner**: `sdp.prd`
+    - **Output**: `spec/<feature-slug>/PRD.md`
 
-## Gate 3: Architecture (Tech Spec)
-**Objective:** Produce architecture/design that fits complexity and `TECH.md`.
-- Output: `spec/<feature-slug>/DESIGN.md`
-- Owner: `sdp.architect`
-- Exit criteria: design is reviewable, implementable, and traceable to backlog.
+2.  **Refinement (Backlog)**: Break PRD into epics and stories.
+    - **Owner**: `sdp.analyst`
+    - **Output**: `spec/<feature-slug>/BACKLOG.md`, `EPIC-*.md`
 
-## Gate 4: Planning (Task Breakdown)
-**Objective:** Create implementation plan for one selected story/task.
-- Output: `spec/<feature-slug>/PLAN.md` (overwrite with current plan).
-- Owner: `sdp.developer` (plan-task mode)
-- Exit criteria: plan is explicit, approved, and bounded to one task.
+3.  **Architecture (Design)**: Create the technical design.
+    - **Owner**: `sdp.architect`
+    - **Output**: `spec/<feature-slug>/DESIGN.md`
 
-## Gate 5: Implementation (Coding)
-**Objective:** Implement only the approved task plan.
-- Output: code + tests + docs updates within planned scope.
-- Side effect: append a summary entry to `spec/<feature-slug>/HISTORY.md`.
-- Owner: `sdp.developer` (implement mode)
-- Exit criteria: implementation complete, tests passing, no out-of-scope edits.
+4.  **Planning (Task Plan)**: Create an implementation plan for one story.
+    - **Owner**: `sdp.developer` (plan mode)
+    - **Output**: `spec/<feature-slug>/PLAN.md`
 
-## Gate 6: Hardening (Review → Security → QA)
-**Objective:** Validate quality, security, and acceptance criteria.
-- Sequence: `sdp.reviewer` → `sdp.security` → `sdp.qa`
-- Output: review findings, security audit results, QA validation report.
-- Exit criteria: critical issues resolved, AC passed, release readiness confirmed.
+5.  **Implementation (Code)**: Execute the approved plan.
+    - **Owner**: `sdp.developer` (implement mode)
+    - **Output**: Code, tests, and docs. Appends to `HISTORY.md`.
+
+6.  **Hardening (Validate)**: Review, secure, and test.
+    - **Sequence**: `sdp.reviewer` → `sdp.security` → `sdp.qa`
+    - **Output**: Review, audit, and QA reports.
 
 ---
 
 ## Feedback Loops
 
-Gates are sequential but failures route back to the appropriate gate — not to the beginning.
+Failures route back to the appropriate gate, not to the start.
 
-| Finding source | Returns to | Action |
+| Finding Source | Returns To | Action |
 |---|---|---|
-| `sdp.reviewer` — Request changes | Gate 5 | Developer fixes review findings, then re-runs Gate 6 from the start |
-| `sdp.security` — Critical/High findings | Gate 5 | Developer fixes security issues, then review + security re-run |
-| `sdp.security` — Architecture-level issue | Gate 3 | Architect updates design; Gate 4 and 5 must also re-run |
-| `sdp.qa` — Fail | Gate 5 | Developer fixes defects, then QA re-validates |
-| Blocked story (missing context) | Gate 2 | Analyst updates backlog; downstream gates re-run as needed |
-| PRD gaps discovered during design | Gate 1 | PRD agent updates PRD; downstream gates re-run as needed |
+| `sdp.reviewer` | Gate 5 | Developer fixes findings. |
+| `sdp.security` | Gate 5 or 3 | Developer or Architect fixes issues. |
+| `sdp.qa` | Gate 5 | Developer fixes defects. |
+| Blocked Story | Gate 2 | Analyst updates backlog. |
+| PRD Gaps | Gate 1 | PRD agent updates PRD. |
 
-**Rule:** Never silently fix-and-continue. Every feedback loop must be explicit — the gate that triggers a return must document what changed and why.
+**Rule**: Never silently fix and continue. Feedback loops must be explicit.
 
 ---
 
 ## Cross-Gate Rules
-- Always reference `@/.github/TECH.md` for stack and standards.
-- Always resolve the applicable `AGENTS.md` chain (root -> module) before broad file search.
-- Maintain bidirectional traceability: PRD -> backlog -> design -> plan -> code -> validation.
-- Block progression if current gate artifacts are incomplete or ambiguous.
-- One story/task at a time through Gates 4–6. Never bundle stories.
-- Always read `spec/ACTIVE.md` to determine the active feature when it is not explicitly provided.
+- Reference `@/.github/TECH.md` for stack and standards.
+- Resolve `AGENTS.md` before broad file searches.
+- Maintain traceability: PRD -> Backlog -> Design -> Plan -> Code.
+- Block on incomplete or ambiguous artifacts.
+- Implement one story at a time through Gates 4-6.
