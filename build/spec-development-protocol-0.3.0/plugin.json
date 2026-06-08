@@ -1,0 +1,8 @@
+{
+  "name": "spec-development-protocol",
+  "version": "0.3.0",
+  "description": "An AI-agentic framework for spec-driven engineering \u2014 structured, traceable, and ready for both greenfield and legacy web projects.",
+  "author": {
+    "name": "Michal Wojcik"
+  }
+}
