@@ -7,7 +7,7 @@ applyTo: "**/*"
 
 These apply to all code produced regardless of language, framework, or project type. Adjust specifics to the stack defined in `TECH.md`.
 
-For SDLC orchestration, gate ordering, agent routing, `AGENTS.md` context strategy, plan scope budgets, and hardening policy, see `@/.github/instructions/sdlc-process.instructions.md` — that file is the single source of truth for process. Do not duplicate process rules here; this file governs code quality only.
+For SDLC orchestration, gate ordering, agent routing, `AGENTS.md` context strategy, delivery contracts, and hardening policy, see `@/.github/instructions/sdlc-process.instructions.md` — that file is the single source of truth for process. Do not duplicate process rules here; this file governs code quality only.
 
 ### Code Quality
 

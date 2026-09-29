@@ -23,6 +23,7 @@ SDP installs into the `.github/` folder of any project repository and works with
 - [Quick Start: End-to-End Example](#quick-start-end-to-end-example)
 - [How It Works](#how-it-works)
   - [The 6-Gate SDLC Process](#the-6-gate-sdlc-process)
+  - [Manual vs. Supervised Delivery](#manual-vs-supervised-delivery)
   - [Feature Folder Structure](#feature-folder-structure)
   - [Working on a Legacy Project](#working-on-a-legacy-project)
 - [Reference](#reference)
@@ -45,7 +46,7 @@ AI coding assistants are powerful but undisciplined by default — they generate
 - **Specification before code** — every feature starts with a PRD and is refined into stories before any implementation begins.
 - **Traceable decisions** — architecture choices, plans, and history are recorded in versioned Markdown files alongside your code.
 - **Role-separated agents** — dedicated agents for product, analysis, architecture, development, review, security, and QA enforce separation of concerns.
-- **Human approval at every gate** — agents propose; you approve. No gate advances automatically.
+- **Human approval of intent and outcome**: approve Gates 1-4, then choose manual hardening or supervised delivery; both end with explicit acceptance.
 - **Safe for existing codebases** — install into any repository without modifying source files.
 
 ---
@@ -86,7 +87,7 @@ iwr -useb https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/m
 
 > **Execution policy note:** If you encounter a script execution policy error on Windows, run `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` and retry.
 
-Both installers copy the `.github/` framework files into the target repository **without overwriting any existing files**. A `.github/sdp-version` marker file records the installed version.
+Both installers recursively copy canonical `.apm/` files into the target repository's `.github/` **without overwriting existing framework files** by default. A `.github/sdp-version` marker records the source version, not proof that skipped files were upgraded. Installer output flags mixed-version risk and the Model Policy setup needed for `/deliver`.
 
 ---
 
@@ -134,23 +135,23 @@ The direct installers accept configuration via environment variables:
 
 ```bash
 # Install a specific release version
-SDP_BRANCH=v1.0.0 curl -fsSL https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.sh | SDP_BRANCH=v0.5.1 bash
 
 # Upgrade an existing installation (overwrite SDP-managed files)
-SDP_FORCE=true curl -fsSL https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.sh | SDP_FORCE=true bash
 
 # Upgrade SDP files but preserve the existing TECH.md
-SDP_FORCE=true SDP_TECH_MODE=skip curl -fsSL https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.sh | SDP_FORCE=true SDP_TECH_MODE=skip bash
 
 # Reset TECH.md from the template (useful when re-initializing a project)
-SDP_TECH_MODE=overwrite curl -fsSL https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.sh | SDP_TECH_MODE=overwrite bash
 ```
 
 **PowerShell examples:**
 
 ```powershell
 # Install a specific release version
-$env:SDP_BRANCH='v1.0.0'; iwr -useb https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.ps1 | iex
+$env:SDP_BRANCH='v0.5.1'; iwr -useb https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.ps1 | iex
 
 # Upgrade an existing installation (overwrite SDP-managed files)
 $env:SDP_FORCE='true'; iwr -useb https://raw.githubusercontent.com/WojcikMM/spec-development-protocol/main/install.ps1 | iex
@@ -174,6 +175,7 @@ After installation, open `.github/TECH.md`. This file is the single source of tr
 - CI/CD pipeline and deployment environment
 - Coding standards and conventions
 - Security baseline and identity model
+- Model Policy: role profiles, available model mappings, and allowed equivalent fallbacks for supervised delivery
 
 `TECH.md` is your file — SDP updates will never overwrite it unless you explicitly set `SDP_TECH_MODE=overwrite`.
 
@@ -205,15 +207,16 @@ The following example walks through adding a "User Registration" feature to an e
 | ---- | --------------------------------------------------------------------------------- | ---------------------- | ---------------------------------------------------------- |
 | 1    | Describe the feature in plain language                                            | `create-prd`           | `spec/user-registration/PRD.md`, `spec/ACTIVE.md`          |
 | 2    | Review and approve `PRD.md` (set `status: approved`), then break it into stories  | `refine-backlog`       | `spec/user-registration/BACKLOG.md`, `EPIC-1-core-flow.md` |
-| 3    | Design the technical solution                                                     | `design-system`        | `spec/user-registration/DESIGN.md`                         |
-| 4    | Select story `US-1` and create a scope-budgeted implementation plan (no code yet) | `plan-task` + "US-1"   | `spec/user-registration/PLAN.md`                           |
-| 5    | Approve the plan (set `status: approved`), then run `implement` explicitly        | `implement` + "US-1"   | Source code, tests, `HISTORY.md` updated                   |
+| 3    | Approve backlog/epics with approver and date, then design the solution | `design-system` | `spec/user-registration/DESIGN.md` |
+| 4    | Approve DESIGN, then plan one coherent delivery package covering related stories | `plan-task` + "US-1" | `PLAN.md` Decision Brief and Execution Contract |
+| 5    | Explicitly approve the exact plan revision and run supervised delivery, or record approval/digest before manual implementation | `/deliver approve-and-run user-registration-DP-1 r1` or `/implement` | Code, tests, run record and history |
 | 6a   | Review the implementation                                                         | `run-review`           | Review findings report                                     |
 | 6b   | Perform a security audit (unless the epic declares `epic-level`/`waived`)         | `audit-security`       | Security sign-off or findings                              |
-| 6c   | Validate acceptance criteria                                                      | `qa-validate` + "US-1" | Pass / Fail verdict                                        |
-| 7    | Repeat Steps 4–6 for the next story                                               | `plan-task` + "US-2"   | —                                                          |
+| 6c   | Validate all ACs; pass waits for human acceptance | `qa-validate` + "US-1" | `awaiting-acceptance` and evidence brief |
+| 7    | Accept the exact verified candidate, or reject/request changes | `/deliver accept user-registration-DP-1 <candidate-id>` | Recorded human decision, no next-package dispatch |
+| 8    | Separately select and plan the next delivery package | `/plan-task` | New draft plan |
 
-Each user story passes through Gates 4–6 independently. You retain full control at every approval checkpoint — no agent advances the process without your confirmation. **`plan-task` and `implement` are separate agents (`sdp.planner` and `sdp.developer`) with no self-referencing handoff**, so they never loop into each other automatically — moving from a plan to code always requires you to approve the plan and run `/implement` explicitly.
+Steps 6a-6c are manual-mode commands; `/deliver` dispatches those specialists for you after explicit approval, respecting every included epic's audit policy. Gates 4-6 operate on one delivery package, which may contain tightly related stories. Planning never starts execution by itself. Approval requires `status`, `approved_by`, `approved_at`, and a computed plan digest; changing status alone does not populate them.
 
 ---
 
@@ -226,13 +229,13 @@ SDP enforces a sequential gate model. Work cannot advance to the next gate until
 ```md
 Gate 1: Discovery → spec/<slug>/PRD.md + spec/ACTIVE.md
 Gate 2: Refinement → spec/<slug>/BACKLOG.md + EPIC-\*.md (declares security_review policy)
-Gate 3: Architecture → spec/<slug>/DESIGN.md (rates story complexity S/M/L)
-Gate 4: Planning → spec/<slug>/PLAN.md (one story at a time, with a mandatory Scope Budget)
+Gate 3: Architecture → spec/<slug>/DESIGN.md (size, risk, uncertainty)
+Gate 4: Planning → spec/<slug>/PLAN.md (one capability-sized delivery contract)
 Gate 5: Implementation → Source code + tests → spec/<slug>/HISTORY.md updated
-Gate 6: Hardening → Code review → Security audit (or deferred/waived) → QA validation
+Gate 6: Hardening → Review → Required security → QA → Human acceptance
 ```
 
-Every gate artifact carries a `status: draft | approved | rejected` header. Agents only treat an artifact as valid input once it is `approved` — approval is a checked field, not inferred from conversation.
+Every gate artifact carries `status: draft | approved | rejected`, `approved_by`, and `approved_at`. PLAN also records a SHA-256 `plan_digest` in that header, calculated over its LF-normalized UTF-8 body only. Plan/upstream content changes require reapproval; candidate changes invalidate prior assurance. Missing identity tooling blocks execution instead of using timestamps or word counts as proof.
 
 **Feedback loops** — gate failures route work back to the correct earlier gate, not the beginning:
 
@@ -242,7 +245,7 @@ Every gate artifact carries a `status: draft | approved | rejected` header. Agen
 | Security finding (Critical or High severity)       | Gate 5                                                                                                              |
 | QA validation failure                              | Gate 5                                                                                                              |
 | Security finding requiring architectural change    | Gate 3                                                                                                              |
-| Same story fails the same hardening step **twice** | Escalated to you — the agent stops auto-retrying and asks you to decide (descope, split, or accept documented risk) |
+| Second rejected candidate for the same package, at any assurance stage | Escalate to the user; one automatic repair is the limit, with full assurance repeated after repair |
 
 All findings across review, security, and QA use one severity scale: **Critical, High, Medium, Low**.
 
@@ -254,7 +257,28 @@ Not every story needs its own security audit. Each epic in `BACKLOG.md`/`EPIC-*.
 - **`epic-level`** — deferred until the whole epic is implemented, then audited once as a batch.
 - **`waived`** — explicitly skipped, with a required, documented reason (e.g., internal tooling with no external input or auth changes).
 
-Agents will not complain about a missing security step if the policy is explicitly `epic-level` or `waived` — but they will stop and ask you to set the policy if a story touches auth, secrets, external input, or data boundaries with no policy declared.
+Agents will not complain about a missing security step if the policy is explicitly `epic-level` or `waived` — but they will stop and ask you to set the policy if a story touches auth, secrets, external input, or data boundaries with no policy declared. An `epic-level` deferral records a `pending_audit` obligation in `spec/ACTIVE.md`; the epic cannot reach final acceptance until the aggregate audit runs and that obligation clears.
+
+### Manual vs. Supervised Delivery
+
+Gates 5–6 can run in two modes:
+
+- **Manual mode** — you run `/implement`, `/run-review`, `/audit-security`, and `/qa-validate` one at a time, reviewing each result before continuing. This is the default and the required fallback whenever supervised orchestration or a specific model/tool isn't available.
+- **Supervised mode**: `/deliver approve-and-run <id> <revision>` records your explicit approval and dispatches implementation, review, required security, and QA. `/deliver run <id> <revision>` uses existing approval. One automatic repair is permitted, followed by full assurance; the second rejected candidate escalates. The coordinator never writes product code or infers acceptance.
+
+Both modes end the same way: a `sdp.qa` Pass sets `final_status: awaiting-acceptance` and produces an acceptance brief (outcome, AC coverage with evidence, verdicts, deviations, remaining risks). Only your explicit accept / request-changes / reject decision closes the delivery package — no agent infers acceptance from a passing verdict or from silence.
+
+> Supervised mode is a customization-layer workflow that runs inside your active agent session — it does not add a background execution service, a persistent runner, or a tamper-proof audit trail. If a session ends mid-run, `/deliver` can resume the same delivery ID; the orchestrator re-validates the plan and last completed stage rather than assuming prior progress is still valid.
+
+Use `/deliver resume <id>` after interruption; it reconciles baseline, environment, candidate, completed steps and external effects before continuing. `/deliver accept <id> <candidate-id>`, `reject`, and `request-changes` record separate decisions. Acceptance never starts another package, commits, merges, or deploys. Intermediate packages may be accepted with disclosed deferred audits, but final-epic acceptance requires aggregate security plus final QA.
+
+**Sizing:** S is a bounded behavior change, M an end-to-end capability, L a cohesive subsystem with staged checks, and XL must be split. Rate Risk (`Low|Moderate|High`) and Uncertainty (`Resolved|Bounded|Open`) separately; Open blocks planning approval. File/line estimates inform review, not blanket caps. Split by independent acceptance, rollback, ownership, or unverifiable combined scope.
+
+**Models and harness:** configure TECH Model Policy using models actually available in your environment. Profiles do not automatically select models; verify worker configuration, approved equivalent fallbacks and the coordinator's cost-tier eligibility. Missing required tooling/models blocks supervised execution. VS Code Copilot Local is the initial target; no live end-to-end runtime or minimum-version compatibility is proven by this static refactor. Other APM targets remain manual until separately tested. Tool allowlists are not a sandbox, especially for terminal execution.
+
+**Upgrades:** default non-overwriting installs may mix old and new policies. Review/back up customized SDP files, deliberately refresh managed files with `SDP_FORCE=true`, preserve project TECH with `SDP_TECH_MODE=skip`, then add its Model Policy manually. Compare agents, prompts, instructions and templates as a set; preflight blocks inconsistent installations. Legacy PLANs need regeneration/reapproval; existing ACTIVE files gain `final_status` and a `pending_audit` list without losing prior obligations/history.
+
+**Evidence:** both modes use one `deliveries/<delivery-id>.json` initialized from `DELIVERY-RUN.json`, plus append-only HISTORY and immutable approved plans under `plans/`. Workers return structured candidate-bound results; the coordinator owns state during supervision. Manual roles persist their own results; read-only reviewer output is persisted and verified by the next role or `/deliver resume`. JSON parsing and transition checks are protocol requirements, not a bundled runtime engine.
 
 ### Feature Folder Structure
 
@@ -262,14 +286,14 @@ All specification artifacts for a feature are co-located in `spec/<feature-slug>
 
 ```md
 spec/
-ACTIVE.md <- identifies the currently active feature, gate, story, and status
+ACTIVE.md <- identifies the currently active feature, gate, story, status, final_status, and pending_audit
 user-registration/
 PRD.md <- Gate 1: product requirements document
 BACKLOG.md <- Gate 2: epic index + security_review policy
-EPIC-1-core-registration.md <- Gate 2: stories, acceptance criteria, sizing
-DESIGN.md <- Gate 3: technical design + story complexity ratings
-PLAN.md <- Gate 4: current story implementation plan + Scope Budget
-HISTORY.md <- Gate 5/6: running log of completed work and hardening outcomes
+EPIC-1-core-registration.md <- Gate 2: stories, acceptance criteria, size/risk/uncertainty
+DESIGN.md <- Gate 3: technical design + capability sizing per story
+PLAN.md <- Gate 4: current delivery package plan + Capability Sizing + Delivery Contract
+HISTORY.md <- Gate 5/6: running log of completed work, delivery run records, and acceptance/escalation entries
 checkout-flow/
 PRD.md
 ...
@@ -280,6 +304,8 @@ PRD.md
 ```yaml
 slug: user-registration
 title: User Registration
+final_status: not-started
+pending_audit: []
 ```
 
 When a new PRD is created, `sdp.prd` derives the slug from the feature title, initializes the feature folder, and writes `ACTIVE.md`. All subsequent agents read this file automatically — you do not need to specify the active feature in each chat session.
@@ -303,18 +329,19 @@ SDP is fully compatible with existing codebases:
 Each SDP agent has a single, well-defined responsibility. Agents are implemented as `.agent.md` files and invoked via the Copilot Chat panel in Agent Mode.
 
 | Agent           | File                            | Responsibility                                                                                    |
-| --------------- | ------------------------------- | ------------------------------------------------------------------------------------------------- |
+| --------------- | -------------------------------- | ------------------------------------------------------------------------------------------------- |
 | `sdp.prd`       | `agents/sdp.prd.agent.md`       | Authors `PRD.md` from a business intent description                                               |
 | `sdp.discover`  | `agents/sdp.discover.agent.md`  | Scans an existing codebase and drafts `TECH.md`                                                   |
 | `sdp.analyst`   | `agents/sdp.analyst.agent.md`   | Refines a PRD into epics, features, and user stories; declares each epic's security review policy |
-| `sdp.architect` | `agents/sdp.architect.agent.md` | Produces a right-sized technical design document and rates story complexity                       |
-| `sdp.planner`   | `agents/sdp.planner.agent.md`   | Creates a scope-budgeted implementation plan for one story — never writes code                    |
+| `sdp.architect` | `agents/sdp.architect.agent.md` | Produces a right-sized technical design document and rates story size/risk/uncertainty            |
+| `sdp.planner`   | `agents/sdp.planner.agent.md`   | Creates a capability-sized implementation plan for one delivery package — never writes code       |
 | `sdp.developer` | `agents/sdp.developer.agent.md` | Implements one approved plan at a time — never plans, never self-loops                            |
 | `sdp.reviewer`  | `agents/sdp.reviewer.agent.md`  | Performs code and design review; routes security per epic policy                                  |
 | `sdp.security`  | `agents/sdp.security.agent.md`  | Conducts a security audit against OWASP web baselines (per-story, epic-level, or waived)          |
-| `sdp.qa`        | `agents/sdp.qa.agent.md`        | Validates story acceptance criteria                                                               |
+| `sdp.qa`        | `agents/sdp.qa.agent.md`        | Validates acceptance criteria; a pass stops at `awaiting-acceptance`, never at automatic completion |
+| `sdp.orchestrator` | `agents/sdp.orchestrator.agent.md` | Supervises Gates 5-6 in one session for `/deliver`; coordinates only, never writes product code |
 
-Agents propose handoffs to the next role — for example, the reviewer agent offers to invoke the security agent after completing its review. Each handoff requires explicit confirmation before proceeding. `sdp.planner` and `sdp.developer` never hand off to themselves, so planning cannot loop into repeated re-implementation.
+Agents propose handoffs to the next role — for example, the reviewer agent offers to invoke the security agent after completing its review. Each handoff requires explicit confirmation before proceeding in manual mode. `sdp.planner` never hands off to an executor automatically, so planning cannot loop into repeated re-implementation; `sdp.orchestrator` dispatches specialists internally under `/deliver` but always stops at the human acceptance checkpoint.
 
 ---
 
@@ -322,17 +349,18 @@ Agents propose handoffs to the next role — for example, the reviewer agent off
 
 Prompts are the entry points that activate agents in the correct mode. Each prompt file documents its prerequisites and describes the expected outcome before the operation begins. **Prefer prompts over invoking an agent by name** — each gate has exactly one entry-point prompt.
 
-| Prompt           | Activates       | Gate                                                           |
-| ---------------- | --------------- | -------------------------------------------------------------- |
-| `discover-tech`  | `sdp.discover`  | Legacy onboarding                                              |
-| `create-prd`     | `sdp.prd`       | Gate 1                                                         |
-| `refine-backlog` | `sdp.analyst`   | Gate 2                                                         |
-| `design-system`  | `sdp.architect` | Gate 3                                                         |
-| `plan-task`      | `sdp.planner`   | Gate 4                                                         |
-| `implement`      | `sdp.developer` | Gate 5                                                         |
-| `run-review`     | `sdp.reviewer`  | Gate 6                                                         |
-| `audit-security` | `sdp.security`  | Gate 6 (skipped if the epic's policy is `epic-level`/`waived`) |
-| `qa-validate`    | `sdp.qa`        | Gate 6                                                         |
+| Prompt           | Activates          | Gate                                                            |
+| ---------------- | ------------------- | ---------------------------------------------------------------- |
+| `discover-tech`  | `sdp.discover`      | Legacy onboarding                                                |
+| `create-prd`     | `sdp.prd`           | Gate 1                                                           |
+| `refine-backlog` | `sdp.analyst`       | Gate 2                                                           |
+| `design-system`  | `sdp.architect`     | Gate 3                                                           |
+| `plan-task`      | `sdp.planner`       | Gate 4                                                           |
+| `implement`      | `sdp.developer`     | Gate 5 (manual, single-shot)                                     |
+| `run-review`     | `sdp.reviewer`      | Gate 6 (manual, single-shot)                                     |
+| `audit-security` | `sdp.security`      | Gate 6 (manual, single-shot; skipped if policy is `epic-level`/`waived`) |
+| `qa-validate`    | `sdp.qa`            | Gate 6 (manual, single-shot)                                     |
+| `deliver`        | `sdp.orchestrator`  | Gates 5-6 combined, supervised, one approval, ends at acceptance |
 
 Prompts are located in `.github/prompts/` after installation and are accessible from the Copilot Chat prompt picker.
 
@@ -361,16 +389,17 @@ To add a custom skill, create a new folder under `.github/skills/` and add a `SK
 The `.github/templates/` folder contains starter files for extending SDP, and canonical templates for every gate artifact (each requires a `status: draft | approved | rejected` header):
 
 | File                 | Purpose                                                                                                    |
-| -------------------- | ---------------------------------------------------------------------------------------------------------- |
-| `TECH.md`            | Blank technology context template for new projects                                                         |
+| -------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `TECH.md`            | Blank technology context template for new projects, including the Model Policy section                    |
 | `AGENTS.md`          | Scoped context-map template for repository root, backend modules, and frontend packages                    |
-| `ACTIVE.md`          | Active feature tracker: slug, title, current gate, current story, status — used to resume interrupted work |
+| `ACTIVE.md`          | Active feature tracker: slug, title, current gate, current story, status, `final_status`, `pending_audit`  |
 | `PRD.md`             | Gate 1 artifact template                                                                                   |
 | `BACKLOG.md`         | Gate 2 artifact template, including the `security_review` policy table                                     |
-| `EPIC.md`            | Gate 2 per-epic template: stories, acceptance criteria, sizing, security review policy/reason              |
-| `DESIGN.md`          | Gate 3 artifact template, including the story complexity/effort rating table                               |
-| `PLAN.md`            | Gate 4 artifact template, including the mandatory Scope Budget                                             |
-| `HISTORY.md`         | Append-only log template for completed work, hardening outcomes, and escalations                           |
+| `EPIC.md`            | Gate 2 per-epic template: stories, acceptance criteria, size/risk/uncertainty, security review policy/reason |
+| `DESIGN.md`          | Gate 3 artifact template, including the per-story Capability Sizing table                                  |
+| `PLAN.md`            | Gate 4 artifact template: Delivery Identity, Capability Sizing, Change Boundary, Work Graph, Verification Matrix |
+| `HISTORY.md`         | Append-only log template for completed work, Delivery Run Records, acceptance entries, and escalations      |
+| `DELIVERY-RUN.json`  | Structured run identity, steps, candidate-bound results, audit obligations, counters and acceptance |
 | `template.agent.md`  | Starter template for authoring a custom agent                                                              |
 | `template.prompt.md` | Starter template for authoring a custom prompt                                                             |
 | `template.skill.md`  | Starter template for authoring a custom skill                                                              |
@@ -422,6 +451,7 @@ SDP is designed to coexist with existing tooling and custom workflows. SDP-manag
 ├── DESIGN.md
 ├── PLAN.md
 ├── HISTORY.md
+├── DELIVERY-RUN.json
 ├── template.agent.md
 ├── template.prompt.md
 └── template.skill.md
@@ -452,6 +482,7 @@ After running the installer, the following structure is created under `.github/`
 ├── DESIGN.md
 ├── PLAN.md
 ├── HISTORY.md
+├── DELIVERY-RUN.json
 ├── template.agent.md
 ├── template.prompt.md
 └── template.skill.md

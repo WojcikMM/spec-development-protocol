@@ -6,6 +6,38 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [Unreleased]
+
+Customization-layer refactor addressing `SDP-REVIEW.md`, with synchronized documentation and installer notices. No version bump in `apm.yml`/`plugin.json`.
+
+### Added
+- **`sdp.orchestrator` agent and `/deliver` prompt** — a supervised-delivery entry point that dispatches `sdp.developer`, `sdp.reviewer`, `sdp.security`, and `sdp.qa` in sequence within one session, ends at a human acceptance checkpoint, and never writes product code itself. Manual mode (`/implement`, `/run-review`, `/audit-security`, `/qa-validate`) remains fully valid and is the required fallback.
+- **Final Human Acceptance checkpoint** — a `sdp.qa` Pass now sets `final_status: awaiting-acceptance` and produces an acceptance brief instead of marking the story/feature `done` automatically. Only an explicit human accept/reject/request-changes decision closes a delivery package; acceptance never itself authorizes commit/merge/deploy/next-package.
+- **`spec/ACTIVE.md` fields** — added `final_status` (`not-started | in-delivery | awaiting-acceptance | accepted | rejected`) and `pending_audit` (list of outstanding epic audit IDs).
+- **Plan digest** — `PLAN.md` approval now records a content fingerprint of the plan body; any later edit to the body invalidates the approval regardless of the `status` field, binding approval to a specific revision instead of a filename.
+- **Symmetric upstream-approval enforcement** — every gate agent (`sdp.analyst`, `sdp.architect`, `sdp.planner`, `sdp.developer`/`sdp.orchestrator`) now explicitly refuses to proceed unless its upstream artifact is `status: approved` with `approved_by`/`approved_at` filled in, not just the developer/PLAN.md pair.
+- **Capability Sizing** — replaced the fixed Gate 4 Scope Budget (8 files / 300 lines / S-M-L) with an independent Size (S/M/L/XL) x Risk (Low/Moderate/High) x Uncertainty (Resolved/Bounded/Open) rating and outcome-based split criteria, carried from `DESIGN.md` through `EPIC.md`/`BACKLOG.md`/`PLAN.md`.
+- **Delivery Contract** — `PLAN.md` restructured into a Human Decision Brief plus an Execution Contract (Delivery Identity, Change Boundary, Work Graph, Verification Matrix, Autonomy Policy, Operational Limits, Recovery).
+- **Delivery Run Record**: new `DELIVERY-RUN.json` template for baseline/candidate manifests, steps, results, obligations, resource use and acceptance. HISTORY defines the worker envelope and validation contract. Both manual and supervised runs use the same data format; no runtime engine or dependency is added.
+- **Model Policy** — `TECH.md` gained a section mapping each gate role to a model profile label, with an explicit instruction not to invent unavailable model IDs.
+- **Deferred-audit closure tracking**: the final package dispatches an aggregate audit against the original epic baseline, then final QA before closure. Intermediate acceptance retains obligations; multi-story/multi-epic packages preserve all policies.
+
+### Changed
+- **Central rejected-candidate counter** replaces "same story fails the same hardening step twice" — escalation to the user now triggers after the delivery package's **2nd** rejected candidate, counting rejections from review, security, or QA in any combination, not per-stage.
+- **Delivery package** replaces "one story at a time" as the Gate 4-6 unit of work — a package may bundle tightly related stories sharing one coherent, demonstrable outcome; unrelated work is never bundled.
+- `sdp.developer`, `sdp.reviewer`, `sdp.security`, `sdp.qa` now describe dual-mode operation: standalone manual handoffs are unchanged, and each also returns a structured result to `sdp.orchestrator` instead of self-chaining when invoked under `/deliver`.
+- `write-tests` skill's test-deletion guidance ("fix or delete failing tests") replaced with a requirement for a root-cause explanation and confirmation that equivalent required coverage remains.
+- `README.md` — added a "Manual vs. Supervised Delivery" section, updated the Quick Start walkthrough, 6-gate diagram, feedback loop table, feature folder structure, and agents/prompts/templates reference tables.
+- Added documented tool allowlists and worker subagent restrictions. The read-only reviewer returns records for the next role/coordinator to persist; terminal permissions are not represented as a sandbox.
+- Added explicit approve-and-run/run/resume/accept/reject/request-changes routing with fresh candidate checks and no automatic next-package selection.
+- Both installers now report mixed-version upgrade risks and Model Policy setup; copy/force/TECH handling is unchanged. Normalized the touched Bash installer to LF so the raw syntax gate passes. Corrected Bash README examples to apply environment variables to `bash`, not `curl`.
+- Regenerated root `AGENTS.md` using the installed APM CLI; no manual edits or archived build changes.
+
+### Not Changed
+- Installer copy behavior: both already recursively copy `.apm/` to `.github/`, including the new agent, prompt and run template. Default preservation and explicit force behavior remain intact.
+- `apm.yml` / `plugin.json` — no version bump; these point at the `.apm/` directories generically and needed no path changes.
+- No durable execution service, authenticated approval system, automatic model selector, or live cross-harness compatibility guarantee is introduced.
+
 ## [v0.5.1]
 
 Technical release only — bumps the APM package version and GitHub Copilot plugin release version. No code, agents, prompts, instructions, or skills were changed.

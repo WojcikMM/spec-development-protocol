@@ -22,7 +22,7 @@ Traceability: derived from `spec/<slug>/PRD.md`.
 
 ## Story Sizing Rule
 
-Every story below must satisfy INVEST and target roughly one day / one PR of effort. If a story is too large, split it here before Gate 3 (design).
+Stories must satisfy INVEST (Independent, Negotiable, Valuable, Estimable, Small, Testable). Related stories that share one coherent, demonstrable outcome may later be bundled into a single delivery package at Gate 4 — see Capability Sizing in `sdlc-process.instructions.md` (size S/M/L/XL, plus independent risk and uncertainty ratings). Split a story here, before Gate 3, if it is independently hazardous, needs independent rollback, or cannot be verified together with the rest of its epic.
 
 ## Stories (summary — full AC in EPIC-<N>-<slug>.md)
 

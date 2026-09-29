@@ -6,9 +6,9 @@ agent: sdp.architect
 
 The `sdp.architect` agent will:
 
-1. Read the approved backlog stories and `TECH.md`.
+1. Verify backlog and relevant epics have approved status, approver and date; read `TECH.md`.
 2. Produce a right-sized technical design.
 3. Define module boundaries, contracts (API/data schemas), and NFRs.
-4. Save the design to `spec/<slug>/DESIGN.md`.
+4. Rate size, risk and uncertainty independently, flag possible delivery packages, and save DESIGN with `status: draft`. XL requires splitting; Open uncertainty requires design resolution.
 
 An approved design is the input for the `plan-task` command.

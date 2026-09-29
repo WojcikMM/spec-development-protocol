@@ -31,13 +31,13 @@ Traceability: `spec/<slug>/BACKLOG.md` / `EPIC-*.md`.
 - Performance: `<latency/throughput targets>`
 - Reliability: `<failure modes, retries>`
 
-## 6) Story Complexity/Effort Rating
+## 6) Capability Sizing
 
-| Story ID | Complexity (S/M/L) | Notes                                                           |
-| -------- | ------------------ | --------------------------------------------------------------- |
-| STORY-1  | `<S/M/L>`          | `<why; flag if likely to exceed a single PLAN.md Scope Budget>` |
+| Story ID | Size (S/M/L/XL) | Risk (Low/Moderate/High) | Uncertainty (Resolved/Bounded/Open) | Notes |
+| -------- | ---------------- | -------------------------- | -------------------------------------- | ----- |
+| STORY-1  | `<S/M/L/XL>`      | `<Low/Moderate/High>`      | `<Resolved/Bounded/Open>`               | `<why; flag related stories that could form one delivery package>` |
 
-> Any story rated **L** or flagged as likely to exceed the Gate 4 Scope Budget should be sent back to `sdp.analyst` for splitting before planning.
+> Any story rated **XL**, or with **Open** uncertainty, should be sent back to `sdp.analyst` for splitting or further design before planning. Tightly related stories with resolved/bounded uncertainty may be bundled into a single delivery package at Gate 4 — see `sdlc-process.instructions.md`.
 
 ## 7) Trade-offs & Decisions
 
