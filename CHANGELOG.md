@@ -8,6 +8,10 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added
+
+- **`scripts/sync-templates.sh`** — regenerates the APM `sdp-templates` skill-asset mirror from the canonical `.apm/templates/` directory (`apm run sync-templates`) and checks for drift without modifying files (`apm run check-templates`), replacing the manual byte-for-byte copy obligation.
+
 ## [v0.5.2]
 
 Customization-layer refactor addressing `SDP-REVIEW.md`, with synchronized documentation and installer notices. No version bump in `apm.yml`/`plugin.json`.

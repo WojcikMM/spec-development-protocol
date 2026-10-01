@@ -535,18 +535,23 @@ SDP is distributed as an [Agent Package Manager (APM)](https://agentpackagemanag
 APM producer release flow (recommended):
 
 ```bash
-# 1) Validate marketplace entries resolve
+# 1) Verify the APM template mirror matches .apm/templates/ (fails on drift)
+apm run check-templates
+
+# 2) Validate marketplace entries resolve
 apm marketplace check
 
-# 2) Build marketplace artifacts
+# 3) Build marketplace artifacts
 apm pack --marketplace=claude,codex
 
-# 3) Commit generated marketplace files and tag a release
+# 4) Commit generated marketplace files and tag a release
 git add .claude-plugin/marketplace.json .agents/plugins/marketplace.json apm.yml
 git commit -m "release: update marketplace index"
 git tag spec-development-protocol-v0.4.0
 git push --tags
 ```
+
+After editing any file under `.apm/templates/`, run `apm run sync-templates` to regenerate the APM mirror at `.apm/skills/sdp-templates/assets/` before packing.
 
 For npm ecosystem compatibility:
 
@@ -562,7 +567,7 @@ Contributions are welcome. Please follow these guidelines:
 
 1. **Source changes belong in `.apm/`** — never edit files under `.github/` as template source. The `.github/` folder in this repository is for maintainer automation only.
 2. **Keep templates generic** — all files in `.apm/` must be reusable across different project types and tech stacks.
-3. **Keep APM template assets synchronized** — changes under `.apm/templates/` must be copied byte-for-byte to `.apm/skills/sdp-templates/assets/` before packing.
+3. **Keep APM template assets synchronized** — run `apm run sync-templates` (or `scripts/sync-templates.sh`) after editing `.apm/templates/`, and `apm run check-templates` to verify there is no drift before packing.
 4. **Update documentation** — if you change behavior in `install.sh` or `install.ps1`, update the corresponding sections in this `README.md`.
 5. **Validate the installer** — run `bash -n install.sh` to check for syntax errors before submitting a pull request.
 6. **Preserve gate discipline** — changes to agents or prompts must maintain the 6-gate sequential process and human-approval model.

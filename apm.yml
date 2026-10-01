@@ -23,6 +23,8 @@ includes:
   - .apm/skills/
 scripts:
   start: apm compile
+  sync-templates: bash scripts/sync-templates.sh
+  check-templates: bash scripts/sync-templates.sh --check
 marketplace:
   owner:
     name: WojcikMM
