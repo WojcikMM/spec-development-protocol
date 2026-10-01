@@ -8,7 +8,7 @@
     {
       "name": "spec-development-protocol",
       "description": "An AI-agentic framework for spec-driven engineering — structured, traceable, and ready for both greenfield and legacy web projects.",
-      "version": "^0.5.1",
+      "version": "^0.5.2",
       "category": "Productivity",
       "source": "./"
     }

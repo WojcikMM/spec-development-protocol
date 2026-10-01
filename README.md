@@ -107,7 +107,7 @@ apm install spec-development-protocol@spec-development-protocol
 
 apm install WojcikMM/spec-development-protocol
 
-The `apm.yml` manifest defines all agents, skills, prompts, and templates included in SDP.
+The `apm.yml` manifest explicitly includes every supported APM primitive. Because APM does not pack arbitrary `.apm/templates/` directories, the same templates are also shipped as assets of the `sdp-templates` skill. SDP resolves the direct-install path (`.github/templates/`) or the APM skill-asset path automatically.
 
 ---
 
@@ -379,6 +379,7 @@ Skills are located in `.github/skills/` and follow the [Agent Skills open standa
 | Create UI Component      | `skills/create-ui-component/` | Component structure, accessibility, state management, and testing                  |
 | Database Migration       | `skills/database-migration/`  | Safe schema changes, rollback strategies, and zero-downtime patterns               |
 | Error Handling           | `skills/error-handling/`      | Error classification, structured logging, safe error responses, and retry logic    |
+| SDP Templates            | `skills/sdp-templates/`        | APM-compatible copies of the canonical gate and customization templates             |
 
 To add a custom skill, create a new folder under `.github/skills/` and add a `SKILL.md` file using `.github/templates/template.skill.md` as the starting point.
 
@@ -439,8 +440,11 @@ SDP is designed to coexist with existing tooling and custom workflows. SDP-manag
 │ │ └── SKILL.md
 │ ├── error-handling/
 │ │ └── SKILL.md
-│ └── write-tests/
-│ └── SKILL.md
+│ ├── write-tests/
+│ │ └── SKILL.md
+│ └── sdp-templates/
+│   ├── SKILL.md
+│   └── assets/ <- Mirrors templates/ for APM packaging
 └── templates/
 ├── ACTIVE.md
 ├── AGENTS.md
@@ -522,8 +526,8 @@ spec/
 
 SDP is distributed as an [Agent Package Manager (APM)](https://agentpackagemanager.io) compatible package. The `apm.yml` manifest defines all framework components:
 
-- **Components:** 8 agents, 9 prompts, 5 skills, global instructions, and templates
-- **Install path:** `.github/` in the target repository
+- **Components:** 10 agents, 10 prompts, 6 skills, global instructions, and template assets
+- **Install paths:** direct installers use `.github/`; APM installs template assets under `.agents/skills/sdp-templates/assets/`
 - **Source directory:** `.apm/` in this repository
 - **Installers:** bash (`install.sh`) and PowerShell (`install.ps1`)
 - **Marketplace outputs:** `.claude-plugin/marketplace.json` and `.agents/plugins/marketplace.json`
@@ -558,9 +562,10 @@ Contributions are welcome. Please follow these guidelines:
 
 1. **Source changes belong in `.apm/`** — never edit files under `.github/` as template source. The `.github/` folder in this repository is for maintainer automation only.
 2. **Keep templates generic** — all files in `.apm/` must be reusable across different project types and tech stacks.
-3. **Update documentation** — if you change behavior in `install.sh` or `install.ps1`, update the corresponding sections in this `README.md`.
-4. **Validate the installer** — run `bash -n install.sh` to check for syntax errors before submitting a pull request.
-5. **Preserve gate discipline** — changes to agents or prompts must maintain the 6-gate sequential process and human-approval model.
+3. **Keep APM template assets synchronized** — changes under `.apm/templates/` must be copied byte-for-byte to `.apm/skills/sdp-templates/assets/` before packing.
+4. **Update documentation** — if you change behavior in `install.sh` or `install.ps1`, update the corresponding sections in this `README.md`.
+5. **Validate the installer** — run `bash -n install.sh` to check for syntax errors before submitting a pull request.
+6. **Preserve gate discipline** — changes to agents or prompts must maintain the 6-gate sequential process and human-approval model.
 
 For significant changes, open an issue first to discuss the proposed direction before submitting a pull request.
 
