@@ -1,5 +1,5 @@
 name: spec-development-protocol
-version: 0.5.1
+version: 0.5.2
 description: An AI-agentic framework for spec-driven engineering — structured, 
   traceable, and ready for both greenfield and legacy web projects.
 author: Michal Wojcik
@@ -16,7 +16,11 @@ targets:
 dependencies:
   apm: []
   mcp: []
-includes: auto
+includes:
+  - .apm/agents/
+  - .apm/instructions/
+  - .apm/prompts/
+  - .apm/skills/
 scripts:
   start: apm compile
 marketplace:
@@ -75,6 +79,6 @@ marketplace:
     - name: spec-development-protocol
       source: ./
       description: An AI-agentic framework for spec-driven engineering — structured, traceable, and ready for both greenfield and legacy web projects.
-      version: "^0.5.1"
+      version: "^0.5.2"
       tag_pattern: "{name}-v{version}"
       category: Productivity

@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "run_id": "<run-id>",
+  "delivery_id": "<delivery-id>",
+  "plan_revision": "<revision>",
+  "plan_digest": "<sha256>",
+  "upstream_revisions": [{"path": "<artifact>", "sha256": "<sha256>"}],
+  "baseline": {"head": "<commit>", "manifest": [], "sha256": "<sha256>"},
+  "candidate": {"manifest": [], "sha256": "<sha256>"},
+  "environment_fingerprint": "<toolchain and dependency identity>",
+  "current_stage": "preflight",
+  "completed_steps": [],
+  "stage_results": [],
+  "rejected_candidates": [],
+  "rejected_candidate_count": 0,
+  "pending_audit": [],
+  "resources": {"dispatch_count": 0, "elapsed_seconds": 0, "tool_calls": null, "tokens": null},
+  "final_status": "not-started",
+  "acceptance": {"decision": "pending", "candidate_id": null, "decided_by": null, "decided_at": null}
+}
