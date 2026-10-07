@@ -6,6 +6,10 @@ handoffs:
     agent: sdp.developer
     prompt: "Plan approved. Implement the plan in spec/<slug>/PLAN.md."
     send: false
+  - label: Run orchestration to implement the approved plan
+    agent: sdp.orchestrator
+    prompt: "Execute the approved plan in spec/<slug>/PLAN.md."
+    send: false
 ---
 
 # Planner Agent
