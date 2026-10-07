@@ -8,9 +8,42 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [v0.5.3]
+
 ### Added
 
 - **`scripts/sync-templates.sh`** — regenerates the APM `sdp-templates` skill-asset mirror from the canonical `.apm/templates/` directory (`apm run sync-templates`) and checks for drift without modifying files (`apm run check-templates`), replacing the manual byte-for-byte copy obligation.
+- **Proportional assurance profiles** — added Lean, Balanced (default), and Compliance delivery profiles. Review remains independent, while specialist security and QA stages run when policy, risk, or independently observable behavior requires them. Compliance retains strict hashes, manifests, environment identity, and evidence retention when a project needs them.
+- **Natural-language correction flow** — after the acceptance brief, users can accept, reject, or describe what is wrong without supplying delivery/candidate identifiers. Bounded corrections are repaired and rechecked; changed contracts return to planning.
+- **Durable comment policy** — production comments must not contain story/task/epic/AC identifiers, implementation narration, change history, completed planning notes, or obvious code restatements. Developer and reviewer agents now enforce this policy.
+- **Implementation autonomy** — plans explicitly preserve developer ownership of naming, idiomatic local design, helper reuse/extraction, and adjacent tests inside the approved outcome and change boundary.
+
+### Changed
+
+- **Simplified `/deliver` workflow** — bare `/deliver` now resolves `spec/ACTIVE.md`, approves the current visible `PLAN.md`, executes it, runs proportionate assurance, and stops at human acceptance. Delivery IDs, plan revisions, digests, and candidate hashes are no longer required when active state is unambiguous. Advanced Compliance, resume, inspect, and reject actions remain available.
+- **Risk-based security is now the default** — epic policy is `risk-based | per-story | epic-level | waived`. Specialist security review is triggered by authentication, authorization, secrets, untrusted input, sensitive data, cryptography, trust boundaries, dependency/infrastructure security, regulated controls, or explicit policy.
+- **Reviewer and QA responsibilities are separated** — reviewer owns technical correctness, maintainability, scope, and test quality. QA runs when independently exercising observable behavior adds evidence beyond review and focused tests.
+- **`PLAN.md` is implementation-focused** — removed normal-mode orchestration bookkeeping such as upstream hashes, model references, resource counters, file manifests, and immutable revision metadata. Plans retain outcome, non-goals, decisions, boundary, ordered work, verification, applicable recovery, and autonomy limits.
+- **Delivery evidence is compact by default** — `DELIVERY-RUN.json` schema version 2 is a small resume checkpoint, and `HISTORY.md` stores one final delivery summary plus unresolved blocks/escalations instead of duplicating successful stage narratives and command logs.
+- **State model consolidated** — `ACTIVE.md` now uses `current_delivery`, `feature_status`, and `delivery_status`, replacing overlapping `current_story`, `status`, and `final_status` fields.
+- **Earlier gates can be right-sized** — small resolved changes may explicitly reference existing product/design contracts instead of generating redundant artifacts, while still requiring an outcome, plan, verification, independent review, and human acceptance.
+- **Global standards made proportional** — softened universal requirements around assertions, health endpoints, metrics, branching, ADRs, test placement, and migration rollback so project-specific policy can live in `TECH.md`.
+- **All agents and prompts aligned** — role files now contain role-specific behavior rather than repeating the entire run-state and compliance contract. Bare `/deliver`, profile routing, conversational correction, and compact evidence are consistent across agents, prompts, instructions, templates, and README.
+- **Skills refined** — API/UI/error-handling skills reinforce durable comments, migration guidance supports safe forward recovery for approved irreversible operations, and test guidance permits multiple assertions that verify one behavioral outcome.
+- **Documentation and installer guidance updated** — README now documents the simplified workflow, delivery profiles, security/QA triggers, state migration, and Compliance fallback. Installer behavior is unchanged; output now points users to the SDP Delivery Policy in `TECH.md`.
+- **Generated context refreshed** — root `AGENTS.md` and the APM template-asset mirror were regenerated from canonical `.apm/` sources.
+
+### Breaking Changes
+
+- Existing clients must migrate `current_story` to `current_delivery`, `status` to `feature_status`, and `final_status` to the closest `delivery_status`.
+- Existing active plans should be regenerated with the simplified `PLAN.md` template.
+- New delivery checkpoints use `DELIVERY-RUN.json` schema version 2; unresolved `pending_audit` obligations must be preserved during migration.
+- Old agents, prompts, instructions, and templates must not be mixed with the redesigned workflow. Upgrade SDP-managed files together and preserve project `TECH.md` with `SDP_TECH_MODE=skip` when appropriate.
+
+### Removed
+
+- Mandatory plan digests, upstream artifact hashes, full working-tree manifests, environment fingerprints, exact candidate IDs, and immutable plan archives from Lean/Balanced delivery. These remain available through project-configured Compliance policy.
+- Required `approve-and-run <delivery-id> <revision>` and `accept <delivery-id> <candidate-id>` syntax from the normal user workflow.
 
 ## [v0.5.2]
 
