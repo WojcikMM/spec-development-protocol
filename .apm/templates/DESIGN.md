@@ -6,47 +6,44 @@ approved_at: pending
 
 # Design: <Feature Title>
 
-Traceability: `spec/<slug>/BACKLOG.md` / `EPIC-*.md`.
+## Architecture and Boundaries
 
-## 1) Architecture Overview
+- <affected module> owns <responsibility>
+- <external boundary> uses <contract>
 
-`<summary and rationale, right-sized to the problem>`
+## Contracts and Data
 
-## 2) Module Boundaries & Ownership
+- API/event/UI contract: <only changed or relied-upon contracts>
+- Data model/state: <only changed or material data decisions>
 
-- `<module/service>` — owns `<responsibility>`
+## Material Non-Functional Decisions
 
-## 3) Contracts
+- Security: <trust boundaries and controls, or not materially changed>
+- Reliability/compatibility: <applicable constraints>
+- Performance/accessibility/operations: <applicable requirements>
 
-- API: `<endpoint, method, request/response schema>`
-- Data schema: `<entities, fields, relations>`
+## Delivery Shape
 
-## 4) Patterns Applied
+| Story | Size | Risk | Uncertainty | Suggested profile | Notes |
+| --- | --- | --- | --- | --- | --- |
+| STORY-1 | <S/M/L/XL> | <Low/Moderate/High> | <Resolved/Bounded/Open> | <Lean/Balanced/Compliance> | <reason> |
 
-- `<e.g., Ports & Adapters at the DB boundary — only where complexity justifies it>`
+XL or Open work returns to refinement/design. Size does not determine risk.
 
-## 5) Non-Functional Requirements
+## Decisions and Trade-offs
 
-- Security: `<authn/authz, data handling>`
-- Performance: `<latency/throughput targets>`
-- Reliability: `<failure modes, retries>`
+- <decision> over <alternative> because <durable rationale>
 
-## 6) Capability Sizing
+## Implementation Freedom
 
-| Story ID | Size (S/M/L/XL) | Risk (Low/Moderate/High) | Uncertainty (Resolved/Bounded/Open) | Notes |
-| -------- | ---------------- | -------------------------- | -------------------------------------- | ----- |
-| STORY-1  | `<S/M/L/XL>`      | `<Low/Moderate/High>`      | `<Resolved/Bounded/Open>`               | `<why; flag related stories that could form one delivery package>` |
+- Settled: <contracts and constraints implementation must preserve>
+- Developer-owned: <local design choices that do not need approval>
 
-> Any story rated **XL**, or with **Open** uncertainty, should be sent back to `sdp.analyst` for splitting or further design before planning. Tightly related stories with resolved/bounded uncertainty may be bundled into a single delivery package at Gate 4 — see `sdlc-process.instructions.md`.
+## Open Decisions
 
-## 7) Trade-offs & Decisions
-
-- `<decision>` — chosen over `<alternative>` because `<rationale>`.
-
-## 8) Open Questions / Assumptions
-
-- `<question or assumption>`
+- <only unresolved decisions that block planning>
 
 ---
 
-_Approval required before proceeding to Gate 4 (`/plan-task`). Set `status: approved` above once confirmed._
+Approval is required before `/plan-task` unless the user explicitly approved a
+lightweight path using an established design.

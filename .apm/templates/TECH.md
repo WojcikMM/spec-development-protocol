@@ -1,72 +1,72 @@
 # Global Technology Context (TECH)
 
-This document defines the technology choices and standards for the project.
+Define project-specific facts. Use `not applicable` instead of inventing
+requirements.
 
-## 1) Platform
+## 1. Platform and Structure
 
-- **Application type**: `<Web App / API / Full-Stack / etc.>`
-- **Target environments**: `<Browser / Node.js / etc.>`
+- Application type: <web/API/library/CLI/etc.>
+- Runtimes/frameworks: <versions>
+- Primary modules: <paths and ownership>
+- Target environments: <environments>
 
-## 2) Frontend
+## 2. Data and External Boundaries
 
-- **Framework**: `<React / Vue / etc.>`
-- **Language**: `<TypeScript / JavaScript>`
-- **UI system**: `<Tailwind CSS / MUI / etc.>`
-- **State management**: `<Redux / Zustand / etc.>`
-- **Testing**: `<Vitest / Jest / etc.>`
+- Data stores/access: <technology and conventions>
+- APIs/events/integrations: <styles and contracts>
+- Authentication/authorization: <approach>
+- Secrets and sensitive data: <handling>
 
-## 3) Backend
+## 3. Build, Test, and Quality
 
-- **Framework**: `<Node.js + Express / NestJS / etc.>`
-- **Language**: `<TypeScript / Python / etc.>`
-- **API style**: `<REST / GraphQL / etc.>`
-- **Data access**: `<ORM / Query Builder / Raw SQL>`
+- Restore/install: <command>
+- Build/type-check: <command>
+- Unit/integration/end-to-end tests: <commands and applicability>
+- Lint/format: <commands>
+- CI/CD: <system and required checks>
 
-## 4) CI/CD & DevOps
+## 4. Architecture and Coding Conventions
 
-- **VCS**: `<GitHub / GitLab / etc.>`
-- **CI/CD system**: `<GitHub Actions / GitLab CI / etc.>`
-- **Environments**: `<dev / staging / prod>`
-- **Branching**: `<trunk-based / GitFlow>`
+- Established patterns: <patterns to reuse>
+- Error handling: <project convention>
+- Observability: <project convention or not applicable>
+- Compatibility constraints: <constraints>
 
-## 5) Infrastructure
+## 5. SDP Delivery Policy
 
-- **Hosting**: `<Vercel / AWS / Azure / etc.>`
-- **IaC**: `<Terraform / Pulumi / Bicep / etc.>`
-- **Database**: `<PostgreSQL / MySQL / MongoDB / etc.>`
-- **Secrets**: `<Environment variables / Secrets manager>`
-- **Observability**: `<Datadog / Sentry / OpenTelemetry / etc.>`
+- Default assurance profile: `Balanced`
+- Lean permitted when: <low-risk criteria>
+- Compliance required when: <regulatory/high-risk criteria>
+- Security specialist triggers: <project additions to SDP defaults>
+- Independent QA triggers: <project additions to SDP defaults>
+- Run-state retention: <transient | retain summaries | compliance retention>
+- Compliance integrity requirements: <none or plan/manifests/environment rules>
 
-## 6) Security
+Profiles:
 
-- **Authentication**: `<JWT / OAuth2 / etc.>`
-- **Authorization**: `<RBAC / ABAC / etc.>`
+- Lean: developer validation plus independent review; extra specialists only
+  when triggered.
+- Balanced: review always; security and QA when they add independent evidence.
+- Compliance: full configured assurance and retained integrity evidence.
 
-## 7) Standards
+## 6. Model Routing (Optional)
 
-- Follow Clean Code and DRY principles.
-- Use consistent formatting from the repo toolchain.
-- Keep changes small and traceable to the backlog.
+Model labels guide selection; they do not automatically configure runtime
+models. Do not block Lean/Balanced delivery merely because telemetry is
+unavailable.
 
-## 8) Model Policy (for `/deliver` and manual gate agents)
+| Role | Preferred profile/model | Allowed fallback |
+| --- | --- | --- |
+| Planning | <selection> | <fallback> |
+| Implementation | <selection> | <fallback> |
+| Review | <selection> | <fallback> |
+| Security | <selection> | <fallback> |
+| QA | <selection> | <fallback> |
+| Coordination | <selection> | <fallback> |
 
-Define which model profile applies to each role. These are **project policy labels**, not runtime model IDs — map each to an actual model available in your environment/agent runtime; do not invent or hard-code a model name here that your tooling doesn't support.
+Compliance may require verified model/tool availability when project policy
+explicitly says so.
 
-- **Planning / plan-readiness** (`sdp.planner`): `<profile, e.g. "strong-reasoning">`
-- **Coordinator** (`sdp.orchestrator`): `<profile; must be able to invoke the assurance profile below per your runtime's model/cost-tier rules>`
-- **Implementation** (`sdp.developer`): `<profile, e.g. "economical-coding">`
-- **Code review** (`sdp.reviewer`): `<profile, e.g. "strong-reasoning">`
-- **Security** (`sdp.security`): `<profile, e.g. "strong-security-reasoning", required when security_review is not waived>`
-- **QA** (`sdp.qa`): `<profile, e.g. "strong-reasoning-plus-execution">`
+## 7. Project Decisions
 
-If a required profile is unavailable in a given session, `sdp.orchestrator` must block supervised delivery for the affected stage rather than silently substitute a weaker model; fall back to manual mode (`/run-review`, `/audit-security`, `/qa-validate`) with an explicitly chosen model instead.
-
-| Profile | Available model/configuration | Approved equivalent fallback | Verification |
-| ------- | ----------------------------- | ---------------------------- | ------------ |
-| `<policy label>` | `<actual available model and where selected>` | `<equivalent or none>` | `<runtime/version, tool access, coordinator cost-tier eligibility>` |
-
-These mappings do not select models automatically. Configure supported agent frontmatter or the runtime picker after checking availability. An unverifiable mandatory mapping blocks supervised delivery. Record actual model, latency, dispatch count, and cost only when exposed; do not fabricate telemetry. Existing projects may keep manual mode while configuring this section.
-
-## 9) Project Decisions
-
-- `YYYY-MM-DD`: `<Decision summary>`
+- YYYY-MM-DD: <durable project decision>

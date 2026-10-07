@@ -1,81 +1,115 @@
 ---
-description: This file defines the global coding standards for all code produced by agents in the Spec Development Protocol (SDP). These standards apply across all languages, frameworks, and project types. They are designed to ensure high code quality, maintainability, security, and consistency with the project's technical guidelines as defined in `TECH.md`.
+description: Global code-quality standards for SDP-managed work.
 applyTo: "**/*"
 ---
 
 # Global Coding Standards
 
-These apply to all code produced regardless of language, framework, or project type. Adjust specifics to the stack defined in `TECH.md`.
+Apply these standards proportionally to the project type and the stack defined
+in `TECH.md`. Process and orchestration rules live in
+`sdlc-process.instructions.md`.
 
-For SDLC orchestration, gate ordering, agent routing, `AGENTS.md` context strategy, delivery contracts, and hardening policy, see `@/.github/instructions/sdlc-process.instructions.md` — that file is the single source of truth for process. Do not duplicate process rules here; this file governs code quality only.
+## Code Quality
 
-### Code Quality
+- Prefer small, focused functions and intent-revealing names.
+- Avoid speculative abstractions and unnecessary indirection.
+- Remove meaningful duplication without forcing unrelated code into a shared
+  abstraction.
+- Prefer guard clauses and clear control flow over deep nesting.
+- Keep side effects explicit and isolate external boundaries.
+- Match architectural complexity to the problem.
 
-- **Clean Code first:** small, focused functions with a single clear responsibility.
-- **Naming is communication:** use intent-revealing names for variables, functions, classes, and files. Avoid abbreviations unless they are universally understood in the domain.
-- **YAGNI:** do not add functionality until it is needed. Avoid speculative abstractions.
-- **DRY with judgment:** eliminate duplication, but do not abstract prematurely. Three occurrences before extracting a shared concept is a reasonable heuristic.
-- **Avoid deep nesting:** prefer early returns, guard clauses, and flat logic over nested conditionals.
-- **Functions and methods:** prefer pure functions where possible. Side effects should be explicit and isolated at system boundaries.
+## Architecture
 
-### Architecture & Design
+- Separate domain/application concerns from infrastructure where the
+  distinction improves testability or changeability.
+- Keep dependencies directed toward stable contracts.
+- Prefer composition over inheritance.
+- Reuse established project patterns before introducing a new one.
+- A simple change does not require a new architecture layer or ADR.
 
-- **Separation of concerns:** keep infrastructure, application logic, and domain rules in separate layers.
-- **Dependency direction:** dependencies should point inward toward domain/core logic, never outward.
-- **Ports and adapters (Hexagonal):** use interfaces/contracts at external boundaries (HTTP, DB, messaging, file system). This keeps the core testable and portable.
-- **Right-size the design:** a simple CRUD endpoint does not need a domain model. A financial transaction processor does. Match complexity to the problem.
-- **Prefer composition over inheritance.**
+## Error Handling
 
-### Error Handling
+- Validate external input at system boundaries.
+- Represent expected failures explicitly rather than using broad exceptions for
+  control flow.
+- Surface actionable messages without exposing secrets, stack traces, or
+  internal details.
+- Distinguish transient, permanent, and programmer failures.
+- Do not swallow errors or convert failures into success-shaped results.
 
-- **Fail fast:** validate at system entry points (API boundaries, CLI inputs, event consumers). Do not let invalid data propagate deep into business logic.
-- **Errors are data:** represent failures explicitly (result types, structured errors) rather than using exceptions for control flow where avoidable.
-- **Surface actionable messages:** error messages should help the operator or developer understand what failed and why. Never expose stack traces or internal details to end users.
-- **Distinguish error categories:** transient (retry-able) vs. permanent (fail fast) vs. programmer errors (crash loudly in dev, alert in prod).
+## Testing
 
-### Testing
+- Test observable behavior rather than private implementation details.
+- Cover business-critical happy paths, error paths, and material edge cases.
+- Use unit, integration, and end-to-end tests where each provides independent
+  confidence; do not require every test layer for every change.
+- Keep tests isolated and deterministic where practical.
+- Use clear Arrange-Act-Assert structure when it improves readability.
+- Prefer one behavioral focus per test; multiple assertions are appropriate
+  when they jointly verify one outcome.
+- Do not skip, delete, or weaken a failing test merely to pass a gate.
 
-- **Test pyramid:** unit tests are the foundation, integration tests verify boundaries, end-to-end tests cover critical user paths only.
-- **Test behavior, not implementation:** tests should validate what the code does, not how it does it internally. Avoid testing private methods directly.
-- **One assertion focus per test:** each test should answer one question. Use descriptive test names that describe the scenario and expected outcome.
-- **Arrange-Act-Assert (AAA):** structure tests consistently with clear setup, execution, and verification sections.
-- **Tests must pass before merging.** No skipped or commented-out tests without a documented reason.
-- **Coverage is a proxy, not a goal:** aim for meaningful coverage of business-critical and error paths, not 100% line coverage of trivial code.
+## Durable Comments Only
 
-### Security (Always On)
+Code should communicate primarily through naming and structure. Comments explain
+durable reasons that cannot be made clear in code.
 
-Apply these regardless of whether a formal security review has been done:
+Do not add comments containing:
 
-- **Input validation at boundaries:** validate and sanitize all external input — HTTP requests, file uploads, event payloads, CLI arguments.
-- **Output encoding:** encode output appropriate to context (HTML, SQL, shell) to prevent injection attacks.
-- **Least privilege:** components, services, and users should have only the permissions they need to do their job.
-- **No secrets in code or version control:** use environment variables, secret managers (e.g. Azure Key Vault, AWS Secrets Manager, HashiCorp Vault), or CI/CD secret stores.
-- **Secure defaults:** default to deny-all access, require HTTPS/TLS, set secure cookie flags, apply CORS policies explicitly.
-- **Dependency hygiene:** flag and address known vulnerable dependencies. Do not add new dependencies without justification.
-- **OWASP Top 10 awareness:** treat injection, broken auth, IDOR, security misconfiguration, and sensitive data exposure as active threats in every feature.
+- story, epic, task, ticket, delivery, or acceptance-criterion IDs;
+- implementation-step narration;
+- change history such as "added for STORY-12";
+- obvious restatements of the next line;
+- completed TODOs or temporary planning notes;
+- conversational explanations from the implementation session.
 
-### Observability
+Comments are appropriate for non-obvious business invariants, compatibility
+constraints, security rationale, external protocol quirks, and deliberate
+trade-offs a future maintainer might otherwise undo.
 
-- **Structured logging:** emit logs as structured data (JSON preferred) with consistent fields: timestamp, level, correlation/trace ID, service name, message, relevant context.
-- **Log levels with intent:** DEBUG for development detail, INFO for significant state transitions, WARN for recoverable anomalies, ERROR for failures requiring attention.
-- **Never log sensitive data:** no passwords, tokens, PII, or financial details in logs.
-- **Health and readiness:** expose health check endpoints on all services. Distinguish liveness (is the process alive) from readiness (is it ready to serve traffic).
-- **Metrics at boundaries:** measure and expose latency, error rates, and throughput at external-facing boundaries and critical internal operations.
+Traceability belongs in specs, meaningful test names, commit/PR descriptions,
+and delivery history - not production-code comments.
 
-### Version Control & Commits
+## Security
 
-- **Atomic commits:** each commit represents one logical change. A commit should be explainable in a single sentence.
-- **Commit messages:** use the imperative mood in the subject line (`Add`, `Fix`, `Remove`, not `Added`, `Fixed`). Reference issue/story IDs where applicable.
-- **Branch per story/task:** never commit feature work directly to the main/trunk branch.
-- **No commented-out code in commits:** delete unused code. Version control preserves history.
+- Treat external input, authorization, secrets, and sensitive data as active
+  trust boundaries.
+- Encode output for its destination and use parameterized data access.
+- Apply least privilege and secure defaults.
+- Never commit or log credentials, tokens, personal data, or financial data.
+- Add dependencies only with justification and review their security posture.
+- Apply OWASP guidance relevant to the changed surface.
 
-### Documentation
+## Observability
 
-- **Code should read as documentation:** prioritize self-documenting code over comments. Comments explain _why_, not _what_.
-- **Update docs with code:** if a change affects an API contract, architectural decision, or user-facing behavior, update the corresponding documentation in the same commit/PR.
-- **Architecture Decision Records (ADRs):** for significant technical decisions, record the context, options considered, and rationale in a short ADR file.
+- Use the project's established structured logging and tracing conventions.
+- Never log secrets or sensitive payloads.
+- Add health/readiness endpoints and boundary metrics when the component is a
+  long-running service and operational ownership requires them.
+- Do not add observability infrastructure to libraries, scripts, or prototypes
+  without a concrete operational need.
 
-### Greenfield vs. Legacy
+## Documentation
 
-- **Greenfield:** establish the full structure from `TECH.md` up front. Set linting, testing, and CI standards before writing feature code.
-- **Legacy:** prefer the strangler fig pattern — incrementally improve at touch points rather than rewriting working code. Respect existing conventions until a deliberate decision to change them is made and documented.
+- Update documentation when public behavior, contracts, setup, operations, or
+  architecture decisions change.
+- Record significant, durable architectural decisions in the project's chosen
+  format; do not create an ADR for routine implementation choices.
+- Keep generated comments and documentation out of source when they add no
+  maintenance value.
+
+## Version Control
+
+- Keep commits logically coherent and use imperative subjects.
+- Reference work items where the project convention requires it.
+- Follow the repository's branching policy from `TECH.md`; do not impose a
+  branch-per-story policy on every project.
+- Remove dead and commented-out code before delivery.
+
+## Greenfield and Legacy Work
+
+- Greenfield projects should establish formatting, tests, and CI appropriate to
+  their risk before substantial implementation.
+- Legacy projects should improve touched boundaries incrementally and preserve
+  working conventions unless a deliberate change is approved.

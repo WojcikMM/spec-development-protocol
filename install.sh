@@ -220,6 +220,6 @@ fi
 
 echo ""
 print_info "Next step: fill in .github/TECH.md with your project stack and standards."
-# Supervised delivery requires project model mappings and matching protocol files.
-print_info "For /deliver: configure TECH.md Model Policy and verify agents, prompts, and templates are consistent."
+# Supervised delivery uses the project profile and assurance triggers from TECH.md.
+print_info "For /deliver: configure TECH.md SDP Delivery Policy (Balanced is the recommended default)."
 print_info "See README: https://github.com/${REPO}#readme"

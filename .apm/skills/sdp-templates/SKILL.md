@@ -7,4 +7,6 @@ description: Canonical SDP artifact and customization templates packaged as APM-
 
 Use the files in `assets/` when the SDP process instructions select this skill directory as `SDP_TEMPLATE_ROOT`.
 
-These assets mirror `.apm/templates/`, which remains the canonical source used by the direct installers. Maintainers must keep both directories byte-for-byte synchronized.
+These generated assets mirror `.apm/templates/`, which is the only authoring
+source. Do not edit assets directly or load both copies into context. Maintainers
+regenerate the mirror with `scripts/sync-templates.sh` for APM packaging.

@@ -1,14 +1,13 @@
 ---
-description: Execute an approved implementation plan for one delivery package (manual, single-shot).
-argument-hint: "Provide the approved plan reference and delivery/story ID."
+description: Manually implement the approved active delivery plan.
+argument-hint: "[optional active delivery override]"
 agent: sdp.developer
 ---
 
-The `sdp.developer` agent will:
+Implement the approved active `PLAN.md`, stay inside its outcome and change
+boundary, add focused tests, and run its verification.
 
-1. Verify `spec/<slug>/PLAN.md` has `status: approved` with a matching plan digest — it refuses to run otherwise.
-2. Execute the steps in the approved plan's Work Graph, staying within its declared Change Boundary.
-3. Add or update tests as required by the Verification Matrix.
-4. Hand off once to `sdp.reviewer` when done — it will not loop back into implementation on its own.
+Use durable comments only. Never add story/task/AC identifiers or
+implementation-session narration to production code.
 
-This command requires an approved plan from `/plan-task`. It will not run without one. This is the manual, single-shot entry point; `/deliver` runs the same agent under supervision through the full hardening sequence, stopping at human acceptance.
+This is the manual single-stage alternative to `/deliver`.

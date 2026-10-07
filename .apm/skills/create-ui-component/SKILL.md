@@ -21,7 +21,9 @@ Produce a reusable, accessible, and testable UI component that aligns with the p
 3.  **Accessibility (a11y)**: Use semantic HTML. Ensure keyboard navigation. Add ARIA attributes only when necessary. Don't rely on color alone to convey state.
 4.  **State Management**: Use local state first. Lift state only when needed. Use global state for app-wide concerns.
 5.  **Testing**: Test rendered output and user interactions, not implementation details. Cover all visual states. Use accessible queries. Mock external dependencies.
-6.  **Documentation**: Add JSDoc for complex props. Export from the barrel file.
+6.  **Documentation**: Document only non-obvious public props or behavioral
+    constraints. Do not add story/task/AC comments or implementation narration.
+    Export from a barrel file only when that is the project's convention.
 
 ## Quality Bar
 

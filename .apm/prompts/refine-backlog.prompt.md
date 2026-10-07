@@ -1,13 +1,11 @@
 ---
-description: Convert an approved PRD into a prioritized backlog of epics and stories.
-argument-hint: "Provide the PRD scope and any priority constraints."
+description: Refine the active approved outcome into coherent, testable stories.
+argument-hint: "[optional priority or scope constraint]"
 agent: sdp.analyst
 ---
 
-The `sdp.analyst` agent will:
+Create right-sized epics and INVEST stories with observable acceptance criteria,
+dependencies, and a security policy. Use `risk-based` by default; choose
+per-story, epic-level, or waived only when justified.
 
-1. Require `PRD.md` to be approved with approver and date before proceeding.
-2. Break it into prioritized INVEST stories with ACs, capability sizing, and explicit security policy per epic, without day/file/line caps.
-3. Create `BACKLOG.md` and `EPIC-*.md` files in the `spec/<slug>/` directory.
-
-An approved backlog is the input for the `design-system` command.
+Write draft backlog artifacts for human approval.

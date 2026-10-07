@@ -6,32 +6,40 @@ approved_at: pending
 
 # EPIC-<N>: <Epic Title>
 
-Traceability: `spec/<slug>/PRD.md` -> `spec/<slug>/BACKLOG.md` -> this epic.
+## Outcome
 
-## Security Review Policy
+<The coherent product capability and user value.>
 
-- **Policy**: `per-story | epic-level | waived`
-- **Reason** (required if `epic-level` or `waived`): `<explicit justification, e.g. "internal tooling, no external input, no auth/data boundary changed">`
+## Security Policy
 
-> If this policy is left unset and any story below touches auth, secrets, external input, or data boundaries, downstream agents (`sdp.reviewer`) must stop and require it to be set before hardening. If the policy is `epic-level`, the epic carries a `pending_audit` obligation (tracked in `spec/ACTIVE.md`) that is not cleared until the aggregate audit runs and final QA confirms it — see `sdlc-process.instructions.md`.
+- **Policy**: `risk-based | per-story | epic-level | waived`
+- **Reason**: <required for per-story, epic-level, or waived>
+
+`risk-based` is the default. Security still runs when changes affect
+authentication, authorization, secrets, untrusted input, sensitive data,
+cryptography, trust boundaries, dependency/infrastructure security, or a
+regulated control.
 
 ## Stories
 
 ### STORY-<N>: <Story Title>
 
-**As a** `<user/persona>`
-**I want** `<capability>`
-**So that** `<benefit>`
+- **As a** <user/persona>
+- **I want** <capability>
+- **So that** <benefit>
 
 **Acceptance Criteria**
 
-1. Given `<context>`, when `<action>`, then `<expected result>`.
-2. `<negative/edge case criterion>`
+1. Given <context>, when <action>, then <observable result>.
+2. <material negative or edge behavior>.
 
-**Sizing**: Size `<S/M/L>` (XL must be split), Risk `<Low/Moderate/High>`, Uncertainty `<Resolved/Bounded/Open>` — see Capability Sizing in `sdlc-process.instructions.md`. Rate independently: a small change can still be high-risk.
+**Dependencies**: <none or IDs>
 
-**Dependencies**: `<other stories/epics, or "none">`
+## Open Decisions
+
+- <only unresolved product decisions>
 
 ---
 
-_Approval required before proceeding to Gate 3 (`/design-system`). Set `status: approved` above once confirmed._
+Approval is required before design unless the user explicitly approved a
+lightweight path against an existing contract.

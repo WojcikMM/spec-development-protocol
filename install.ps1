@@ -222,8 +222,8 @@ if ($techInitialized) {
 
 Write-Host ""
 Write-SdpInfo "Next step: fill in .github/TECH.md with your project stack and standards."
-# Supervised delivery requires project model mappings and matching protocol files.
-Write-SdpInfo "For /deliver: configure TECH.md Model Policy and verify agents, prompts, and templates are consistent."
+# Supervised delivery uses the project profile and assurance triggers from TECH.md.
+Write-SdpInfo "For /deliver: configure TECH.md SDP Delivery Policy (Balanced is the recommended default)."
 Write-SdpInfo "See README: https://github.com/$REPO#readme"
 
 } finally {
