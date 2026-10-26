@@ -31,7 +31,8 @@ lightweight path and the change follows an established design.
 5. Identify stories that require splitting and related stories suitable for one
    delivery package.
 6. Record meaningful trade-offs and unresolved decisions.
-7. Write draft `DESIGN.md` and update ACTIVE to Gate 3.
+7. Write draft `DESIGN.md` and set the ACTIVE pointer to Gate 3 (pointer
+   fields only; notes belong in the design).
 
 An XL story or Open uncertainty returns to refinement/design. Routine local
 implementation choices remain with the developer and do not need architectural

@@ -40,7 +40,7 @@ references an existing contract and design.
    other package is open.
 9. Allocate a unique delivery ID, write
    `spec/<slug>/deliveries/<delivery-id>/PLAN.md` as `draft`, and point
-   `ACTIVE.md` at it with Gate 4.
+   `ACTIVE.md` at it with Gate 4. Change only its pointer fields.
 
 If size is XL or uncertainty is Open, stop and recommend splitting or further
 design. Do not add model mappings, resource counters, file manifests, upstream

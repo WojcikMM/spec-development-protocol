@@ -430,6 +430,10 @@ current_gate: 5
 current_delivery: user-registration-DP-1
 ```
 
+`ACTIVE.md` is a marker: front-matter pointer fields only, no body. Progress
+notes, summaries, and findings go to the package `HISTORY.md` or
+`DELIVERY-RUN.json`; product and design notes go to their gate artifacts.
+
 `delivery_status` lives in the package `DELIVERY-RUN.json`; a package with a
 plan and no run record is `planned`. Feature and story status are derived from
 accepted packages. Delivery states:

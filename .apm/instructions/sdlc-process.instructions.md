@@ -276,6 +276,20 @@ current_gate: <1-6>
 current_delivery: <delivery-id | n/a>
 ```
 
+`ACTIVE.md` holds exactly these front-matter fields and no body. Update the
+fields in place; never append progress notes, summaries, findings, decisions,
+or history to it. Record that content where it belongs:
+
+| Content | Location |
+| --- | --- |
+| Delivery outcome, blocks, escalations | package `HISTORY.md` |
+| Stage, verdicts, findings, audit obligations | package `DELIVERY-RUN.json` |
+| Product, backlog, or design decisions and open questions | `PRD.md`, `BACKLOG.md`/`EPIC-*.md`, `DESIGN.md` |
+| Plan approval and deviations | package `PLAN.md` |
+
+If an existing `ACTIVE.md` has body content, move it to the matching location
+and reduce the file to the pointer fields.
+
 Resolve the active package in this order and stop at the first unambiguous
 match:
 

@@ -15,7 +15,7 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 - **Package-scoped state** — plans, run records, and history live in `spec/<slug>/deliveries/<delivery-id>/`. Shared specs are read-only during delivery and feature/story status is derived, so parallel packages do not conflict in spec files.
-- **`ACTIVE.md` is a local pointer** (`slug`, `title`, `current_gate`, `current_delivery`). `delivery_status` and `pending_audit` moved to `DELIVERY-RUN.json` schema version 3; `feature_status` is derived. Package resolution order: explicit ID, `sdp/<delivery-id>` branch, `ACTIVE.md`, only open package.
+- **`ACTIVE.md` is a local pointer** (`slug`, `title`, `current_gate`, `current_delivery`) with no body; agents must not append notes, summaries, or history to it and move any legacy body content to the package `HISTORY.md`, run record, or gate artifacts. `delivery_status` and `pending_audit` moved to `DELIVERY-RUN.json` schema version 3; `feature_status` is derived. Package resolution order: explicit ID, `sdp/<delivery-id>` branch, `ACTIVE.md`, only open package.
 - **`TECH.md` delivery policy** — added integration branch, parallel delivery, and merge hotspot lines.
 
 ### Migration

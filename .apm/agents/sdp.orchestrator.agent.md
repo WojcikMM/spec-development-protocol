@@ -100,7 +100,9 @@ because it was requested. Summarize the interpreted correction:
 
 This agent is the single writer of the package `DELIVERY-RUN.json` and
 `HISTORY.md` in `spec/<slug>/deliveries/<delivery-id>/` during supervised
-delivery. It writes `spec/ACTIVE.md` only to record a user's package choice.
+delivery. It writes `spec/ACTIVE.md` only to record a user's package choice,
+and only its pointer fields. Summaries, verdicts, and blocks never go to
+`ACTIVE.md`.
 
 - Set `delivery_status: delivering` in the run record before implementation.
 - Keep compact stage verdicts and material findings in the run record.

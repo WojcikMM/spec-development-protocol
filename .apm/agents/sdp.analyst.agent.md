@@ -31,7 +31,8 @@ path for a small change with an existing product contract.
 6. Declare each epic's security policy:
    `risk-based` (default), `per-story`, `epic-level`, or `waived`.
 7. Record only material assumptions and open questions.
-8. Write draft backlog/epic artifacts and update ACTIVE to Gate 2.
+8. Write draft backlog/epic artifacts and set the ACTIVE pointer to Gate 2
+   (pointer fields only; notes belong in the backlog/epics).
 
 Ask when acceptance behavior or security policy is genuinely ambiguous. Do not
 ask for details that can safely remain an implementation choice.
