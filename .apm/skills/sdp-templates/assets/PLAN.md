@@ -38,6 +38,14 @@ If size is XL or uncertainty is Open, stop and return to refinement/design.
 - **Explicit exclusions**: <areas that must not change>
 - **Dependencies, data, or migration constraints**: <only applicable constraints>
 
+## Parallel Delivery
+
+<Omit this section when no other package is open.>
+
+- **Open packages compared**: <delivery IDs>
+- **Verdict**: <independent | additive-overlap | sequenced after <delivery-id>>
+- **Shared hotspots and technique**: <path - merge-friendly technique, or none>
+
 ## Work
 
 1. <implementation step> - Verify: <command or observable check>

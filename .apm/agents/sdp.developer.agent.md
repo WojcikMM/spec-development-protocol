@@ -30,9 +30,12 @@ approval metadata must already exist.
 3. Exercise the autonomy granted by the plan for naming, idiomatic local
    design, helper reuse/extraction, and adjacent tests.
 4. Add or update focused tests and run the plan's verification.
-5. Remove temporary notes, completed TODOs, and implementation-session
+5. In shared integration hotspots, apply the plan's merge-friendly technique:
+   self-contained additions, no reordering or reformatting of neighbors, and
+   no lockfile regeneration unless a dependency change is in boundary.
+6. Remove temporary notes, completed TODOs, and implementation-session
    commentary before handoff.
-6. Return changed paths, checks, material deviations, and unresolved risks.
+7. Return changed paths, checks, material deviations, and unresolved risks.
 
 Do not add story, task, epic, delivery, or AC identifiers to production-code
 comments. Keep only durable comments that explain a non-obvious invariant,
@@ -46,7 +49,7 @@ weakened AC, or path outside the approved boundary.
 
 ## Modes
 
-- Manual: update compact run/active state, append a final implementation result
+- Manual: update the package run record, append a final implementation result
   when the manual flow requires it, and hand off once to reviewer.
 - Supervised: return the result to the orchestrator; do not write shared state
   or dispatch another worker.

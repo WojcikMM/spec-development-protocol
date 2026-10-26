@@ -30,6 +30,7 @@ SDP installs into the `.github/` folder of greenfield or existing repositories.
 - [Delivery Profiles](#delivery-profiles)
 - [Security and QA Routing](#security-and-qa-routing)
 - [Manual and Supervised Delivery](#manual-and-supervised-delivery)
+- [Parallel Delivery with Git Worktrees](#parallel-delivery-with-git-worktrees)
 - [Artifacts and State](#artifacts-and-state)
 - [Reference](#reference)
 - [Customization](#customization)
@@ -193,7 +194,7 @@ Example: add user registration.
 | 5 | Read the plan and deliver it | `/deliver` | code, tests, proportional assurance |
 | 6 | Review acceptance brief | normal language | accept, reject, or describe correction |
 
-Bare `/deliver` resolves `spec/ACTIVE.md`, approves the current visible plan,
+Bare `/deliver` resolves the active package, approves the current visible plan,
 implements it, runs the required assurance profile, and stops for human
 acceptance. It does not require delivery IDs, revisions, digests, or candidate
 hashes when active state is unambiguous.
@@ -356,50 +357,97 @@ without specialist dispatch.
 Both modes stop at an acceptance brief. Acceptance never automatically commits,
 merges, deploys, or selects the next package.
 
+## Parallel Delivery with Git Worktrees
+
+Independent packages (one or a few stories each) can be delivered at the same
+time on separate branches, typically in separate git worktrees. Single-package
+work is unchanged; parallel delivery adds no step unless you use it.
+
+SDP stays merge-friendly by construction:
+
+- every package writes only its own `spec/<slug>/deliveries/<delivery-id>/`
+  folder (plan, run record, history), so spec files never conflict;
+- shared specs (`PRD.md`, `BACKLOG.md`, `EPIC-*.md`, `DESIGN.md`, `TECH.md`)
+  are read-only during delivery; feature and story status are derived from
+  accepted packages instead of edited;
+- a story belongs to at most one open package;
+- when other packages are open, `/plan-task` compares change boundaries and
+  marks the plan `independent`, `additive-overlap` (shared hotspots with a named
+  merge-friendly technique), or `sequenced` (wait or re-split);
+- the developer edits shared hotspots additively: new files where possible,
+  self-contained blocks, unique migration IDs, no lockfile churn or mass
+  reformatting;
+- the acceptance brief reports merge readiness: overlap with the integration
+  branch and with other open packages. It is informational and never blocks.
+
+Typical flow:
+
+```text
+# primary worktree
+/plan-task US-3          -> spec/<slug>/deliveries/<slug>-DP-1/PLAN.md
+/plan-task US-5 US-6     -> spec/<slug>/deliveries/<slug>-DP-2/PLAN.md (independent)
+git add spec && git commit -m "Plan DP-1 and DP-2"
+git worktree add ../app-<slug>-DP-1 -b sdp/<slug>-DP-1
+git worktree add ../app-<slug>-DP-2 -b sdp/<slug>-DP-2
+
+# each worktree, in its own VS Code window or agent session
+/deliver                 -> the sdp/<delivery-id> branch selects the package
+```
+
+Merge accepted packages in any order. The later package updates from the
+integration branch and reruns the affected verification. Agents propose Git
+commands but create worktrees, commit, or merge only on explicit request.
+
+The active package resolves from, in order: an explicit ID, the
+`sdp/<delivery-id>` branch, `spec/ACTIVE.md`, or the only open package.
+`/deliver inspect` lists open packages when none is resolvable. Teams using
+parallel delivery should add `spec/ACTIVE.md` to `.gitignore`; it is only a
+local pointer.
+
 ## Artifacts and State
 
 ```text
 spec/
-  ACTIVE.md
+  ACTIVE.md                  # local pointer
   <feature-slug>/
     PRD.md
     BACKLOG.md
     EPIC-*.md
     DESIGN.md
-    PLAN.md
-    HISTORY.md
     deliveries/
-      <delivery-id>.json
+      <delivery-id>/
+        PLAN.md
+        DELIVERY-RUN.json
+        HISTORY.md
 ```
 
-`ACTIVE.md` separates feature progress from delivery state:
+`ACTIVE.md` points at the active feature, gate, and package:
 
 ```yaml
 slug: user-registration
 title: User Registration
 current_gate: 5
 current_delivery: user-registration-DP-1
-feature_status: in-progress
-delivery_status: delivering
-pending_audit: []
 ```
 
-Delivery states:
+`delivery_status` lives in the package `DELIVERY-RUN.json`; a package with a
+plan and no run record is `planned`. Feature and story status are derived from
+accepted packages. Delivery states:
 
 ```text
-not-planned -> planned -> delivering -> awaiting-acceptance -> accepted
-                              |                 |
-                              -> blocked        -> changes-requested -> delivering
-                                                -> rejected
+planned -> delivering -> awaiting-acceptance -> accepted
+               |                 |
+               -> blocked        -> changes-requested -> delivering
+                                 -> rejected
 ```
 
-`DELIVERY-RUN.json` is a compact resume checkpoint containing profile, current
-stage, completed stages, changed paths, compact verdicts, material findings,
-audit obligations, and acceptance decision.
+`DELIVERY-RUN.json` is a compact resume checkpoint containing delivery status,
+branch, profile, current stage, completed stages, changed paths, compact
+verdicts, material findings, audit obligations, and acceptance decision.
 
-`HISTORY.md` stores one concise final entry per delivery plus unresolved
-blocking/escalation entries. Detailed command logs remain in test/CI output and
-are referenced rather than copied.
+The package `HISTORY.md` stores one concise final entry per delivery plus
+unresolved blocking/escalation entries. Detailed command logs remain in
+test/CI output and are referenced rather than copied.
 
 ## Reference
 
@@ -450,7 +498,7 @@ are referenced rather than copied.
 | --- | --- |
 | `TECH.md` | Stack, commands, conventions, delivery policy |
 | `AGENTS.md` | Scoped context map |
-| `ACTIVE.md` | Active feature and package state |
+| `ACTIVE.md` | Local pointer to the active feature and package |
 | `PRD.md` | Product outcome |
 | `BACKLOG.md`, `EPIC.md` | Stories, ACs, security policy |
 | `DESIGN.md` | Contracts, boundaries, decisions |
@@ -526,7 +574,7 @@ When upgrading an existing client:
    - `status` -> `feature_status`;
    - `final_status` -> the closest `delivery_status`.
 5. Regenerate the active `PLAN.md` using the simplified template.
-6. Start new run checkpoints with `DELIVERY-RUN.json` schema version 2.
+6. Start new run checkpoints with the current `DELIVERY-RUN.json` schema.
 7. Preserve unresolved security obligations in `pending_audit`.
 
 Do not mix old plan/run semantics with new agents. Default non-overwriting
@@ -535,6 +583,18 @@ installation may leave mixed versions, so deliberate upgrades should use
 
 Projects that still need strict digests, manifests, and retained stage evidence
 should set Compliance as their mandatory profile.
+
+### Upgrading to package-scoped state
+
+Package-scoped state enables parallel delivery. For an existing client:
+
+1. Move `spec/<slug>/PLAN.md` to
+   `spec/<slug>/deliveries/<delivery-id>/PLAN.md`, and move the run record
+   and feature `HISTORY.md` entries for that delivery into the same folder.
+2. Move `delivery_status` and `pending_audit` from `ACTIVE.md` into the
+   package `DELIVERY-RUN.json` (schema version 3); drop `feature_status`.
+3. Optionally add `spec/ACTIVE.md` to `.gitignore` and fill the new
+   integration-branch and merge-hotspot lines in `TECH.md`.
 
 ## Contributing
 

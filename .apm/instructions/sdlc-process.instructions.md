@@ -16,8 +16,9 @@ Traceability supports delivery; it must not become the delivery.
 
 1. Read `@/.github/TECH.md`. If it is missing in a legacy project, use
    `sdp.discover` to draft it.
-2. Read `@/spec/ACTIVE.md` when it exists. It identifies the active feature,
-   gate, delivery package, and delivery state.
+2. Resolve the active feature and package with the order in Delivery State.
+   `spec/ACTIVE.md`, when present, is a local pointer to the active feature,
+   gate, and delivery package.
 3. Resolve the applicable `AGENTS.md` chain from repository root to the target
    module before broad exploration.
 4. Resolve `SDP_TEMPLATE_ROOT` to the first existing directory:
@@ -48,8 +49,8 @@ Traceability supports delivery; it must not become the delivery.
    and security policy in `BACKLOG.md` and `EPIC-*.md`.
 3. **Architecture** - record contracts, boundaries, decisions, and material
    non-functional requirements in `DESIGN.md`.
-4. **Planning** - create one implementation-grade `PLAN.md` for one coherent
-   delivery package.
+4. **Planning** - create one implementation-grade `PLAN.md` per coherent
+   delivery package in `spec/<slug>/deliveries/<delivery-id>/`.
 5. **Implementation** - change product code and tests within the approved
    boundary.
 6. **Assurance and acceptance** - run proportionate independent checks, present
@@ -203,7 +204,7 @@ operation, or acceptance criterion requires replanning or explicit approval.
 1. `/plan-task` resolves the active feature and asks for a package choice only
    when the selection is ambiguous.
 2. The user reviews `PLAN.md`.
-3. Bare `/deliver` resolves `spec/ACTIVE.md` and the current plan, records
+3. Bare `/deliver` resolves the active package and its plan, records
    approval, selects the required profile, and runs implementation plus
    assurance.
 4. The orchestrator presents one concise acceptance brief.
@@ -251,34 +252,126 @@ candidate.
 
 ## Delivery State
 
-`spec/ACTIVE.md` distinguishes feature progress from the current package:
+Delivery state is package-scoped, so independent packages can run on separate
+branches or git worktrees and merge without spec conflicts:
+
+```text
+spec/
+  ACTIVE.md                      # local pointer only
+  <slug>/
+    PRD.md  BACKLOG.md  EPIC-*.md  DESIGN.md
+    deliveries/
+      <delivery-id>/
+        PLAN.md
+        DELIVERY-RUN.json
+        HISTORY.md
+```
+
+`spec/ACTIVE.md` is a pointer, not delivery state:
 
 ```yaml
 slug: <feature-slug>
 title: <title>
 current_gate: <1-6>
 current_delivery: <delivery-id | n/a>
-feature_status: <in-progress | blocked | done>
-delivery_status: <not-planned | planned | delivering | awaiting-acceptance | changes-requested | accepted | rejected | blocked>
-pending_audit: []
 ```
 
-Use the package state transitions:
+Resolve the active package in this order and stop at the first unambiguous
+match:
+
+1. an explicit delivery ID argument;
+2. the current branch named `<branch-prefix><delivery-id>` (default prefix
+   `sdp/`);
+3. `current_delivery` in `spec/ACTIVE.md`;
+4. the only open package under `spec/*/deliveries/`;
+5. otherwise ask once and record the choice in `spec/ACTIVE.md`.
+
+A package is open unless its `delivery_status` is `accepted` or `rejected`.
+`delivery_status` lives in the package `DELIVERY-RUN.json`; a package with a
+`PLAN.md` and no run record is `planned`. Package transitions:
 
 ```text
-not-planned -> planned -> delivering -> awaiting-acceptance -> accepted
-                              |                 |
-                              -> blocked        -> changes-requested -> delivering
-                                                -> rejected
+planned -> delivering -> awaiting-acceptance -> accepted
+               |                 |
+               -> blocked        -> changes-requested -> delivering
+                                 -> rejected
 ```
 
-Do not store another overlapping final-status vocabulary.
+Feature and story status are derived, not stored: a story is done when an
+accepted package includes it; a feature is done when every backlog story is
+done and no package has `pending_audit`. Do not store another overlapping
+status vocabulary.
+
+During Gates 4-6, write only the package's own folder, `spec/ACTIVE.md`, and
+product code/tests inside the plan boundary. `PRD.md`, `BACKLOG.md`, `EPIC-*.md`,
+`DESIGN.md`, and `TECH.md` are read-only during delivery; a needed change
+returns to Gate 2 or 3.
+
+Delivery IDs use `<slug>-DP-<n>`. The planner picks the next `n` not used in
+the tree, in sibling worktrees, or by existing `<branch-prefix>*` branches.
+
+## Parallel Delivery
+
+Parallel delivery is opt-in and adds no step to single-package work. Several
+packages may be open at once when they are independent; each runs the normal
+`/deliver` flow on its own branch, typically in its own git worktree.
+
+### Parallel safety at planning
+
+When another package is open in this tree or a sibling worktree
+(`git worktree list`), the planner compares change boundaries and records one
+verdict in the plan:
+
+- `independent` - no shared files and no dependency on unmerged behavior;
+- `additive-overlap` - only shared integration hotspots such as registrations,
+  routes, DI wiring, exports, configuration, migrations, or lockfiles; the plan
+  names the merge-friendly technique for each;
+- `sequenced` - needs another package's unmerged contract or changes the same
+  behavior; deliver after that package merges, or re-split.
+
+A story belongs to at most one open package. Do not split one story's
+acceptance criteria across concurrent packages. When no other package is open,
+the planner skips this check.
+
+### Merge-friendly implementation
+
+Inside an overlapping hotspot, the developer:
+
+- prefers adding a new file where the established pattern allows it;
+- inserts entries as a self-contained block without reordering or reformatting
+  neighbors;
+- uses timestamp or package-unique migration identifiers when the toolchain
+  supports them and never renumbers existing migrations;
+- does not regenerate lockfiles or run repository-wide formatting unless a
+  dependency change is inside the boundary.
+
+### Worktree flow
+
+1. Plan the packages in the primary worktree and commit the spec changes so
+   every branch starts with all plans.
+2. Per package: `git worktree add ../<repo>-<delivery-id> -b sdp/<delivery-id>`,
+   then open it in its own editor window or agent session.
+3. Run bare `/deliver` in each worktree; the branch name resolves the package.
+4. Merge accepted packages in any order. The later package updates from the
+   integration branch and reruns verification affected by the integration.
+
+Agents may propose these commands but create branches or worktrees, commit,
+or merge only on explicit user request.
+
+### Merge readiness
+
+Before the acceptance brief, the orchestrator runs a read-only, best-effort
+check: intersect the candidate's changed paths with files changed on the
+integration branch since the merge base and with changed paths of other open
+packages in sibling worktrees. Report `clean` or the overlapping paths with a
+recommendation. The check never blocks acceptance and is skipped silently when
+Git or an integration branch is unavailable.
 
 ## Run State and Evidence
 
-Use `DELIVERY-RUN.json` as a small resume checkpoint:
+Use the package `DELIVERY-RUN.json` as a small resume checkpoint:
 
-- delivery and selected profile;
+- delivery, `delivery_status`, branch, and selected profile;
 - current stage and completed stages;
 - changed paths;
 - compact stage verdicts and material findings;
@@ -288,8 +381,8 @@ Use `DELIVERY-RUN.json` as a small resume checkpoint:
 
 Reference existing test/CI logs instead of copying them into Markdown. Successful
 stages need a verdict and evidence reference, not a narrative report in several
-files. `HISTORY.md` receives one final delivery summary plus unresolved
-blocking/escalation entries.
+files. The package `HISTORY.md` receives one final delivery summary plus
+unresolved blocking/escalation entries.
 
 Compliance extensions may add manifests, hashes, environment fingerprints,
 detailed command evidence, model identity when exposed, and retention data.
@@ -320,7 +413,9 @@ produces a brief containing:
 - acceptance-criteria coverage;
 - review/security/QA disposition;
 - deviations and remaining risks;
-- checks and evidence references.
+- checks and evidence references;
+- merge readiness when other packages are open or the integration branch has
+  moved.
 
 Only an explicit human decision sets `accepted` or `rejected`. Acceptance does
 not authorize commit, merge, deployment, or selection of the next package.
@@ -341,6 +436,7 @@ production-code comments.
 | Unmet acceptance criterion | Gate 5 |
 | Changed requirement or boundary | Gate 4, or Gate 2/3 when necessary |
 | XL package or Open uncertainty | Gate 2/3 |
+| Non-additive overlap with another open package | Gate 4 (sequence or re-split) |
 | Repeated autonomous rejection | Human decision |
 
 Feedback loops are explicit, bounded, and proportional. Do not silently fix a

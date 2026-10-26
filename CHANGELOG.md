@@ -8,6 +8,20 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added
+
+- **Parallel delivery with git worktrees** — independent packages can be delivered concurrently on `sdp/<delivery-id>` branches/worktrees. `/plan-task` records a parallel-safety verdict (`independent`, `additive-overlap`, `sequenced`) when other packages are open, the developer edits shared hotspots additively, and the acceptance brief reports read-only merge readiness. Single-package flow is unchanged.
+
+### Changed
+
+- **Package-scoped state** — plans, run records, and history live in `spec/<slug>/deliveries/<delivery-id>/`. Shared specs are read-only during delivery and feature/story status is derived, so parallel packages do not conflict in spec files.
+- **`ACTIVE.md` is a local pointer** (`slug`, `title`, `current_gate`, `current_delivery`). `delivery_status` and `pending_audit` moved to `DELIVERY-RUN.json` schema version 3; `feature_status` is derived. Package resolution order: explicit ID, `sdp/<delivery-id>` branch, `ACTIVE.md`, only open package.
+- **`TECH.md` delivery policy** — added integration branch, parallel delivery, and merge hotspot lines.
+
+### Migration
+
+- Move existing `PLAN.md`, run record, and history entries into the package folder and move delivery state out of `ACTIVE.md`; see README "Upgrading to package-scoped state". Installer behavior is unchanged.
+
 ## [v0.5.3]
 
 ### Added

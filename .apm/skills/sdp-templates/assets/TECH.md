@@ -41,6 +41,9 @@ requirements.
 - Independent QA triggers: <project additions to SDP defaults>
 - Run-state retention: <transient | retain summaries | compliance retention>
 - Compliance integrity requirements: <none or plan/manifests/environment rules>
+- Integration branch: <main | other>
+- Parallel delivery: <off | worktrees with branch prefix `sdp/`>
+- Merge hotspots: <shared files needing additive edits, e.g. DI wiring, routes, migrations>
 
 Profiles:
 

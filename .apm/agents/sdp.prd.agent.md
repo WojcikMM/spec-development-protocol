@@ -23,8 +23,7 @@ without over-specifying implementation.
 3. Record material risks, dependencies, and assumptions.
 4. Keep the artifact proportionate to the change.
 5. Write draft `PRD.md`.
-6. Create/update `ACTIVE.md` with Gate 1, no current delivery, and
-   `feature_status: in-progress`.
+6. Create/update `ACTIVE.md` with Gate 1 and no current delivery.
 
 Do not silently invent business behavior. Do not require architecture details
 that belong in design.

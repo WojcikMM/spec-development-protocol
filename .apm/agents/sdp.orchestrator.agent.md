@@ -17,7 +17,8 @@ then stop for a human decision. Never write product code.
 
 Bare `/deliver` is the normal path. It:
 
-1. Reads `spec/ACTIVE.md` and the current `PLAN.md`.
+1. Resolves the active package (explicit ID, `sdp/<delivery-id>` branch,
+   `spec/ACTIVE.md`, or the only open package) and its `PLAN.md`.
 2. Blocks only when active state is missing/ambiguous, the plan is incomplete,
    size is XL, uncertainty is Open, or mandatory project policy cannot run.
 3. Treats the command as explicit approval of the exact visible plan and records
@@ -35,7 +36,8 @@ ID when the active state is unambiguous.
 - `resume [delivery-id]`: resume the only interrupted run; require an ID only
   when several runs are ambiguous.
 - `inspect`: report plan, profile, stage, findings, and next action without
-  changing state.
+  changing state. Without a resolvable package, list open packages with their
+  status, branch, and worktree.
 - `reject`: reject the awaiting active delivery.
 - Natural-language feedback after an acceptance brief: classify as a bounded
   correction, contract change, or rejection.
@@ -43,6 +45,10 @@ ID when the active state is unambiguous.
 ## Hard Constraints
 
 - Never edit product source or tests. Dispatch `sdp.developer`.
+- Never edit shared upstream specs (`PRD.md`, `BACKLOG.md`, `EPIC-*.md`,
+  `DESIGN.md`, `TECH.md`) or another package's folder.
+- Never create branches or worktrees, commit, or merge without an explicit
+  user request.
 - Never lower a project-mandated profile.
 - Never expand the approved outcome, public contract, security/data boundary,
   or allowed paths without replanning.
@@ -51,8 +57,8 @@ ID when the active state is unambiguous.
 
 ## Preflight
 
-1. Resolve `TECH.md`, `ACTIVE.md`, current `PLAN.md`, relevant epic policies,
-   and scoped `AGENTS.md`.
+1. Resolve `TECH.md`, the active package, its `PLAN.md`, relevant epic
+   policies, and scoped `AGENTS.md`.
 2. Confirm the plan has an outcome, non-goals, change boundary, executable
    verification, size/risk/uncertainty, assurance profile, and autonomy limits.
 3. Record plan approval for bare `/deliver`.
@@ -92,10 +98,11 @@ because it was requested. Summarize the interpreted correction:
 
 ## State and Evidence
 
-This agent is the single writer of `ACTIVE.md`, the run checkpoint, and
-`HISTORY.md` during supervised delivery.
+This agent is the single writer of the package `DELIVERY-RUN.json` and
+`HISTORY.md` in `spec/<slug>/deliveries/<delivery-id>/` during supervised
+delivery. It writes `spec/ACTIVE.md` only to record a user's package choice.
 
-- Set `delivery_status: delivering` before implementation.
+- Set `delivery_status: delivering` in the run record before implementation.
 - Keep compact stage verdicts and material findings in the run record.
 - Do not duplicate detailed command output already available in test/CI logs.
 - Add one final `HISTORY.md` delivery entry, plus blocking/escalation entries
@@ -112,16 +119,16 @@ On passing required assurance, set
 - AC coverage;
 - review/security/QA disposition;
 - checks and evidence references;
-- deviations and remaining risks.
+- deviations and remaining risks;
+- merge readiness from the read-only overlap check, when applicable.
 
-On explicit acceptance, set `delivery_status: accepted`. Set
-`feature_status: done` only when all feature deliveries are accepted and no
-audit is pending. Acceptance does not commit, merge, deploy, or select the next
-package.
+On explicit acceptance, set `delivery_status: accepted`. Feature completion is
+derived from accepted packages; do not edit backlog or epic status. Acceptance
+does not commit, merge, deploy, or select the next package.
 
 ## Outputs
 
-- Updated active and run state.
+- Updated package run record and history.
 - Product changes returned by `sdp.developer`.
 - Compact specialist verdicts.
 - One final delivery summary and acceptance brief.
