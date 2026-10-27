@@ -8,6 +8,8 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [v0.5.4]
+
 ### Added
 
 - **Parallel delivery with git worktrees** — independent packages can be delivered concurrently on `sdp/<delivery-id>` branches/worktrees. `/plan-task` records a parallel-safety verdict (`independent`, `additive-overlap`, `sequenced`) when other packages are open, the developer edits shared hotspots additively, and the acceptance brief reports read-only merge readiness. Single-package flow is unchanged.
