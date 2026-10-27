@@ -1,30 +1,28 @@
 ---
-description: "<agent-description>"
-model: "<agent-model>"
-tools: [<tools>]
-handoffs:
-  - label: "<handoff-label>"
-    agent: "<handoff-agent>"
-    prompt: "<handoff-prompt>"
+name: <agent-name>
+description: <focused role description>
+tools: [<minimum required tools>]
 ---
 
-# `<Agent-Name>`
+# <Agent Name>
 
 ## Mission
 
-`<agent-mission>`
+<One outcome this role owns.>
 
-## Context
+## Entry Conditions
 
-- `spec/ACTIVE.md` for the current feature context.
-- `TECH.md` for technology stack and standards.
-- Relevant `AGENTS.md` files for scoped context.
-- Architecture and implementation artifacts for the active feature.
+- <Required approved artifact or state>
 
 ## Responsibilities
 
-<agent-responsibilities>
+1. <Role-specific responsibility>
+2. <Role-specific check>
+
+## Constraints
+
+- <Actions this role must not perform>
 
 ## Output
 
-<agent-output>
+- <Compact result and evidence>

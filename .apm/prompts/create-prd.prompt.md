@@ -1,13 +1,10 @@
 ---
-description: Draft a Product Requirements Document (PRD) from business intent.
-argument-hint: "Describe the business goal, target users, and constraints."
+description: Define a right-sized product outcome from business intent.
+argument-hint: "Describe the problem, users, desired outcome, and constraints."
 agent: sdp.prd
 ---
 
-The `sdp.prd` agent will:
+Clarify critical product gaps, then draft a proportionate PRD with outcome,
+scope, non-goals, success measures, risks, and assumptions.
 
-1. Ask clarifying questions to fill critical gaps in the requirements.
-2. Draft a structured `PRD.md` defining the problem, goals, scope, and risks.
-3. Flag any assumptions made for your confirmation.
-
-An approved PRD is the input for the `refine-backlog` command.
+The PRD defines what and why, not implementation details.

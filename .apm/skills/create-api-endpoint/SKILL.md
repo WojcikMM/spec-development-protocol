@@ -22,7 +22,9 @@ Produce a consistent, secure, and documented HTTP endpoint that meets its design
 4.  **Business Logic**: Delegate logic to a service layer. Keep route handlers thin. Handle `404 Not Found` explicitly.
 5.  **Error Handling**: Never expose stack traces. Use a consistent error response shape. Log errors with a trace ID.
 6.  **Response**: Return correct status codes (`200`, `201`, `204`, etc.). Include `Location` header for `201 Created`. Use DTOs to avoid over-exposing data.
-7.  **Documentation**: Update OpenAPI/Swagger spec.
+7.  **Documentation**: Update OpenAPI/Swagger when the public contract changes.
+    Do not add story/task/AC comments to handlers; keep only durable rationale
+    that cannot be expressed in code or the API contract.
 
 ## Quality Bar
 

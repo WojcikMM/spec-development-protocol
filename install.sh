@@ -205,6 +205,7 @@ print_info   "  Files copied : ${copied}"
 if [[ $skipped -gt 0 ]]; then
   print_warn "  Files skipped (already exist): ${skipped}"
   print_warn "  Run with SDP_FORCE=true to overwrite existing files."
+  print_warn "  Mixed SDP versions may block /deliver; review managed files before upgrading."
 fi
 
 if [[ $tech_initialized -eq 1 ]]; then
@@ -219,4 +220,6 @@ fi
 
 echo ""
 print_info "Next step: fill in .github/TECH.md with your project stack and standards."
+# Supervised delivery uses the project profile and assurance triggers from TECH.md.
+print_info "For /deliver: configure TECH.md SDP Delivery Policy (Balanced is the recommended default)."
 print_info "See README: https://github.com/${REPO}#readme"

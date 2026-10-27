@@ -1,30 +1,61 @@
-# History: <Feature Title>
+# History: <delivery-id> - <Package Title>
 
-Append-only log of completed work and hardening outcomes for `spec/<slug>/`. Do not edit or delete prior entries — append new ones.
+Stored in `spec/<slug>/deliveries/<delivery-id>/`. Keep one concise entry per
+delivery outcome. Add separate entries only for an
+unresolved block or escalation. Detailed command output stays in existing
+test/CI logs and is referenced rather than copied here.
 
-## Entry Format
-
-Copy this block per completed story or hardening event:
-
-```md
-### <ISO date> — STORY-<N>: <title>
-- Gate: <5 Implementation | 6 Hardening>
-- Actor: <sdp.developer | sdp.reviewer | sdp.security | sdp.qa>
-- Summary: <what was done / what was found>
-- Severity (if finding): <Critical | High | Medium | Low>
-- Security review: <per-story audit result | epic-level deferred | waived: "<reason>">
-- Hardening cycle count for this story: <n>
-- Outcome: <Approved | Request Changes | Pass | Fail | Escalated to user>
-```
-
-## Escalation Log
-
-If a story fails the same hardening step twice, log the escalation here per the Loop Breaker rule in `sdlc-process.instructions.md`:
+## Delivery Entry
 
 ```md
-### <ISO date> — ESCALATION: STORY-<N>
-- Failed step: <reviewer | security | qa>
-- Cycles: 2
-- Decision requested from user: <descope | split story | accept documented risk>
-- Resolution: <pending | resolved: description>
+### <ISO date> - <delivery-id>: <title>
+- Outcome: <delivered behavior>
+- Profile: <Lean | Balanced | Compliance>
+- Acceptance criteria: <behavior -> evidence reference>
+- Verdicts: Review <result>; Security <result/not applicable>; QA <result/not applicable>
+- Changed paths: <concise list>
+- Checks: <command or evidence reference and result>
+- Merge readiness: <clean | overlapping paths and recommendation | not applicable>
+- Deviations / remaining risks: <none or list>
+- Decision: <awaiting acceptance | accepted | rejected | changes requested>
+- Decided by: <identity and time, when decided>
 ```
+
+## Blocking or Escalation Entry
+
+```md
+### <ISO date> - BLOCKED: <delivery-id>
+- Stage: <implement | review | security | qa | acceptance>
+- Reason: <actionable blocker or repeated autonomous rejection>
+- Material findings: <stable IDs and evidence>
+- Decision needed: <specific user choice>
+```
+
+## Compact Worker Result
+
+The active run checkpoint stores compact structured results:
+
+```json
+{
+  "stage": "review",
+  "verdict": "pass",
+  "findings": [],
+  "checks": [
+    {
+      "name": "<check>",
+      "result": "<actual result>",
+      "evidence": "<log, test, or artifact reference>"
+    }
+  ],
+  "changed_paths": [],
+  "scope_changes": [],
+  "recommended_next_action": "<action>"
+}
+```
+
+Valid verdicts are `pass`, `fail`, `blocked`, and `not_applicable`.
+`not_applicable` requires a policy reason. Never invent evidence or telemetry.
+
+Compliance profile may extend the run record with plan/upstream integrity,
+baseline/candidate manifests, environment identity, and detailed retained
+evidence as required by `TECH.md`.

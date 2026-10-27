@@ -21,6 +21,8 @@ Implement error handling that is observable, safe for users, and actionable for 
 3.  **Service/Domain**: Return explicit error types (e.g., Result objects) instead of throwing generic exceptions. Don't swallow errors; re-throw or convert them.
 4.  **Frontend/UI**: Handle loading, success, and error states for every async call. Show user-friendly messages. Use Error Boundaries (React) to prevent page crashes. Log UI errors to a tracking service.
 5.  **Retries & Timeouts**: Set explicit timeouts on all external calls. Retry only idempotent operations, using exponential backoff with jitter. Use a circuit breaker for unreliable dependencies.
+6.  **Comments**: Explain only durable, non-obvious failure or compatibility
+    rationale. Do not leave task identifiers or implementation-session notes.
 
 ## Quality Bar
 

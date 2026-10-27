@@ -1,13 +1,19 @@
 ---
-description: Create an implementation plan for one approved story. Does not write code.
-argument-hint: "Provide one approved story/task ID."
+description: Create an implementation-grade plan for the active delivery package.
+argument-hint: "[optional story or coherent package selection]"
 agent: sdp.planner
 ---
 
-The `sdp.planner` agent will:
+The planner resolves `spec/ACTIVE.md` and asks for a package choice only when
+selection is ambiguous. It writes a concise
+`spec/<slug>/deliveries/<delivery-id>/PLAN.md` containing outcome,
+non-goals, decisions, change boundary, ordered work, verification, risk,
+assurance profile, and implementation autonomy.
 
-1. Create a detailed implementation plan for a single story, including a mandatory Scope Budget (max files, estimated changed lines, complexity tier).
-2. If the story doesn't fit the budget, it will stop and recommend splitting it instead of producing an oversized plan.
-3. Save the plan to `spec/<slug>/PLAN.md` with `status: draft`, for your approval.
+When other packages are open, the plan also records whether this package is
+`independent`, `additive-overlap`, or `sequenced` relative to them, so packages
+can be delivered in parallel git worktrees and merged cleanly.
 
-This command **does not write code** and does not auto-chain to implementation. After you set `status: approved` in `PLAN.md`, run `/implement` explicitly.
+XL scope or Open uncertainty returns to refinement/design.
+
+Review the resulting plan, then run bare `/deliver` to approve and execute it.

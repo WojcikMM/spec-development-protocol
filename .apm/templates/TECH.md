@@ -1,53 +1,75 @@
 # Global Technology Context (TECH)
 
-This document defines the technology choices and standards for the project.
+Define project-specific facts. Use `not applicable` instead of inventing
+requirements.
 
-## 1) Platform
+## 1. Platform and Structure
 
-- **Application type**: `<Web App / API / Full-Stack / etc.>`
-- **Target environments**: `<Browser / Node.js / etc.>`
+- Application type: <web/API/library/CLI/etc.>
+- Runtimes/frameworks: <versions>
+- Primary modules: <paths and ownership>
+- Target environments: <environments>
 
-## 2) Frontend
+## 2. Data and External Boundaries
 
-- **Framework**: `<React / Vue / etc.>`
-- **Language**: `<TypeScript / JavaScript>`
-- **UI system**: `<Tailwind CSS / MUI / etc.>`
-- **State management**: `<Redux / Zustand / etc.>`
-- **Testing**: `<Vitest / Jest / etc.>`
+- Data stores/access: <technology and conventions>
+- APIs/events/integrations: <styles and contracts>
+- Authentication/authorization: <approach>
+- Secrets and sensitive data: <handling>
 
-## 3) Backend
+## 3. Build, Test, and Quality
 
-- **Framework**: `<Node.js + Express / NestJS / etc.>`
-- **Language**: `<TypeScript / Python / etc.>`
-- **API style**: `<REST / GraphQL / etc.>`
-- **Data access**: `<ORM / Query Builder / Raw SQL>`
+- Restore/install: <command>
+- Build/type-check: <command>
+- Unit/integration/end-to-end tests: <commands and applicability>
+- Lint/format: <commands>
+- CI/CD: <system and required checks>
 
-## 4) CI/CD & DevOps
+## 4. Architecture and Coding Conventions
 
-- **VCS**: `<GitHub / GitLab / etc.>`
-- **CI/CD system**: `<GitHub Actions / GitLab CI / etc.>`
-- **Environments**: `<dev / staging / prod>`
-- **Branching**: `<trunk-based / GitFlow>`
+- Established patterns: <patterns to reuse>
+- Error handling: <project convention>
+- Observability: <project convention or not applicable>
+- Compatibility constraints: <constraints>
 
-## 5) Infrastructure
+## 5. SDP Delivery Policy
 
-- **Hosting**: `<Vercel / AWS / Azure / etc.>`
-- **IaC**: `<Terraform / Pulumi / Bicep / etc.>`
-- **Database**: `<PostgreSQL / MySQL / MongoDB / etc.>`
-- **Secrets**: `<Environment variables / Secrets manager>`
-- **Observability**: `<Datadog / Sentry / OpenTelemetry / etc.>`
+- Default assurance profile: `Balanced`
+- Lean permitted when: <low-risk criteria>
+- Compliance required when: <regulatory/high-risk criteria>
+- Security specialist triggers: <project additions to SDP defaults>
+- Independent QA triggers: <project additions to SDP defaults>
+- Run-state retention: <transient | retain summaries | compliance retention>
+- Compliance integrity requirements: <none or plan/manifests/environment rules>
+- Integration branch: <main | other>
+- Parallel delivery: <off | worktrees with branch prefix `sdp/`>
+- Merge hotspots: <shared files needing additive edits, e.g. DI wiring, routes, migrations>
 
-## 6) Security
+Profiles:
 
-- **Authentication**: `<JWT / OAuth2 / etc.>`
-- **Authorization**: `<RBAC / ABAC / etc.>`
+- Lean: developer validation plus independent review; extra specialists only
+  when triggered.
+- Balanced: review always; security and QA when they add independent evidence.
+- Compliance: full configured assurance and retained integrity evidence.
 
-## 7) Standards
+## 6. Model Routing (Optional)
 
-- Follow Clean Code and DRY principles.
-- Use consistent formatting from the repo toolchain.
-- Keep changes small and traceable to the backlog.
+Model labels guide selection; they do not automatically configure runtime
+models. Do not block Lean/Balanced delivery merely because telemetry is
+unavailable.
 
-## 8) Project Decisions
+| Role | Preferred profile/model | Allowed fallback |
+| --- | --- | --- |
+| Planning | <selection> | <fallback> |
+| Implementation | <selection> | <fallback> |
+| Review | <selection> | <fallback> |
+| Security | <selection> | <fallback> |
+| QA | <selection> | <fallback> |
+| Coordination | <selection> | <fallback> |
 
-- `YYYY-MM-DD`: `<Decision summary>`
+Compliance may require verified model/tool availability when project policy
+explicitly says so.
+
+## 7. Project Decisions
+
+- YYYY-MM-DD: <durable project decision>

@@ -4,41 +4,76 @@ approved_by: pending
 approved_at: pending
 ---
 
-# Plan: <Story Title> (STORY-<N>)
+# Plan: <Delivery Package Title> (<delivery-id>)
 
-Traceability: `spec/<slug>/DESIGN.md` -> `spec/<slug>/EPIC-<N>-<slug>.md` (STORY-<N>).
+## Outcome and Demonstration
 
-## Scope Budget (mandatory)
+- **Outcome**: <what will work when this delivery is accepted>
+- **Demonstration**: <short reproducible way to observe it>
+- **Included stories / acceptance criteria**: <IDs and concise behaviors>
+- **Non-goals**: <explicit exclusions>
 
-| Field                   | Value                                                       | Limit                          |
-| ----------------------- | ----------------------------------------------------------- | ------------------------------ |
-| Files touched           | `<count>`                                                   | 8 max                          |
-| Estimated changed lines | `<estimate>`                                                | 300 max (guideline)            |
-| Complexity tier         | `<S/M/L>`                                                   | L requires justification below |
-| Exploration budget      | `<e.g., "only files listed below and DESIGN.md section 3">` | stated up front                |
+## Relevant Context and Decisions
 
-**If this story cannot fit the budget above, STOP.** Do not produce an oversized plan — recommend splitting the story and return it to Gate 2 (`sdp.analyst`).
+- Read: <scoped AGENTS.md, design sections, owning code, neighboring tests>
+- Settled decisions: <contracts and constraints carried from approved artifacts>
+- Implementation choices left open: <safe decisions owned by the developer>
 
-**Justification for tier L (if applicable):** `<why this cannot be split further>`
+## Delivery Shape
 
-## Files to Change
+| Field | Value |
+| --- | --- |
+| Size | <S / M / L> |
+| Risk | <Low / Moderate / High> |
+| Uncertainty | <Resolved / Bounded> |
+| Assurance profile | <Lean / Balanced / Compliance> |
+| Security policy | <risk-based / per-story / epic-level / waived: reason> |
 
-- `<path/to/file>` — `<what changes and why>`
+If size is XL or uncertainty is Open, stop and return to refinement/design.
 
-## Implementation Steps
+## Change Boundary
 
-1. `<step>`
-2. `<step>`
+- **Allowed paths**: <paths or modules>
+- **Expected changes**: <likely files and purpose>
+- **Explicit exclusions**: <areas that must not change>
+- **Dependencies, data, or migration constraints**: <only applicable constraints>
 
-## Test Plan
+## Parallel Delivery
 
-- `<test case derived from acceptance criteria>`
+<Omit this section when no other package is open.>
 
-## Risks & Rollback
+- **Open packages compared**: <delivery IDs>
+- **Verdict**: <independent | additive-overlap | sequenced after <delivery-id>>
+- **Shared hotspots and technique**: <path - merge-friendly technique, or none>
 
-- Risk: `<risk>` — Mitigation: `<mitigation>`
-- Rollback: `<how to revert this change safely>`
+## Work
+
+1. <implementation step> - Verify: <command or observable check>
+2. <implementation step> - Verify: <command or observable check>
+
+## Verification
+
+| Acceptance behavior | Evidence/check | Expected result |
+| --- | --- | --- |
+| <behavior> | <test, command, or demonstration> | <result> |
+
+## Applicable Risk and Recovery
+
+- Security-sensitive boundaries: <none or details>
+- Compatibility/migration: <none or details>
+- Rollback/recovery: <not needed or concise approach>
+
+## Autonomy and Escalation
+
+- Developer owns: naming, idiomatic local design, helper reuse/extraction, and
+  adjacent tests inside the boundary.
+- A simpler in-boundary approach may proceed when outcome, risk, and
+  verification remain unchanged.
+- Replan for: changed public behavior, new dependency/service, expanded
+  security/data boundary, destructive operation, weakened acceptance criterion,
+  or work outside allowed paths.
 
 ---
 
-_Approval required before implementation. Set `status: approved` above, then run `/implement`. `sdp.developer` will refuse to run otherwise._
+Review this plan, then run bare `/deliver` to approve and execute it. Manual
+`/implement` requires approval metadata above to be filled in first.

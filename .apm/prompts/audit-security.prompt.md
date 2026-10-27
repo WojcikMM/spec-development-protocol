@@ -1,14 +1,11 @@
 ---
+description: Manually audit a security-sensitive active delivery.
+argument-hint: "[optional threat or compliance context]"
 agent: sdp.security
-description: Audit implemented changes for security risks.
-argument-hint: "Provide scope, threat context, and compliance constraints."
 ---
 
-The `sdp.security` agent will:
+Audit changed trust boundaries and realistic abuse paths. Run when epic policy,
+Compliance profile, or security-sensitive changes require it. Return evidence,
+prioritized findings, and a clear verdict.
 
-1. Threat-model the changed components.
-2. Audit against OWASP Top 10 and other security baselines.
-3. Check for vulnerabilities in secrets handling, auth, and data validation.
-4. Produce a report with prioritized findings and mitigations.
-
-A successful audit is required before QA validation.
+Risk-based deliveries with no security trigger do not need a ceremonial audit.

@@ -1,13 +1,12 @@
 ---
-description: Validate that delivered changes meet acceptance criteria.
-argument-hint: "Provide the story/task ID and scope of delivered changes."
+description: Manually validate independently observable acceptance criteria.
+argument-hint: "[optional environment or scenario context]"
 agent: sdp.qa
 ---
 
-The `sdp.qa` agent will:
+Exercise acceptance behavior that adds evidence beyond static review and the
+same focused unit tests. Cover applicable positive, negative, edge,
+integration, accessibility, compatibility, migration, performance, or critical
+journey scenarios.
 
-1. Derive test cases from the story's acceptance criteria.
-2. Validate positive, negative, and edge-case scenarios.
-3. Produce a test matrix and a final pass/fail verdict.
-
-A `pass` verdict completes the story. A `fail` verdict will be handed back to the developer with a defect list.
+A pass produces an acceptance brief; it does not itself accept the delivery.
